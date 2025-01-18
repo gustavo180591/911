@@ -4,6 +4,10 @@
 
 {% block body %}
 <div class="container mt-4">
+    <div class="d-flex justify-content-end">
+        <a href="{{ path('auth_login') }}" class="btn btn-secondary mb-3">Iniciar Sesión</a>
+    </div>
+    
     <h1 class="mb-4">Bienvenido al Sistema de Emergencias 911</h1>
 
     <p>
@@ -12,7 +16,7 @@
     </p>
 
     <div class="row mt-5">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">
                     <h5 class="card-title">Acerca de Nosotros</h5>
@@ -21,7 +25,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">
                     <h5 class="card-title">Contáctanos</h5>
@@ -30,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">
                     <h5 class="card-title">Registrar Emergencia</h5>

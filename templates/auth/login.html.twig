@@ -12,7 +12,7 @@
         </div>
     {% endfor %}
 
-    <form method="post" action="{{ path('app_login') }}">
+    <form method="post" action="{{ path('auth_login') }}">
         <div class="mb-3">
             <label for="username" class="form-label">Nombre de Usuario o Correo Electrónico</label>
             <input type="text" name="_username" id="username" class="form-control" required autofocus value="{{ last_username }}">
@@ -31,7 +31,7 @@
         <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
 
         <div class="mt-3">
-            <p>¿No tienes una cuenta? <a href="{{ path('app_register') }}">Regístrate aquí</a>.</p>
+            <p>¿No tienes una cuenta? <a href="{{ path('auth_register') }}">Regístrate aquí</a>.</p>
         </div>
     </form>
 </div>

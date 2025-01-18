@@ -34,4 +34,16 @@ class HomeController extends AbstractController
             'phone' => '+54 123 456 7890',
         ]);
     }
+    #[Route('/contact/submit', name: 'contact_submit', methods: ['POST'])]
+    public function submitContact(Request $request): Response
+    {
+        // Obtén los datos del formulario
+        $data = $request->request->all();
+
+        // Procesa los datos
+        $this->addFlash('success', 'Gracias por contactarnos. Responderemos lo antes posible.');
+
+        // Redirige a la página de contacto
+        return $this->redirectToRoute('home_contact');
+    }
 }
