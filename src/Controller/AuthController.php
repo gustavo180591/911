@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 #[Route('/auth')]
@@ -49,15 +50,20 @@ class AuthController extends AbstractController
     }
 
     #[Route('/login', name: 'auth_login', methods: ['GET', 'POST'])]
-    public function login(): Response
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // Symfony gestiona automáticamente el login con el sistema de seguridad configurado
+        // Si el usuario ya está autenticado, redirigirlo
         if ($this->getUser()) {
-            return $this->redirectToRoute('home'); // Redirigir al usuario si ya está autenticado
+            return $this->redirectToRoute('home_index'); // Cambiar "home" por el nombre de tu ruta de inicio
         }
 
+        // Obtener el último nombre de usuario ingresado y el error de autenticación, si existe
+        $lastUsername = $authenticationUtils->getLastUsername();
+        $error = $authenticationUtils->getLastAuthenticationError();
+
         return $this->render('auth/login.html.twig', [
-            'error' => null, // Puedes pasar errores de autenticación aquí
+            'last_username' => $lastUsername,
+            'error' => $error,
         ]);
     }
 

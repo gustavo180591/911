@@ -6,6 +6,14 @@
 <div class="container mt-4">
     <h1 class="mb-4">Iniciar Sesión</h1>
 
+    {# Mostrar errores de autenticación si existen #}
+    {% if error %}
+        <div class="alert alert-danger">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+        </div>
+    {% endif %}
+
+    {# Mostrar mensajes flash relacionados con errores u otras notificaciones #}
     {% for message in app.flashes('error') %}
         <div class="alert alert-danger">
             {{ message }}
@@ -13,23 +21,28 @@
     {% endfor %}
 
     <form method="post" action="{{ path('auth_login') }}">
+        {# Campo para el nombre de usuario o correo electrónico #}
         <div class="mb-3">
             <label for="username" class="form-label">Nombre de Usuario o Correo Electrónico</label>
-            <input type="text" name="_username" id="username" class="form-control" required autofocus value="{{ last_username }}">
+            <input type="text" name="_username" id="username" class="form-control" required autofocus value="{{ last_username|default('') }}">
         </div>
 
+        {# Campo para la contraseña #}
         <div class="mb-3">
             <label for="password" class="form-label">Contraseña</label>
             <input type="password" name="_password" id="password" class="form-control" required>
         </div>
 
+        {# Opción de "Recuérdame" #}
         <div class="mb-3 form-check">
             <input type="checkbox" name="_remember_me" id="remember_me" class="form-check-input">
             <label class="form-check-label" for="remember_me">Recuérdame</label>
         </div>
 
+        {# Botón de envío del formulario #}
         <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
 
+        {# Enlace para registrarse si no tiene cuenta #}
         <div class="mt-3">
             <p>¿No tienes una cuenta? <a href="{{ path('auth_register') }}">Regístrate aquí</a>.</p>
         </div>
