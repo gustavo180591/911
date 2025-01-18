@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Crear Reporte{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Crear Nuevo Reporte</h1>
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {{ form_start(form) }}
+
+    <div class="mb-3">
+        {{ form_label(form.titulo, 'Título del Reporte') }}
+        {{ form_widget(form.titulo, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_errors(form.titulo) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.descripcion, 'Descripción') }}
+        {{ form_widget(form.descripcion, { 'attr': {'class': 'form-control', 'rows': 5} }) }}
+        {{ form_errors(form.descripcion) }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar Reporte</button>
+
+    {{ form_end(form) }}
+
+    <div class="mt-3">
+        <a href="{{ path('report_index') }}" class="btn btn-secondary">Volver a la Lista de Reportes</a>
+    </div>
+</div>
+{% endblock %}

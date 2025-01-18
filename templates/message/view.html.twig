@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalle del Mensaje{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Detalle del Mensaje</h1>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <td>{{ message.id }}</td>
+        </tr>
+        <tr>
+            <th>Remitente</th>
+            <td>{{ message.usuarioRemitente.nombre }} {{ message.usuarioRemitente.apellido }}</td>
+        </tr>
+        <tr>
+            <th>Destinatario</th>
+            <td>{{ message.usuarioDestinatario.nombre }} {{ message.usuarioDestinatario.apellido }}</td>
+        </tr>
+        <tr>
+            <th>Fecha de Envío</th>
+            <td>{{ message.fechaEnvio|date('d-m-Y H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Mensaje</th>
+            <td>{{ message.contenido }}</td>
+        </tr>
+    </table>
+
+    <div class="mt-3">
+        <a href="{{ path('message_index') }}" class="btn btn-secondary">Volver a la Bandeja de Mensajes</a>
+    </div>
+</div>
+{% endblock %}

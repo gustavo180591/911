@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalle del Reporte{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Detalle del Reporte</h1>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <td>{{ report.id }}</td>
+        </tr>
+        <tr>
+            <th>Título</th>
+            <td>{{ report.titulo }}</td>
+        </tr>
+        <tr>
+            <th>Descripción</th>
+            <td>{{ report.descripcion }}</td>
+        </tr>
+        <tr>
+            <th>Autor</th>
+            <td>{{ report.autor.nombre }} {{ report.autor.apellido }}</td>
+        </tr>
+        <tr>
+            <th>Fecha de Creación</th>
+            <td>{{ report.fechaGeneracion|date('d-m-Y H:i:s') }}</td>
+        </tr>
+    </table>
+
+    <div class="mt-3">
+        <a href="{{ path('report_index') }}" class="btn btn-secondary">Volver a la Lista de Reportes</a>
+    </div>
+</div>
+{% endblock %}

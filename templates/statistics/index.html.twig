@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listado de Estadísticas{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Listado de Estadísticas</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tipo de Denuncia</th>
+                <th>Cantidad</th>
+                <th>Fecha de Generación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for statistic in statistics %}
+                <tr>
+                    <td>{{ statistic.id }}</td>
+                    <td>{{ statistic.tipoDenuncia }}</td>
+                    <td>{{ statistic.cantidad }}</td>
+                    <td>{{ statistic.fechaGeneracion|date('d-m-Y H:i:s') }}</td>
+                    <td>
+                        <a href="{{ path('statistics_details', { id: statistic.id }) }}" class="btn btn-sm btn-primary">Ver</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">No se encontraron estadísticas.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

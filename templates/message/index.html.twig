@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mensajes{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Bandeja de Mensajes</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Remitente</th>
+                <th>Destinatario</th>
+                <th>Fecha de Envío</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for message in messages %}
+                <tr>
+                    <td>{{ message.id }}</td>
+                    <td>{{ message.usuarioRemitente.nombre }} {{ message.usuarioRemitente.apellido }}</td>
+                    <td>{{ message.usuarioDestinatario.nombre }} {{ message.usuarioDestinatario.apellido }}</td>
+                    <td>{{ message.fechaEnvio|date('d-m-Y H:i:s') }}</td>
+                    <td>
+                        <a href="{{ path('message_view', { id: message.id }) }}" class="btn btn-sm btn-primary">Ver</a>
+                        <form method="post" action="{{ path('message_delete', { id: message.id }) }}" style="display: inline-block;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este mensaje?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_message_' ~ message.id) }}">
+                            <button class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">No se encontraron mensajes.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

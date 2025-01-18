@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listado de Reportes{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Listado de Reportes</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="mb-3">
+        <a href="{{ path('report_create') }}" class="btn btn-primary">Crear Nuevo Reporte</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Fecha de Creación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in reports %}
+                <tr>
+                    <td>{{ report.id }}</td>
+                    <td>{{ report.titulo }}</td>
+                    <td>{{ report.autor.nombre }} {{ report.autor.apellido }}</td>
+                    <td>{{ report.fechaGeneracion|date('d-m-Y H:i:s') }}</td>
+                    <td>
+                        <a href="{{ path('report_view', { id: report.id }) }}" class="btn btn-sm btn-primary">Ver</a>
+                        <form method="post" action="{{ path('report_delete', { id: report.id }) }}" style="display: inline-block;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este reporte?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_report_' ~ report.id) }}">
+                            <button class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">No se encontraron reportes.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

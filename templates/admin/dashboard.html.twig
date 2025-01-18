@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panel de Administración{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Panel de Administración</h1>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Gestión de Usuarios</h5>
+                    <p class="card-text">Administra los usuarios registrados en el sistema.</p>
+                    <a href="{{ path('user_management_index') }}" class="btn btn-primary">Ver Usuarios</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Categorías</h5>
+                    <p class="card-text">Gestiona las categorías de denuncias disponibles.</p>
+                    <a href="{{ path('category_index') }}" class="btn btn-primary">Ver Categorías</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Reportes</h5>
+                    <p class="card-text">Consulta y genera reportes del sistema.</p>
+                    <a href="{{ path('report_index') }}" class="btn btn-primary">Ver Reportes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Estadísticas</h5>
+                    <p class="card-text">Visualiza estadísticas relacionadas con las denuncias.</p>
+                    <a href="{{ path('statistics_index') }}" class="btn btn-primary">Ver Estadísticas</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Historial</h5>
+                    <p class="card-text">Revisa el historial de actividades en el sistema.</p>
+                    <a href="{{ path('audit_log_index') }}" class="btn btn-primary">Ver Historial</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Notificaciones</h5>
+                    <p class="card-text">Administra las notificaciones enviadas a los usuarios.</p>
+                    <a href="{{ path('notification_index') }}" class="btn btn-primary">Ver Notificaciones</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

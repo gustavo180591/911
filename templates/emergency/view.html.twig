@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalle de Emergencia{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Detalle de Emergencia</h1>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <td>{{ emergency.id }}</td>
+        </tr>
+        <tr>
+            <th>Descripción</th>
+            <td>{{ emergency.descripcion }}</td>
+        </tr>
+        <tr>
+            <th>Categoría</th>
+            <td>{{ emergency.categoria.nombre }}</td>
+        </tr>
+        <tr>
+            <th>Fecha y Hora</th>
+            <td>{{ emergency.fechaHora|date('d-m-Y H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Ubicación</th>
+            <td>{{ emergency.ubicacion.calle ~ ', ' ~ emergency.ubicacion.numero }}</td>
+        </tr>
+        <tr>
+            <th>Evidencias</th>
+            <td>
+                {% if emergency.evidencias|length > 0 %}
+                    <ul>
+                        {% for evidencia in emergency.evidencias %}
+                            <li>
+                                <a href="{{ evidencia.rutaArchivo }}" target="_blank">{{ evidencia.tipo }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    No hay evidencias disponibles.
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    <div class="mt-3">
+        <a href="{{ path('emergency_index') }}" class="btn btn-secondary">Volver a la Lista de Emergencias</a>
+    </div>
+</div>
+{% endblock %}

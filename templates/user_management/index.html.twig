@@ -1,20 +1,54 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserManagementController!{% endblock %}
+{% block title %}Listado de Usuarios{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="container mt-4">
+    <h1 class="mb-4">Listado de Usuarios</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/home/gustavo/911/src/Controller/UserManagementController.php</code></li>
-        <li>Your template at <code>/home/gustavo/911/templates/user_management/index.html.twig</code></li>
-    </ul>
+    <div class="mb-3">
+        <a href="{{ path('user_management_create') }}" class="btn btn-primary">Crear Nuevo Usuario</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.nombre }}</td>
+                    <td>{{ user.apellido }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.rol.nombre }}</td>
+                    <td>
+                        <a href="{{ path('user_management_edit', { id: user.id }) }}" class="btn btn-sm btn-warning">Editar</a>
+                        <form method="post" action="{{ path('user_management_delete', { id: user.id }) }}" style="display: inline-block;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_user_' ~ user.id) }}">
+                            <button class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">No se encontraron usuarios.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

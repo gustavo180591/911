@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mi Perfil{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Mi Perfil</h1>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>Nombre</th>
+            <td>{{ user.nombre }}</td>
+        </tr>
+        <tr>
+            <th>Apellido</th>
+            <td>{{ user.apellido }}</td>
+        </tr>
+        <tr>
+            <th>Correo Electrónico</th>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <th>Teléfono</th>
+            <td>{{ user.telefono ? user.telefono : 'No especificado' }}</td>
+        </tr>
+        <tr>
+            <th>Fecha de Nacimiento</th>
+            <td>{{ user.fechaNacimiento ? user.fechaNacimiento|date('d-m-Y') : 'No especificado' }}</td>
+        </tr>
+        <tr>
+            <th>Fecha de Registro</th>
+            <td>{{ user.fechaRegistro|date('d-m-Y H:i:s') }}</td>
+        </tr>
+    </table>
+
+    <div class="mt-3">
+        <a href="{{ path('profile_edit') }}" class="btn btn-primary">Editar Perfil</a>
+        <a href="{{ path('profile_change_password') }}" class="btn btn-secondary">Cambiar Contraseña</a>
+    </div>
+</div>
+{% endblock %}

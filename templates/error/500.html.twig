@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Error del Servidor{% endblock %}
+
+{% block body %}
+<div class="container text-center mt-5">
+    <h1 class="display-1">500</h1>
+    <h2 class="mb-4">Error Interno del Servidor</h2>
+    <p class="mb-4">Lo sentimos, algo salió mal en nuestro servidor. Estamos trabajando para solucionarlo lo antes posible.</p>
+    <a href="{{ path('home') }}" class="btn btn-primary">Volver al inicio</a>
+</div>
+{% endblock %}

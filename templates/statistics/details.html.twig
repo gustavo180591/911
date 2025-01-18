@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalles de Estadísticas{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Detalles de Estadísticas</h1>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <td>{{ statistic.id }}</td>
+        </tr>
+        <tr>
+            <th>Tipo de Denuncia</th>
+            <td>{{ statistic.tipoDenuncia }}</td>
+        </tr>
+        <tr>
+            <th>Cantidad</th>
+            <td>{{ statistic.cantidad }}</td>
+        </tr>
+        <tr>
+            <th>Fecha de Generación</th>
+            <td>{{ statistic.fechaGeneracion|date('d-m-Y H:i:s') }}</td>
+        </tr>
+    </table>
+
+    <div class="mt-3">
+        <a href="{{ path('statistics_index') }}" class="btn btn-secondary">Volver a la Lista de Estadísticas</a>
+    </div>
+</div>
+{% endblock %}

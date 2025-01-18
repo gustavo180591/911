@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalle de Evidencia{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Detalle de Evidencia</h1>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <td>{{ evidence.id }}</td>
+        </tr>
+        <tr>
+            <th>Tipo</th>
+            <td>{{ evidence.tipo }}</td>
+        </tr>
+        <tr>
+            <th>Archivo</th>
+            <td>
+                <a href="{{ evidence.rutaArchivo }}" target="_blank">Ver Archivo</a>
+            </td>
+        </tr>
+        <tr>
+            <th>Fecha de Subida</th>
+            <td>{{ evidence.fechaSubida|date('d-m-Y H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Asociada a Denuncia</th>
+            <td>
+                {% if evidence.denuncia %}
+                    <a href="{{ path('emergency_view', { id: evidence.denuncia.id }) }}">Ver Denuncia</a>
+                {% else %}
+                    No asociada a ninguna denuncia.
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    <div class="mt-3">
+        <a href="{{ path('evidence_index') }}" class="btn btn-secondary">Volver a la Lista de Evidencias</a>
+    </div>
+</div>
+{% endblock %}

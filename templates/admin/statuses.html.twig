@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestión de Estados{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Gestión de Estados de Denuncias</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="mb-3">
+        <a href="{{ path('status_create') }}" class="btn btn-primary">Crear Nuevo Estado</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for status in statuses %}
+                <tr>
+                    <td>{{ status.id }}</td>
+                    <td>{{ status.nombre }}</td>
+                    <td>{{ status.descripcion }}</td>
+                    <td>
+                        <a href="{{ path('status_edit', { id: status.id }) }}" class="btn btn-sm btn-warning">Editar</a>
+                        <form method="post" action="{{ path('status_delete', { id: status.id }) }}" style="display: inline-block;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este estado?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_status_' ~ status.id) }}">
+                            <button class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center">No se encontraron estados.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

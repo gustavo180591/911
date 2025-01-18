@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listado de Emergencias{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Listado de Emergencias</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="mb-3">
+        <a href="{{ path('emergency_create') }}" class="btn btn-primary">Registrar Nueva Emergencia</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Descripción</th>
+                <th>Categoría</th>
+                <th>Fecha y Hora</th>
+                <th>Ubicación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for emergency in emergencies %}
+                <tr>
+                    <td>{{ emergency.id }}</td>
+                    <td>{{ emergency.descripcion }}</td>
+                    <td>{{ emergency.categoria.nombre }}</td>
+                    <td>{{ emergency.fechaHora|date('d-m-Y H:i:s') }}</td>
+                    <td>{{ emergency.ubicacion.calle ~ ', ' ~ emergency.ubicacion.numero }}</td>
+                    <td>
+                        <a href="{{ path('emergency_edit', { id: emergency.id }) }}" class="btn btn-sm btn-warning">Editar</a>
+                        <form method="post" action="{{ path('emergency_delete', { id: emergency.id }) }}" style="display: inline-block;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta emergencia?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_emergency_' ~ emergency.id) }}">
+                            <button class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">No se encontraron emergencias.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

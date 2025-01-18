@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listado de Evidencias{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Listado de Evidencias</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="mb-3">
+        <a href="{{ path('evidence_create') }}" class="btn btn-primary">Subir Nueva Evidencia</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tipo</th>
+                <th>Archivo</th>
+                <th>Fecha de Subida</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for evidence in evidences %}
+                <tr>
+                    <td>{{ evidence.id }}</td>
+                    <td>{{ evidence.tipo }}</td>
+                    <td>
+                        <a href="{{ evidence.rutaArchivo }}" target="_blank">Ver Archivo</a>
+                    </td>
+                    <td>{{ evidence.fechaSubida|date('d-m-Y H:i:s') }}</td>
+                    <td>
+                        <form method="post" action="{{ path('evidence_delete', { id: evidence.id }) }}" style="display: inline-block;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta evidencia?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_evidence_' ~ evidence.id) }}">
+                            <button class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">No se encontraron evidencias.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

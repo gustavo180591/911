@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notificaciones{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Lista de Notificaciones</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Mensaje</th>
+                <th>Usuario</th>
+                <th>Fecha de Envío</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for notification in notifications %}
+                <tr>
+                    <td>{{ notification.id }}</td>
+                    <td>{{ notification.mensaje }}</td>
+                    <td>{{ notification.usuario ? notification.usuario.email : 'Anónimo' }}</td>
+                    <td>{{ notification.fechaEnvio|date('d-m-Y H:i:s') }}</td>
+                    <td>
+                        <a href="{{ path('notification_view', { id: notification.id }) }}" class="btn btn-sm btn-primary">Ver</a>
+                        <form method="post" action="{{ path('notification_delete', { id: notification.id }) }}" style="display: inline-block;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta notificación?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_notification_' ~ notification.id) }}">
+                            <button class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">No se encontraron notificaciones.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

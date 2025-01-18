@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registros de Auditoría{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Registros de Auditoría</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Acción</th>
+                <th>Fecha y Hora</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+                <tr>
+                    <td>{{ log.id }}</td>
+                    <td>{{ log.usuario ? log.usuario.email : 'Anónimo' }}</td>
+                    <td>{{ log.accion }}</td>
+                    <td>{{ log.fechaHora|date('d-m-Y H:i:s') }}</td>
+                    <td>
+                        <a href="{{ path('audit_log_detail', { id: log.id }) }}" class="btn btn-sm btn-primary">Ver Detalle</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">No se encontraron registros de auditoría.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="mt-3">
+        <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary">Volver al Panel de Administración</a>
+    </div>
+</div>
+{% endblock %}

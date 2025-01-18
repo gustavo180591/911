@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Página no encontrada{% endblock %}
+
+{% block body %}
+<div class="container text-center mt-5">
+    <h1 class="display-1">404</h1>
+    <h2 class="mb-4">Página no encontrada</h2>
+    <p class="mb-4">Lo sentimos, la página que estás buscando no existe o ha sido movida.</p>
+    <a href="{{ path('home') }}" class="btn btn-primary">Volver al inicio</a>
+</div>
+{% endblock %}
