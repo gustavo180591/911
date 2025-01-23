@@ -34,6 +34,21 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 20, nullable: true)]
     private ?string $telefono = null;
 
+    #[ORM\Column(type: 'date', nullable: true)]
+    private ?\DateTimeInterface $fechaNacimiento = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $direccion = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $genero = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $avatar = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $token = null;
+
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $fechaRegistro = null;
 
@@ -147,6 +162,69 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTelefono(?string $telefono): self
     {
         $this->telefono = $telefono;
+
+        return $this;
+    }
+
+    public function getFechaNacimiento(): ?\DateTimeInterface
+    {
+        return $this->fechaNacimiento;
+    }
+
+
+    public function setFechaNacimiento(?\DateTimeInterface $fechaNacimiento): self
+    {
+        $this->fechaNacimiento = $fechaNacimiento;
+
+        return $this;
+    }
+
+
+    public function getDireccion(): ?string
+    {
+        return $this->direccion;
+    }
+
+    public function setDireccion(?string $direccion): self
+    {
+        $this->direccion = $direccion;
+
+        return $this;
+    }
+
+
+    public function getGenero(): ?string
+    {
+        return $this->genero;
+    }
+
+    public function setGenero(?string $genero): self
+    {
+        $this->genero = $genero;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }
