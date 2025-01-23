@@ -52,4 +52,34 @@
         <a href="{{ path('emergency_index') }}" class="btn btn-secondary">Volver a la Lista de Emergencias</a>
     </div>
 </div>
+<div id="map" style="width: 100%; height: 400px;" class="mt-3"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<script>
+    // Inicializar el mapa
+    const map = L.map('map').setView([0, 0], 13);
+
+    // Agregar la capa de tiles (usamos OpenStreetMap en este ejemplo)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+    }).addTo(map);
+
+    // Controlar el cambio de selección en el formulario
+    const ubicacionSelect = document.querySelector('#{{ form.ubicacion.vars.id }}');
+
+    ubicacionSelect.addEventListener('change', function () {
+        const selectedOption = ubicacionSelect.options[ubicacionSelect.selectedIndex];
+        const dataCoordinates = selectedOption.getAttribute('data-coordinates');
+        
+        if (dataCoordinates) {
+            const [lat, lng] = dataCoordinates.split(',');
+            map.setView([parseFloat(lat), parseFloat(lng)], 15);
+            
+            // Agregar un marcador en la ubicación seleccionada
+            L.marker([lat, lng]).addTo(map).bindPopup(selectedOption.text).openPopup();
+        }
+    });
+</script>
 {% endblock %}

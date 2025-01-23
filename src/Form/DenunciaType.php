@@ -69,6 +69,9 @@ class DenunciaType extends AbstractType
                 'label' => 'Ubicación',
                 'placeholder' => 'Selecciona una ubicación',
                 'required' => false,
+                'attr' => [
+                    'data-coordinates' => 'data-coordinates', // Usado para almacenar las coordenadas
+                ],
             ])
             ->add('evidencias', EntityType::class, [
                 'class' => Evidencia::class,
