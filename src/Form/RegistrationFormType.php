@@ -90,7 +90,12 @@ class RegistrationFormType extends AbstractType
                 ],
                 'required' => false,
                 'placeholder' => 'Selecciona una opción',
+            ])
+            ->add('direccion', TextType::class, [
+                'label' => 'Dirección',
+                'required' => true,
             ]);
+            
     }
 
     public function configureOptions(OptionsResolver $resolver): void

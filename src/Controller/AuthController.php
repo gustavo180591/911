@@ -29,8 +29,9 @@ class AuthController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Cifrar la contraseña
-            $password = password_hash($form->get('plainPassword')->getData(), PASSWORD_BCRYPT);
+            $password = password_hash($form->get('Password')->getData(), PASSWORD_BCRYPT);
             $user->setPassword($password);
+            $user->setRoles(['ROLE_USER']);
             $user->setFechaRegistro(new \DateTime());
 
             $entityManager->persist($user);
