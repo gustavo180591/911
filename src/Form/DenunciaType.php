@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Denuncia;
+use App\Entity\Evidencia;
 use App\Entity\CategoriaDenuncia;
 use App\Entity\EstadoDenuncia;
 use App\Entity\Ubicacion;
@@ -67,6 +68,14 @@ class DenunciaType extends AbstractType
                 },
                 'label' => 'Ubicación',
                 'placeholder' => 'Selecciona una ubicación',
+                'required' => false,
+            ])
+            ->add('evidencias', EntityType::class, [
+                'class' => Evidencia::class,
+                'choice_label' => 'rutaArchivo',
+                'label' => 'Evidencias',
+                'multiple' => true,
+                'expanded' => true,
                 'required' => false,
             ]);
     }

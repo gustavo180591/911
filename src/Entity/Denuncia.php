@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DenunciaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DenunciaRepository::class)]
@@ -40,6 +42,44 @@ class Denuncia
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $fechaActualizacion = null;
+
+    #[ORM\OneToMany(mappedBy: 'denuncia', targetEntity: Evidencia::class, cascade: ['persist', 'remove'])]
+    private Collection $evidencias;
+
+    public function __construct()
+    {
+        $this->evidencias = new ArrayCollection();
+    }
+
+    // Getters y Setters para Evidencias
+
+    public function getEvidencias(): Collection
+    {
+        return $this->evidencias;
+    }
+
+    public function addEvidencia(Evidencia $evidencia): self
+    {
+        if (!$this->evidencias->contains($evidencia)) {
+            $this->evidencias[] = $evidencia;
+            $evidencia->setDenuncia($this); // Establece la relación inversa
+        }
+
+        return $this;
+    }
+
+    public function removeEvidencia(Evidencia $evidencia): self
+    {
+        if ($this->evidencias->removeElement($evidencia)) {
+            // Si es necesario, rompe la relación inversa
+            if ($evidencia->getDenuncia() === $this) {
+                $evidencia->setDenuncia(null);
+            }
+        }
+
+        return $this;
+    }
+
 
     // Getters y Setters
 

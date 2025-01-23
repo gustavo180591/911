@@ -22,9 +22,9 @@ class Evidencia
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $fechaSubida;
 
-    #[ORM\ManyToOne(targetEntity: Denuncia::class)]
+    #[ORM\ManyToOne(targetEntity: Denuncia::class, inversedBy: 'evidencias')]
     #[ORM\JoinColumn(nullable: false)]
-    private Denuncia $denuncia;
+    private ?Denuncia $denuncia = null;
 
     // Getters y Setters
 
@@ -69,12 +69,12 @@ class Evidencia
         return $this;
     }
 
-    public function getDenuncia(): Denuncia
+    public function getDenuncia(): ?Denuncia
     {
         return $this->denuncia;
     }
 
-    public function setDenuncia(Denuncia $denuncia): self
+    public function setDenuncia(?Denuncia $denuncia): self
     {
         $this->denuncia = $denuncia;
 
