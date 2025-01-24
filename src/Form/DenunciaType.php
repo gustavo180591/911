@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
@@ -61,17 +61,25 @@ class DenunciaType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('direccion', TextType::class, [
+                'label' => 'Ubicación (Dirección)',
+                'required' => true,
+                'attr' => [
+                    'placeholder' => 'Escribe la dirección...',
+                    'class' => 'form-control',
+                ],
+            ])
             ->add('ubicacion', EntityType::class, [
                 'class' => Ubicacion::class,
                 'choice_label' => function (Ubicacion $ubicacion) {
                     return $ubicacion->getCalle() . ' ' . $ubicacion->getNumero();
                 },
-                'label' => 'Ubicación',
-                'placeholder' => 'Selecciona una ubicación',
+                'label' => 'Ubicación Seleccionada',
                 'required' => false,
                 'attr' => [
-                    'data-coordinates' => 'data-coordinates', // Usado para almacenar las coordenadas
+                    'class' => 'form-select',
                 ],
+                'placeholder' => 'Selecciona una ubicación existente',
             ])
             ->add('evidencias', EntityType::class, [
                 'class' => Evidencia::class,

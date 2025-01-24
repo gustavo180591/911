@@ -33,9 +33,9 @@
     </div>
 
     <div class="mb-3">
-        {{ form_label(form.ubicacion, 'Ubicación') }}
-        {{ form_widget(form.ubicacion, { 'attr': {'class': 'form-control'} }) }}
-        {{ form_errors(form.ubicacion) }}
+        {{ form_label(form.direccion, 'Dirección') }}
+        {{ form_widget(form.direccion, { 'attr': {'class': 'form-control', 'id': 'direccion-input', 'placeholder': 'Escribe la dirección...'} }) }}
+        {{ form_errors(form.direccion) }}
     </div>
 
     <div class="mb-3">
@@ -58,28 +58,42 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
 <script>
-    // Inicializar el mapa
-    const map = L.map('map').setView([0, 0], 13);
+    // Inicializar el mapa centrado en Posadas
+    const map = L.map('map').setView([-27.362778, -55.900555], 13);
 
-    // Agregar la capa de tiles (usamos OpenStreetMap en este ejemplo)
+    // Agregar la capa de tiles (OpenStreetMap)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
     }).addTo(map);
 
-    // Controlar el cambio de selección en el formulario
-    const ubicacionSelect = document.querySelector('#{{ form.ubicacion.vars.id }}');
+    // Marcador inicial para Posadas
+    let marker = L.marker([-27.362778, -55.900555]).addTo(map).bindPopup('Posadas, Misiones').openPopup();
 
-    ubicacionSelect.addEventListener('change', function () {
-        const selectedOption = ubicacionSelect.options[ubicacionSelect.selectedIndex];
-        const dataCoordinates = selectedOption.getAttribute('data-coordinates');
-        
-        if (dataCoordinates) {
-            const [lat, lng] = dataCoordinates.split(',');
-            map.setView([parseFloat(lat), parseFloat(lng)], 15);
-            
-            // Agregar un marcador en la ubicación seleccionada
-            L.marker([lat, lng]).addTo(map).bindPopup(selectedOption.text).openPopup();
-        }
+    // Obtener el cuadro de texto de dirección
+    const direccionInput = document.querySelector('#direccion-input');
+
+    // Actualizar el mapa y el marcador al escribir en el cuadro de texto
+    direccionInput.addEventListener('change', function () {
+        const direccion = direccionInput.value;
+
+        fetch(`/buscar-ubicacion?direccion=${encodeURIComponent(direccion)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.latitud && data.longitud) {
+                    const latLng = [data.latitud, data.longitud];
+
+                    // Mover el marcador al nuevo lugar
+                    marker.setLatLng(latLng).bindPopup(direccion).openPopup();
+
+                    // Centrar el mapa en la nueva ubicación
+                    map.setView(latLng, 15);
+                } else {
+                    alert('Ubicación no encontrada.');
+                }
+            })
+            .catch(error => {
+                console.error('Error al buscar la ubicación:', error);
+            });
     });
 </script>
 {% endblock %}
