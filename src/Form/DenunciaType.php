@@ -16,6 +16,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class DenunciaType extends AbstractType
 {
@@ -50,17 +51,6 @@ class DenunciaType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('estado', EntityType::class, [
-                'class' => EstadoDenuncia::class,
-                'choice_label' => 'nombre',
-                'label' => 'Estado',
-                'placeholder' => 'Selecciona un estado',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Debes seleccionar un estado.',
-                    ]),
-                ],
-            ])
             ->add('direccion', TextType::class, [
                 'label' => 'Ubicación (Dirección)',
                 'required' => true,
@@ -81,13 +71,15 @@ class DenunciaType extends AbstractType
                 ],
                 'placeholder' => 'Selecciona una ubicación existente',
             ])
-            ->add('evidencias', EntityType::class, [
-                'class' => Evidencia::class,
-                'choice_label' => 'rutaArchivo',
-                'label' => 'Evidencias',
-                'multiple' => true,
-                'expanded' => true,
+            ->add('evidencias', FileType::class, [
+                'label' => 'Evidencias (Fotos, Videos, Audios)',
+                'multiple' => true, // Permitir múltiples archivos
+                'mapped' => false,  // No está mapeado directamente a la entidad
                 'required' => false,
+                'attr' => [
+                    'accept' => 'image/*,video/*,audio/*', // Aceptar solo imágenes, videos y audios
+                    'class' => 'form-control',
+                ],
             ]);
     }
 

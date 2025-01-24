@@ -45,7 +45,10 @@ class Denuncia
 
     #[ORM\OneToMany(mappedBy: 'denuncia', targetEntity: Evidencia::class, cascade: ['persist', 'remove'])]
     private Collection $evidencias;
-
+    
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $direccion = null;
+   
     public function __construct()
     {
         $this->evidencias = new ArrayCollection();
@@ -180,6 +183,18 @@ class Denuncia
     public function setFechaActualizacion(?\DateTimeInterface $fechaActualizacion): self
     {
         $this->fechaActualizacion = $fechaActualizacion;
+
+        return $this;
+    }
+
+    public function getDireccion(): ?string
+    {
+        return $this->direccion;
+    }
+
+    public function setDireccion(?string $direccion): self
+    {
+        $this->direccion = $direccion;
 
         return $this;
     }

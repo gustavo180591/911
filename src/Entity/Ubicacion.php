@@ -43,8 +43,6 @@ class Ubicacion
     )]
     private ?string $coordenadas = null; // Almacena latitud y longitud.
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $direccion = null;
     // Getters y Setters
 
     public function getId(): ?int
@@ -125,16 +123,4 @@ class Ubicacion
 
         return null;
     }
-
-    public function getDireccion(): ?string
-    {
-        return $this->direccion;
     }
-
-    public function setDireccion(?string $direccion): self
-    {
-        $this->direccion = $direccion;
-
-        return $this;
-    }
-}

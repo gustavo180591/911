@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Denuncia;
+use App\Entity\Ubicacion;
+use App\Entity\EstadoDenuncia;
 use App\Form\DenunciaType;
 use App\Repository\DenunciaRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,6 +25,9 @@ class EmergencyController extends AbstractController
         $this->repository = $repository;
     }
 
+
+
+
     #[Route('/', name: 'emergency_index', methods: ['GET'])]
     public function index(): Response
     {
@@ -36,29 +41,50 @@ class EmergencyController extends AbstractController
     }
 
     #[Route('/create', name: 'emergency_create', methods: ['GET', 'POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $emergency = new Denuncia();
-        $form = $this->createForm(DenunciaType::class, $emergency);
-        $form->handleRequest($request);
+public function create(Request $request, EntityManagerInterface $entityManager): Response
+{
+    $emergency = new Denuncia();
+    $form = $this->createForm(DenunciaType::class, $emergency);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $emergency->setUsuario($this->getUser());
-            $emergency->setFechaCreacion(new \DateTime());
+    if ($form->isSubmitted() && $form->isValid()) {
+        $direccion = $form->get('direccion')->getData();
+        $ubicacion = $entityManager->getRepository(Ubicacion::class)->findOneBy(['calle' => $direccion]);
 
-            $entityManager->persist($emergency);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Emergencia creada exitosamente.');
-
-            return $this->redirectToRoute('emergency_index');
+        if (!$ubicacion) {
+            $ubicacion = new Ubicacion();
+            $ubicacion->setCalle($direccion);
+            $ubicacion->setNumero(''); // Ajusta si es necesario
+            $ubicacion->setCoordenadas(''); // Ajusta si es necesario
+            $entityManager->persist($ubicacion);
         }
 
-        return $this->render('emergency/create.html.twig', [
-            'title' => 'Registrar Emergencia',
-            'form' => $form->createView(),
-        ]);
+        $emergency->setUbicacion($ubicacion);
+
+        // Obtener el estado "Iniciado" desde la base de datos
+        $estadoIniciado = $entityManager->getRepository(EstadoDenuncia::class)->findOneBy(['nombre' => 'Iniciado']);
+
+        if (!$estadoIniciado) {
+            throw new \Exception('El estado "Iniciado" no existe en la base de datos.');
+        }
+
+        $emergency->setEstado($estadoIniciado);
+        $emergency->setUsuario($this->getUser());
+        $emergency->setFechaCreacion(new \DateTime());
+
+        $entityManager->persist($emergency);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Emergencia creada exitosamente.');
+
+        return $this->redirectToRoute('emergency_index');
     }
+
+    return $this->render('emergency/create.html.twig', [
+        'title' => 'Registrar Emergencia',
+        'form' => $form->createView(),
+    ]);
+}
 
     #[Route('/view/{id}', name: 'emergency_view', methods: ['GET'])]
     public function view(int $id): Response
@@ -89,6 +115,18 @@ class EmergencyController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $direccion = $form->get('direccion')->getData();
+            $ubicacion = $entityManager->getRepository(Ubicacion::class)->findOneBy(['calle' => $direccion]);
+
+            if (!$ubicacion) {
+                $ubicacion = new Ubicacion();
+                $ubicacion->setCalle($direccion);
+                $ubicacion->setNumero('');
+                $ubicacion->setCoordenadas('');
+                $entityManager->persist($ubicacion);
+            }
+
+            $emergency->setUbicacion($ubicacion);
             $entityManager->flush();
 
             $this->addFlash('success', 'Emergencia actualizada exitosamente.');

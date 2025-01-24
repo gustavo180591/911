@@ -19,6 +19,9 @@ class Evidencia
     #[ORM\Column(type: 'string', length: 255)]
     private string $rutaArchivo;
 
+    #[Vich\UploadableField(mapping: 'denuncia', fileNameProperty: 'images')]
+    private ?File $imageFile = null;
+
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $fechaSubida;
 
