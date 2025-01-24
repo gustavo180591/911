@@ -15,12 +15,6 @@
     {{ form_start(form, { 'attr': {'enctype': 'multipart/form-data'} }) }}
 
     <div class="mb-3">
-        {{ form_label(form.tipo, 'Tipo de Evidencia') }}
-        {{ form_widget(form.tipo, { 'attr': {'class': 'form-control'} }) }}
-        {{ form_errors(form.tipo) }}
-    </div>
-
-    <div class="mb-3">
         {{ form_label(form.rutaArchivo, 'Archivo') }}
         {{ form_widget(form.rutaArchivo, { 'attr': {'class': 'form-control'} }) }}
         {{ form_errors(form.rutaArchivo) }}

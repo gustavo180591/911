@@ -1,11 +1,12 @@
 <?php
-
 namespace App\Entity;
 
-use App\Repository\EvidenciaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
-#[ORM\Entity(repositoryClass: EvidenciaRepository::class)]
+#[ORM\Entity]
+#[Vich\Uploadable] // Añade esta anotación a la clase
 class Evidencia
 {
     #[ORM\Id]
@@ -13,17 +14,14 @@ class Evidencia
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 50)]
-    private string $tipo;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $rutaArchivo = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $rutaArchivo;
-
-    #[Vich\UploadableField(mapping: 'denuncia', fileNameProperty: 'images')]
+    #[Vich\UploadableField(mapping: 'denuncia', fileNameProperty: 'rutaArchivo')]
     private ?File $imageFile = null;
 
     #[ORM\Column(type: 'datetime')]
-    private \DateTimeInterface $fechaSubida;
+    private ?\DateTimeInterface $fechaSubida = null;
 
     #[ORM\ManyToOne(targetEntity: Denuncia::class, inversedBy: 'evidencias')]
     #[ORM\JoinColumn(nullable: false)]
@@ -36,31 +34,33 @@ class Evidencia
         return $this->id;
     }
 
-    public function getTipo(): string
-    {
-        return $this->tipo;
-    }
-
-    public function setTipo(string $tipo): self
-    {
-        $this->tipo = $tipo;
-
-        return $this;
-    }
-
-    public function getRutaArchivo(): string
+    public function getRutaArchivo(): ?string
     {
         return $this->rutaArchivo;
     }
 
-    public function setRutaArchivo(string $rutaArchivo): self
+    public function setRutaArchivo(?string $rutaArchivo): self
     {
         $this->rutaArchivo = $rutaArchivo;
-
         return $this;
     }
 
-    public function getFechaSubida(): \DateTimeInterface
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        // Actualiza la fecha de subida solo si se sube un nuevo archivo
+        if (null !== $imageFile) {
+            $this->fechaSubida = new \DateTimeImmutable();
+        }
+    }
+
+    public function getFechaSubida(): ?\DateTimeInterface
     {
         return $this->fechaSubida;
     }
@@ -68,7 +68,6 @@ class Evidencia
     public function setFechaSubida(\DateTimeInterface $fechaSubida): self
     {
         $this->fechaSubida = $fechaSubida;
-
         return $this;
     }
 
@@ -80,7 +79,6 @@ class Evidencia
     public function setDenuncia(?Denuncia $denuncia): self
     {
         $this->denuncia = $denuncia;
-
         return $this;
     }
 }

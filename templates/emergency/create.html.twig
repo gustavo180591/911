@@ -39,9 +39,16 @@
     </div>
 
     <div class="mb-3">
-        {{ form_label(form.evidencias, 'Evidencias (Opcional)') }}
-        {{ form_widget(form.evidencias, { 'attr': {'class': 'form-control'} }) }}
-        {{ form_errors(form.evidencias) }}
+        <h3>Evidencias</h3>
+        <ul class="evidencias" data-prototype="{{ form_widget(form.evidencias.vars.prototype)|e('html_attr') }}">
+            {% for evidencia in form.evidencias %}
+                <li>{{ form_row(evidencia) }}</li>
+            {% endfor %}
+        </ul>
+
+        <button type="button" class="btn btn-secondary add_evidencia_link" data-collection-holder-class="evidencias">
+            Agregar Evidencia
+        </button>
     </div>
 
     <button type="submit" class="btn btn-primary">Registrar</button>
@@ -52,6 +59,7 @@
         <a href="{{ path('emergency_index') }}" class="btn btn-secondary">Volver a la Lista de Emergencias</a>
     </div>
 </div>
+
 <div id="map" style="width: 100%; height: 400px;" class="mt-3"></div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -72,28 +80,20 @@
     // Obtener el cuadro de texto de dirección
     const direccionInput = document.querySelector('#direccion-input');
 
-    // Actualizar el mapa y el marcador al escribir en el cuadro de texto
-    direccionInput.addEventListener('change', function () {
-        const direccion = direccionInput.value;
+    // JavaScript para manejar la colección dinámica de evidencias
+    document.addEventListener('DOMContentLoaded', function() {
+        const addEvidenciaButton = document.querySelector('.add_evidencia_link');
+        const evidenciasHolder = document.querySelector('ul.evidencias');
 
-        fetch(`/buscar-ubicacion?direccion=${encodeURIComponent(direccion)}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.latitud && data.longitud) {
-                    const latLng = [data.latitud, data.longitud];
+        addEvidenciaButton.addEventListener('click', function(e) {
+            const prototype = evidenciasHolder.dataset.prototype;
+            const index = evidenciasHolder.children.length;
 
-                    // Mover el marcador al nuevo lugar
-                    marker.setLatLng(latLng).bindPopup(direccion).openPopup();
-
-                    // Centrar el mapa en la nueva ubicación
-                    map.setView(latLng, 15);
-                } else {
-                    alert('Ubicación no encontrada.');
-                }
-            })
-            .catch(error => {
-                console.error('Error al buscar la ubicación:', error);
-            });
+            const newForm = prototype.replace(/__name__/g, index);
+            const newFormLi = document.createElement('li');
+            newFormLi.innerHTML = newForm;
+            evidenciasHolder.appendChild(newFormLi);
+        });
     });
 </script>
 {% endblock %}

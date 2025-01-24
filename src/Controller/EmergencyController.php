@@ -73,6 +73,12 @@ public function create(Request $request, EntityManagerInterface $entityManager):
         $emergency->setFechaCreacion(new \DateTime());
 
         $entityManager->persist($emergency);
+        foreach ($emergency->getEvidencias() as $evidencia) {
+            $evidencia->setDenuncia($emergency);
+            $entityManager->persist($evidencia);
+        }
+        
+        dump($emergency->getEvidencias());
         $entityManager->flush();
 
         $this->addFlash('success', 'Emergencia creada exitosamente.');
