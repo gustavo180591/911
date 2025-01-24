@@ -16,10 +16,6 @@
             <td>{{ emergency.descripcion }}</td>
         </tr>
         <tr>
-            <th>Categoría</th>
-            <td>{{ emergency.categoria.nombre }}</td>
-        </tr>
-        <tr>
             <th>Fecha y Hora</th>
             <td>{{ emergency.fechaHora|date('d-m-Y H:i:s') }}</td>
         </tr>
@@ -31,15 +27,43 @@
             <th>Evidencias</th>
             <td>
                 {% if emergency.evidencias|length > 0 %}
-                    <ul>
+                    <ul class="list-unstyled">
                         {% for evidencia in emergency.evidencias %}
-                            <li>
-                                <a href="{{ evidencia.rutaArchivo }}" target="_blank">{{ evidencia.tipo }}</a>
+                            <li class="mb-2">
+                                {% if evidencia.rutaArchivo %}
+                                    <a href="{{ asset('uploads/denuncias/' ~ evidencia.rutaArchivo) }}" target="_blank" class="text-decoration-none">
+                                        {# Íconos según el tipo de evidencia #}
+                                        {% if evidencia.tipo == 'imagen' %}
+                                            <i class="fas fa-image"></i>
+                                        {% elseif evidencia.tipo == 'video' %}
+                                            <i class="fas fa-video"></i>
+                                        {% elseif evidencia.tipo == 'audio' %}
+                                            <i class="fas fa-volume-up"></i>
+                                        {% else %}
+                                            <i class="fas fa-file"></i>
+                                        {% endif %}
+                                        {{ evidencia.tipo }} ({{ evidencia.rutaArchivo }})
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">
+                                        {# Íconos según el tipo de evidencia #}
+                                        {% if evidencia.tipo == 'imagen' %}
+                                            <i class="fas fa-image"></i>
+                                        {% elseif evidencia.tipo == 'video' %}
+                                            <i class="fas fa-video"></i>
+                                        {% elseif evidencia.tipo == 'audio' %}
+                                            <i class="fas fa-volume-up"></i>
+                                        {% else %}
+                                            <i class="fas fa-file"></i>
+                                        {% endif %}
+                                        {{ evidencia.tipo }} (Archivo no disponible)
+                                    </span>
+                                {% endif %}
                             </li>
                         {% endfor %}
                     </ul>
                 {% else %}
-                    No hay evidencias disponibles.
+                    <span class="text-muted">No hay evidencias disponibles.</span>
                 {% endif %}
             </td>
         </tr>

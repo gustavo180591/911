@@ -21,7 +21,6 @@
             <tr>
                 <th>ID</th>
                 <th>Descripción</th>
-                <th>Categoría</th>
                 <th>Fecha y Hora</th>
                 <th>Ubicación</th>
                 <th>Acciones</th>
@@ -32,11 +31,10 @@
                 <tr>
                     <td>{{ emergency.id }}</td>
                     <td>{{ emergency.descripcion }}</td>
-                    <td>{{ emergency.categoria.nombre }}</td>
                     <td>{{ emergency.fechaHora|date('d-m-Y H:i:s') }}</td>
                     <td>{{ emergency.ubicacion.calle ~ ', ' ~ emergency.ubicacion.numero }}</td>
                     <td>
-                        <a href="{{ path('emergency_edit', { id: emergency.id }) }}" class="btn btn-sm btn-warning">Editar</a>
+                        <a href="{{ path('emergency_view', { id: emergency.id }) }}" class="btn btn-sm btn-warning">Ver</a>
                         <form method="post" action="{{ path('emergency_delete', { id: emergency.id }) }}" style="display: inline-block;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta emergencia?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete_emergency_' ~ emergency.id) }}">
                             <button class="btn btn-sm btn-danger">Eliminar</button>

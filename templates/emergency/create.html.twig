@@ -27,12 +27,6 @@
     </div>
 
     <div class="mb-3">
-        {{ form_label(form.categoria, 'Categoría') }}
-        {{ form_widget(form.categoria, { 'attr': {'class': 'form-control'} }) }}
-        {{ form_errors(form.categoria) }}
-    </div>
-
-    <div class="mb-3">
         {{ form_label(form.direccion, 'Dirección') }}
         {{ form_widget(form.direccion, { 'attr': {'class': 'form-control', 'id': 'direccion-input', 'placeholder': 'Escribe la dirección...'} }) }}
         {{ form_errors(form.direccion) }}

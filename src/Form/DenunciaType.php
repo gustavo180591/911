@@ -2,7 +2,6 @@
 namespace App\Form;
 
 use App\Entity\Denuncia;
-use App\Entity\CategoriaDenuncia;
 use App\Entity\Ubicacion;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -36,17 +35,6 @@ class DenunciaType extends AbstractType
                 'label' => 'Fecha y Hora del Incidente',
                 'widget' => 'single_text',
                 'required' => true,
-            ])
-            ->add('categoria', EntityType::class, [
-                'class' => CategoriaDenuncia::class,
-                'choice_label' => 'nombre',
-                'label' => 'Categoría',
-                'placeholder' => 'Selecciona una categoría',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Debes seleccionar una categoría.',
-                    ]),
-                ],
             ])
             ->add('direccion', TextType::class, [
                 'label' => 'Ubicación (Dirección)',
