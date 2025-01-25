@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Denuncia;
 use App\Entity\Ubicacion;
+use App\Entity\CategoriaDenuncia;
 use App\Entity\EstadoDenuncia;
 use App\Form\DenunciaType;
 use App\Repository\DenunciaRepository;
@@ -68,7 +69,12 @@ public function create(Request $request, EntityManagerInterface $entityManager):
             throw new \Exception('El estado "Iniciado" no existe en la base de datos.');
         }
 
+        $categoriaSincategoria = $entityManager->getRepository(CategoriaDenuncia::class)->findOneBy(['nombre' => 'Sincategoria']);
+        if (!$categoriaSincategoria) {
+            throw new \Exception('La categoria "Sincategoria" no existe en la base de datos.');
+        }
         $emergency->setEstado($estadoIniciado);
+        $emergency->setCategoria($categoriaSincategoria);
         $emergency->setUsuario($this->getUser());
         $emergency->setFechaCreacion(new \DateTime());
 
