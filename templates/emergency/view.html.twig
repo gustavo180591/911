@@ -27,41 +27,39 @@
             <th>Evidencias</th>
             <td>
                 {% if emergency.evidencias|length > 0 %}
-                    <ul class="list-unstyled">
+                    <div class="d-flex flex-wrap">
                         {% for evidencia in emergency.evidencias %}
-                            <li class="mb-2">
-                                {% if evidencia.rutaArchivo %}
-                                    <a href="{{ asset('uploads/denuncias/' ~ evidencia.rutaArchivo) }}" target="_blank" class="text-decoration-none">
-                                        {# Íconos según el tipo de evidencia #}
-                                        {% if evidencia.tipo == 'imagen' %}
-                                            <i class="fas fa-image"></i>
-                                        {% elseif evidencia.tipo == 'video' %}
-                                            <i class="fas fa-video"></i>
-                                        {% elseif evidencia.tipo == 'audio' %}
-                                            <i class="fas fa-volume-up"></i>
+                            <div class="me-3 mb-3" style="width: 150px;">
+                                <div class="card">
+                                    {% if evidencia.rutaArchivo %}
+                                        {# Verificar si el archivo es una imagen #}
+                                        {% if evidencia.rutaArchivo ends with '.jpg' or evidencia.rutaArchivo ends with '.jpeg' or evidencia.rutaArchivo ends with '.png' or evidencia.rutaArchivo ends with '.gif' %}
+                                            <img src="{{ asset('uploads/denuncias/' ~ evidencia.rutaArchivo) }}" 
+                                                 alt="Evidencia" 
+                                                 class="card-img-top img-thumbnail" 
+                                                 style="width: 100%; height: 150px; object-fit: cover;">
                                         {% else %}
-                                            <i class="fas fa-file"></i>
+                                            {# Si no es una imagen, mostrar un ícono genérico #}
+                                            <div class="text-center py-4">
+                                                <i class="fas fa-file fa-3x"></i>
+                                            </div>
                                         {% endif %}
-                                        {{ evidencia.tipo }} ({{ evidencia.rutaArchivo }})
-                                    </a>
-                                {% else %}
-                                    <span class="text-muted">
-                                        {# Íconos según el tipo de evidencia #}
-                                        {% if evidencia.tipo == 'imagen' %}
-                                            <i class="fas fa-image"></i>
-                                        {% elseif evidencia.tipo == 'video' %}
-                                            <i class="fas fa-video"></i>
-                                        {% elseif evidencia.tipo == 'audio' %}
-                                            <i class="fas fa-volume-up"></i>
-                                        {% else %}
-                                            <i class="fas fa-file"></i>
-                                        {% endif %}
-                                        {{ evidencia.tipo }} (Archivo no disponible)
-                                    </span>
-                                {% endif %}
-                            </li>
+                                        <div class="card-body text-center">
+                                            <a href="{{ asset('uploads/denuncias/' ~ evidencia.rutaArchivo) }}" 
+                                               target="_blank" 
+                                               class="btn btn-sm btn-primary">
+                                                Ver archivo
+                                            </a>
+                                        </div>
+                                    {% else %}
+                                        <div class="card-body text-center">
+                                            <span class="text-muted">Archivo no disponible</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
                         {% endfor %}
-                    </ul>
+                    </div>
                 {% else %}
                     <span class="text-muted">No hay evidencias disponibles.</span>
                 {% endif %}
