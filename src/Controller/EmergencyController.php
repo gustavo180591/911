@@ -170,4 +170,8 @@ public function create(Request $request, EntityManagerInterface $entityManager):
 
         return $this->redirectToRoute('emergency_index');
     }
+
+
+    // HACER FUNCIONAR EL BOTON DE ACEPTAR Y RECHAZAR
+    // 
 }
