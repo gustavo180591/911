@@ -174,4 +174,54 @@ public function create(Request $request, EntityManagerInterface $entityManager):
 
     // HACER FUNCIONAR EL BOTON DE ACEPTAR Y RECHAZAR
     // 
+    #[Route('/accept/{id}', name: 'emergency_accept', methods: ['POST'])]
+public function accept(int $id, Request $request, EntityManagerInterface $entityManager): Response
+{
+    $emergency = $this->repository->find($id);
+
+    if (!$emergency) {
+        throw $this->createNotFoundException('La emergencia solicitada no existe.');
+    }
+
+    if ($this->isCsrfTokenValid('accept_emergency_' . $emergency->getId(), $request->request->get('_token'))) {
+        // Cambiar el estado a "Aceptado"
+        $estadoAceptado = $entityManager->getRepository(EstadoDenuncia::class)->findOneBy(['nombre' => 'Aceptado']);
+        if (!$estadoAceptado) {
+            throw new \Exception('El estado "Aceptado" no existe.');
+        }
+
+        $emergency->setEstado($estadoAceptado);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Emergencia aceptada exitosamente.');
+    }
+
+    return $this->redirectToRoute('emergency_view', ['id' => $id]);
+}
+
+#[Route('/reject/{id}', name: 'emergency_reject', methods: ['POST'])]
+public function reject(int $id, Request $request, EntityManagerInterface $entityManager): Response
+{
+    $emergency = $this->repository->find($id);
+
+    if (!$emergency) {
+        throw $this->createNotFoundException('La emergencia solicitada no existe.');
+    }
+
+    if ($this->isCsrfTokenValid('reject_emergency_' . $emergency->getId(), $request->request->get('_token'))) {
+        // Cambiar el estado a "Rechazado"
+        $estadoRechazado = $entityManager->getRepository(EstadoDenuncia::class)->findOneBy(['nombre' => 'Rechazado']);
+        if (!$estadoRechazado) {
+            throw new \Exception('El estado "Rechazado" no existe.');
+        }
+
+        $emergency->setEstado($estadoRechazado);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Emergencia rechazada exitosamente.');
+    }
+
+    return $this->redirectToRoute('emergency_view', ['id' => $id]);
+}
+
 }
