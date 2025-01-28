@@ -23,7 +23,7 @@ class DenunciaType extends AbstractType
                 'label' => 'Descripción de la Denuncia',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'La descripción no puede estar vacía.',
+                        'message' => 'La dexscripción no puede estar vacía.',
                     ]),
                     new Length([
                         'max' => 2000,
