@@ -225,3 +225,10 @@ public function reject(int $id, Request $request, EntityManagerInterface $entity
 }
 
 }
+
+// la fecha y hora que vaya al momento de la denuncia
+// los datos del denunciante que figuren en la denuncia
+// foto del dni, selfie del denunciante para el registro y validar usuario.
+// si se acepta o no la denuncia, se envia un correo al denunciante con la respuesta.
+// agregar filto
+// Cargá imágenes del frente y del dorso de tu DNI, cédula o libreta cívica
