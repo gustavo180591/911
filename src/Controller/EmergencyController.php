@@ -26,9 +26,6 @@ class EmergencyController extends AbstractController
         $this->repository = $repository;
     }
 
-
-
-
     #[Route('/', name: 'emergency_index', methods: ['GET'])]
     public function index(): Response
     {
