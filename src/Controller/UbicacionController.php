@@ -16,7 +16,7 @@ class UbicacionController extends AbstractController
     {
         $direccion = $request->query->get('direccion');
 
-        // Buscar en la base de datos una ubicación que coincida
+        // Buscar la dirección en la base de datos
         $ubicacion = $ubicacionRepository->findOneBy(['calle' => $direccion]);
 
         if (!$ubicacion) {
@@ -24,8 +24,8 @@ class UbicacionController extends AbstractController
         }
 
         return new JsonResponse([
-            'latitud' => $ubicacion->getCoordenadas() ? explode(',', $ubicacion->getCoordenadas())[0] : null,
-            'longitud' => $ubicacion->getCoordenadas() ? explode(',', $ubicacion->getCoordenadas())[1] : null
+            'latitud' => explode(',', $ubicacion->getCoordenadas())[0],
+            'longitud' => explode(',', $ubicacion->getCoordenadas())[1]
         ]);
     }
 }
