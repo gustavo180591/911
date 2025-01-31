@@ -13,6 +13,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use DateTime;
+use DateTimeZone;
 
 class DenunciaType extends AbstractType
 {
@@ -35,8 +37,9 @@ class DenunciaType extends AbstractType
                 'label' => 'Fecha y Hora del Incidente',
                 'widget' => 'single_text',
                 'required' => true,
+                'data' => new DateTime('now', new DateTimeZone('America/Argentina/Buenos_Aires')), // Ajusta la zona horaria
             ])
-            ->add('direccion', TextType::class, [
+                ->add('direccion', TextType::class, [
                 'label' => 'Ubicación (Dirección)',
                 'required' => true,
                 'attr' => [
