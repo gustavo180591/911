@@ -27,9 +27,11 @@
     </div>
 
     <div class="mb-3">
-        <label for="direccion-input" class="form-label">Dirección</label>
-        <input type="text" id="direccion-input" name="direccion" class="form-control" placeholder="Escribe la dirección..." />
+        {{ form_label(form.direccion) }}
+        {{ form_widget(form.direccion, { 'attr': {'class': 'form-control', 'id': 'direccion-input'} }) }}
+        {{ form_errors(form.direccion) }}
     </div>
+    
 
     <input type="hidden" id="latitud" name="latitud">
     <input type="hidden" id="longitud" name="longitud">

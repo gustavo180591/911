@@ -38,7 +38,12 @@ class DenunciaType extends AbstractType
                 'widget' => 'single_text',
                 'required' => true,
                 'data' => new DateTime('now', new DateTimeZone('America/Argentina/Buenos_Aires')), // Ajusta la zona horaria
-            ])              
+            ])          
+            ->add('direccion', TextType::class, [
+                'mapped' => false,
+                'required' => false,
+                'label' => 'Dirección',
+            ])
             ->add('evidencias', CollectionType::class, [
                 'entry_type' => EvidenciaType::class, // Usa el formulario EvidenciaType
                 'entry_options' => ['label' => false], // No mostrar etiquetas para cada evidencia

@@ -46,7 +46,7 @@ public function create(Request $request, EntityManagerInterface $entityManager):
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-        $direccion = $form->get('direccion')->getData();
+        $direccion = $direccion = $request->request->get('direccion');
         $ubicacion = $entityManager->getRepository(Ubicacion::class)->findOneBy(['calle' => $direccion]);
 
         if (!$ubicacion) {
