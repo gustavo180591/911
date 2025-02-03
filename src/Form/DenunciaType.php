@@ -37,13 +37,19 @@ class DenunciaType extends AbstractType
                 'label' => 'Fecha y Hora del Incidente',
                 'widget' => 'single_text',
                 'required' => true,
-                'data' => new DateTime('now', new DateTimeZone('America/Argentina/Buenos_Aires')), // Ajusta la zona horaria
-            ])          
+                'data' => new \DateTime('now', new \DateTimeZone('America/Argentina/Buenos_Aires')), // Establecer valor por defecto
+            ])                     
             ->add('direccion', TextType::class, [
-                'mapped' => false,
-                'required' => false,
+                'mapped' => false, // No está en la entidad Denuncia, pero se captura manualmente
+                'required' => true,
                 'label' => 'Dirección',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'La dirección es obligatoria.',
+                    ]),
+                ],
             ])
+            
             ->add('evidencias', CollectionType::class, [
                 'entry_type' => EvidenciaType::class, // Usa el formulario EvidenciaType
                 'entry_options' => ['label' => false], // No mostrar etiquetas para cada evidencia

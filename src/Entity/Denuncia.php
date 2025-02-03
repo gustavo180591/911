@@ -29,7 +29,7 @@ class Denuncia
     #[ORM\JoinColumn(nullable: false)]
     private CategoriaDenuncia $categoria;
 
-    #[ORM\ManyToOne(targetEntity: Ubicacion::class)]
+    #[ORM\ManyToOne(targetEntity: Ubicacion::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private Ubicacion $ubicacion;
 
@@ -45,17 +45,17 @@ class Denuncia
 
     #[ORM\OneToMany(mappedBy: 'denuncia', targetEntity: Evidencia::class, cascade: ['persist', 'remove'])]
     private Collection $evidencias;
-    
+
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $direccion = null;
-   
+
     public function __construct()
     {
         $this->evidencias = new ArrayCollection();
+        $this->fechaCreacion = new \DateTime('now', new \DateTimeZone('America/Argentina/Buenos_Aires')); // Fecha por defecto
     }
 
-    // Getters y Setters para Evidencias
-
+    // Métodos para Evidencias
     public function getEvidencias(): Collection
     {
         return $this->evidencias;
@@ -65,27 +65,22 @@ class Denuncia
     {
         if (!$this->evidencias->contains($evidencia)) {
             $this->evidencias[] = $evidencia;
-            $evidencia->setDenuncia($this); // Establece la relación inversa
+            $evidencia->setDenuncia($this);
         }
-
         return $this;
     }
 
     public function removeEvidencia(Evidencia $evidencia): self
     {
         if ($this->evidencias->removeElement($evidencia)) {
-            // Si es necesario, rompe la relación inversa
             if ($evidencia->getDenuncia() === $this) {
                 $evidencia->setDenuncia(null);
             }
         }
-
         return $this;
     }
 
-
-    // Getters y Setters
-
+    // Métodos Getters y Setters
     public function getId(): ?int
     {
         return $this->id;
@@ -99,7 +94,6 @@ class Denuncia
     public function setDescripcion(string $descripcion): self
     {
         $this->descripcion = $descripcion;
-
         return $this;
     }
 
@@ -111,7 +105,6 @@ class Denuncia
     public function setFechaHora(\DateTimeInterface $fechaHora): self
     {
         $this->fechaHora = $fechaHora;
-
         return $this;
     }
 
@@ -123,7 +116,6 @@ class Denuncia
     public function setEstado(EstadoDenuncia $estado): self
     {
         $this->estado = $estado;
-
         return $this;
     }
 
@@ -135,7 +127,6 @@ class Denuncia
     public function setCategoria(CategoriaDenuncia $categoria): self
     {
         $this->categoria = $categoria;
-
         return $this;
     }
 
@@ -147,7 +138,6 @@ class Denuncia
     public function setUbicacion(Ubicacion $ubicacion): self
     {
         $this->ubicacion = $ubicacion;
-
         return $this;
     }
 
@@ -159,7 +149,6 @@ class Denuncia
     public function setUsuario(Usuario $usuario): self
     {
         $this->usuario = $usuario;
-
         return $this;
     }
 
@@ -171,7 +160,6 @@ class Denuncia
     public function setFechaCreacion(\DateTimeInterface $fechaCreacion): self
     {
         $this->fechaCreacion = $fechaCreacion;
-
         return $this;
     }
 
@@ -183,7 +171,6 @@ class Denuncia
     public function setFechaActualizacion(?\DateTimeInterface $fechaActualizacion): self
     {
         $this->fechaActualizacion = $fechaActualizacion;
-
         return $this;
     }
 
@@ -195,7 +182,6 @@ class Denuncia
     public function setDireccion(?string $direccion): self
     {
         $this->direccion = $direccion;
-
         return $this;
     }
 }

@@ -17,7 +17,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/emergencies')]
 #[IsGranted('ROLE_USER')]
-class EmergencyController extends AbstractController
+class DenunciaController extends AbstractController
 {
     private DenunciaRepository $repository;
 
@@ -46,46 +46,15 @@ public function create(Request $request, EntityManagerInterface $entityManager):
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-        $direccion = $direccion = $request->request->get('direccion');
-        $ubicacion = $entityManager->getRepository(Ubicacion::class)->findOneBy(['calle' => $direccion]);
+        // Asignar la fecha y hora de creación en la zona horaria de Buenos Aires
+        $fechaCreacion = new \DateTime('now', new \DateTimeZone('America/Argentina/Buenos_Aires'));
+        $emergency->setFechaCreacion($fechaCreacion);
 
-        if (!$ubicacion) {
-            $ubicacion = new Ubicacion();
-            $ubicacion->setCalle($direccion);
-            $ubicacion->setNumero(''); // Ajusta si es necesario
-            $ubicacion->setCoordenadas(''); // Ajusta si es necesario
-            $entityManager->persist($ubicacion);
-        }
-
-        $emergency->setUbicacion($ubicacion);
-
-        // Obtener el estado "Iniciado" desde la base de datos
-        $estadoIniciado = $entityManager->getRepository(EstadoDenuncia::class)->findOneBy(['nombre' => 'Iniciado']);
-
-        if (!$estadoIniciado) {
-            throw new \Exception('El estado "Iniciado" no existe en la base de datos.');
-        }
-
-        $categoriaSincategoria = $entityManager->getRepository(CategoriaDenuncia::class)->findOneBy(['nombre' => 'Sincategoria']);
-        if (!$categoriaSincategoria) {
-            throw new \Exception('La categoria "Sincategoria" no existe en la base de datos.');
-        }
-        $emergency->setEstado($estadoIniciado);
-        $emergency->setCategoria($categoriaSincategoria);
-        $emergency->setUsuario($this->getUser());
-        $emergency->setFechaCreacion(new \DateTime());
-
+        // Guardar la emergencia
         $entityManager->persist($emergency);
-        foreach ($emergency->getEvidencias() as $evidencia) {
-            $evidencia->setDenuncia($emergency);
-            $entityManager->persist($evidencia);
-        }
-        
-        dump($emergency->getEvidencias());
         $entityManager->flush();
 
         $this->addFlash('success', 'Emergencia creada exitosamente.');
-
         return $this->redirectToRoute('emergency_index');
     }
 
