@@ -52,9 +52,10 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $fechaRegistro = null;
 
-    #[ORM\ManyToOne(targetEntity: Rol::class, inversedBy: 'usuarios')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Rol $rol = null;
+    #[ORM\ManyToOne(targetEntity: Rol::class)]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+    private ?Rol $rol;
+
     public function __construct()
     {
         $this->fechaRegistro = new \DateTime();

@@ -64,9 +64,6 @@ class Rol
         return $this;
     }
 
-    /**
-     * @return Collection|Usuario[]
-     */
     public function getUsuarios(): Collection
     {
         return $this->usuarios;
@@ -93,9 +90,6 @@ class Rol
         return $this;
     }
 
-    /**
-     * @return Collection|Permiso[]
-     */
     public function getPermisos(): Collection
     {
         return $this->permisos;
