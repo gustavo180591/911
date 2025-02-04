@@ -21,7 +21,7 @@ class Rol
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $descripcion = null;
 
-    #[ORM\OneToMany(mappedBy: 'rol', targetEntity: Usuario::class)]
+    #[ORM\OneToMany(mappedBy: 'rol', targetEntity: Usuario::class, cascade: ['persist', 'remove'])]
     private Collection $usuarios;
 
     #[ORM\ManyToMany(targetEntity: Permiso::class, inversedBy: 'roles')]

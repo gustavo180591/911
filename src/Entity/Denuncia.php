@@ -6,6 +6,7 @@ use App\Repository\DenunciaRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DenunciaRepository::class)]
 class Denuncia
@@ -16,6 +17,7 @@ class Denuncia
     private ?int $id = null;
 
     #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank(message: 'La descripción no puede estar vacía.')]
     private string $descripcion;
 
     #[ORM\Column(type: 'datetime')]
@@ -29,7 +31,7 @@ class Denuncia
     #[ORM\JoinColumn(nullable: false)]
     private CategoriaDenuncia $categoria;
 
-    #[ORM\ManyToOne(targetEntity: Ubicacion::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Ubicacion::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private Ubicacion $ubicacion;
 
@@ -46,13 +48,10 @@ class Denuncia
     #[ORM\OneToMany(mappedBy: 'denuncia', targetEntity: Evidencia::class, cascade: ['persist', 'remove'])]
     private Collection $evidencias;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $direccion = null;
-
     public function __construct()
     {
         $this->evidencias = new ArrayCollection();
-        $this->fechaCreacion = new \DateTime('now', new \DateTimeZone('America/Argentina/Buenos_Aires')); // Fecha por defecto
+        $this->fechaCreacion = new \DateTime('now', new \DateTimeZone('America/Argentina/Buenos_Aires'));
     }
 
     // Métodos para Evidencias
@@ -80,16 +79,10 @@ class Denuncia
         return $this;
     }
 
-    // Métodos Getters y Setters
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    // Getters y Setters
+    public function getId(): ?int { return $this->id; }
 
-    public function getDescripcion(): string
-    {
-        return $this->descripcion;
-    }
+    public function getDescripcion(): string { return $this->descripcion; }
 
     public function setDescripcion(string $descripcion): self
     {
@@ -97,10 +90,7 @@ class Denuncia
         return $this;
     }
 
-    public function getFechaHora(): \DateTimeInterface
-    {
-        return $this->fechaHora;
-    }
+    public function getFechaHora(): \DateTimeInterface { return $this->fechaHora; }
 
     public function setFechaHora(\DateTimeInterface $fechaHora): self
     {
@@ -108,10 +98,7 @@ class Denuncia
         return $this;
     }
 
-    public function getEstado(): EstadoDenuncia
-    {
-        return $this->estado;
-    }
+    public function getEstado(): EstadoDenuncia { return $this->estado; }
 
     public function setEstado(EstadoDenuncia $estado): self
     {
@@ -119,10 +106,7 @@ class Denuncia
         return $this;
     }
 
-    public function getCategoria(): CategoriaDenuncia
-    {
-        return $this->categoria;
-    }
+    public function getCategoria(): CategoriaDenuncia { return $this->categoria; }
 
     public function setCategoria(CategoriaDenuncia $categoria): self
     {
@@ -130,10 +114,7 @@ class Denuncia
         return $this;
     }
 
-    public function getUbicacion(): Ubicacion
-    {
-        return $this->ubicacion;
-    }
+    public function getUbicacion(): Ubicacion { return $this->ubicacion; }
 
     public function setUbicacion(Ubicacion $ubicacion): self
     {
@@ -141,10 +122,7 @@ class Denuncia
         return $this;
     }
 
-    public function getUsuario(): Usuario
-    {
-        return $this->usuario;
-    }
+    public function getUsuario(): Usuario { return $this->usuario; }
 
     public function setUsuario(Usuario $usuario): self
     {
@@ -152,10 +130,7 @@ class Denuncia
         return $this;
     }
 
-    public function getFechaCreacion(): \DateTimeInterface
-    {
-        return $this->fechaCreacion;
-    }
+    public function getFechaCreacion(): \DateTimeInterface { return $this->fechaCreacion; }
 
     public function setFechaCreacion(\DateTimeInterface $fechaCreacion): self
     {
@@ -163,25 +138,11 @@ class Denuncia
         return $this;
     }
 
-    public function getFechaActualizacion(): ?\DateTimeInterface
-    {
-        return $this->fechaActualizacion;
-    }
+    public function getFechaActualizacion(): ?\DateTimeInterface { return $this->fechaActualizacion; }
 
     public function setFechaActualizacion(?\DateTimeInterface $fechaActualizacion): self
     {
         $this->fechaActualizacion = $fechaActualizacion;
-        return $this;
-    }
-
-    public function getDireccion(): ?string
-    {
-        return $this->direccion;
-    }
-
-    public function setDireccion(?string $direccion): self
-    {
-        $this->direccion = $direccion;
         return $this;
     }
 }
