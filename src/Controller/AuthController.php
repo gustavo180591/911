@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Usuario;
 use App\Form\RegistrationFormType;
 use App\Security\LoginFormAuthenticator;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,21 +29,38 @@ class AuthController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Cifrar la contraseña
-            $password = password_hash($form->get('Password')->getData(), PASSWORD_BCRYPT);
-            $user->setPassword($password);
-            $user->setRoles(['ROLE_USER']);
-            $user->setFechaRegistro(new \DateTime());
+            try {
+                // Comprobar si el usuario ya existe
+                $existingUser = $entityManager->getRepository(Usuario::class)->findOneBy(['email' => $user->getEmail()]);
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+                if ($existingUser) {
+                    $this->addFlash('error', 'El correo electrónico ya está registrado. Intente con otro.');
+                    return $this->redirectToRoute('auth_register');
+                }
 
-            // Autenticar al usuario tras el registro
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
+                // Cifrar la contraseña
+                $password = password_hash($form->get('Password')->getData(), PASSWORD_BCRYPT);
+                $user->setPassword($password);
+                $user->setRoles(['ROLE_USER']);
+                $user->setFechaRegistro(new \DateTime());
+
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                // Autenticar al usuario tras el registro
+                return $userAuthenticator->authenticateUser(
+                    $user,
+                    $authenticator,
+                    $request
+                );
+
+                // ✅ Redirigir a la página de éxito o al home
+                return $this->redirectToRoute('auth_success');
+
+            } catch (UniqueConstraintViolationException $e) {
+                $this->addFlash('error', 'El correo electrónico ya está en uso. Intente con otro.');
+                return $this->redirectToRoute('auth_register');
+            }
         }
 
         return $this->render('auth/register.html.twig', [
@@ -55,23 +73,25 @@ class AuthController extends AbstractController
     {
         // Si el usuario ya está autenticado, redirigirlo
         if ($this->getUser()) {
-            return $this->redirectToRoute('home_index'); // Cambiar "home" por el nombre de tu ruta de inicio
+            return $this->redirectToRoute('home_index'); // Ruta de inicio
         }
 
-        // Obtener el último nombre de usuario ingresado y el error de autenticación, si existe
-        $lastUsername = $authenticationUtils->getLastUsername();
-        $error = $authenticationUtils->getLastAuthenticationError();
-
         return $this->render('auth/login.html.twig', [
-            'last_username' => $lastUsername,
-            'error' => $error,
+            'last_username' => $authenticationUtils->getLastUsername(),
+            'error' => $authenticationUtils->getLastAuthenticationError(),
         ]);
     }
 
     #[Route('/logout', name: 'auth_logout', methods: ['GET'])]
     public function logout(): void
     {
-        // Symfony gestiona automáticamente el logout
+        // Symfony maneja automáticamente el cierre de sesión
         throw new \LogicException('Este método puede estar vacío, Symfony lo gestiona automáticamente.');
+    }
+
+    #[Route('/success', name: 'auth_success', methods: ['GET'])]
+    public function success(): Response
+    {
+        return $this->render('auth/success.html.twig');
     }
 }

@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}911{% endblock %}</title>
         <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         {% block stylesheets %}
@@ -13,6 +13,8 @@
         {% endblock %}
     </head>
     <body>
+        <div class="container">
+        {% include "comunes/_menu.html.twig" %}
         {% block body %}{% endblock %}
     </body>
 </html>

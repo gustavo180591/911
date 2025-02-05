@@ -49,7 +49,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         }
 
         // ✅ Redirigir al dashboard o página principal después del login
-        return new RedirectResponse($this->urlGenerator->generate('home')); 
+        return new RedirectResponse($this->urlGenerator->generate('auth/success.html.twig')); 
     }
 
     protected function getLoginUrl(Request $request): string

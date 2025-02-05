@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registro Exitoso{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4 text-success">¡Registro Exitoso!</h1>
+    <p>Tu cuenta ha sido creada correctamente.</p>
+    <p><a href="{{ path('home_index') }}" class="btn btn-primary">Ir al Inicio</a></p>
+</div>
+{% endblock %}
