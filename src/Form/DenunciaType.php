@@ -39,16 +39,7 @@ class DenunciaType extends AbstractType
                 'required' => true,
                 'data' => new \DateTime('now', new \DateTimeZone('America/Argentina/Buenos_Aires')), // Establecer valor por defecto
             ])                     
-            ->add('direccion', TextType::class, [
-                'mapped' => false, // No está en la entidad Denuncia, pero se captura manualmente
-                'required' => true,
-                'label' => 'Dirección',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'La dirección es obligatoria.',
-                    ]),
-                ],
-            ])
+
             
             ->add('evidencias', CollectionType::class, [
                 'entry_type' => EvidenciaType::class, // Usa el formulario EvidenciaType

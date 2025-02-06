@@ -76,8 +76,8 @@
         box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
 </style>
-
 <script>
+(function() {
     let map = null;
     let marker = null;
 
@@ -89,16 +89,16 @@
         const mapContainer = document.getElementById('map');
         if (!mapContainer || map) return;
 
-        // Inicializar mapa
+        // Initialize map
         map = L.map('map').setView([-27.362778, -55.900555], 13);
         
-        // Configurar capa
+        // Configure tile layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        // Configurar marcador
+        // Configure marker
         const redIcon = L.icon({
             iconUrl: '/images/marker-red.png',
             iconSize: [25, 41],
@@ -204,57 +204,6 @@
             fechaHoraInput.value = now.toISOString().slice(0, 16);
         }
     });
-    let map;  // Definir map globalmente fuera del evento
-
-document.addEventListener("turbo:load", () => {
-    if (map) return; // Si ya existe, no lo inicializa de nuevo
-
-    const mapContainer = document.getElementById('map');
-    if (!mapContainer) return;
-
-    map = L.map('map').setView([-27.362778, -55.900555], 13);
-    
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    const redIcon = L.icon({
-        iconUrl: '/images/marker-red.png', // Asegúrate de que el archivo existe en /public/images
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34]
-    });
-
-    let marker = L.marker([-27.362778, -55.900555], {
-        draggable: true,
-        icon: redIcon
-    }).addTo(map).bindPopup('Posadas, Misiones').openPopup();
-
-    // Manejo del clic en el mapa
-    map.on('click', (e) => {
-        const lat = e.latlng.lat;
-        const lon = e.latlng.lng;
-
-        marker.setLatLng([lat, lon]).openPopup();
-        document.getElementById('latitud').value = lat;
-        document.getElementById('longitud').value = lon;
-
-        reverseGeocode(lat, lon);
-    });
-
-    function reverseGeocode(lat, lon) {
-        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.address) {
-                    const direccion = `${data.address.road || ''} ${data.address.house_number || ''}, ${data.address.city || 'Posadas'}`;
-                    document.getElementById('direccion-input').value = direccion;
-                }
-            })
-            .catch(error => console.error('Error en geocoding inverso:', error));
-    }
-});
-
+})();
 </script>
 {% endblock %}
