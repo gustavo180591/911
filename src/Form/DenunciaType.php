@@ -3,6 +3,8 @@ namespace App\Form;
 
 use App\Entity\Denuncia;
 use App\Entity\Ubicacion;
+use App\Entity\Evidencia;
+use App\Form\BootstrapCollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -13,6 +15,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+
 use DateTime;
 use DateTimeZone;
 
@@ -41,17 +44,15 @@ class DenunciaType extends AbstractType
             ])                     
 
             
-            ->add('evidencias', CollectionType::class, [
-                'entry_type' => EvidenciaType::class, // Usa el formulario EvidenciaType
-                'entry_options' => ['label' => false], // No mostrar etiquetas para cada evidencia
+            ->add('evidencias',
+                BootstrapCollectionType::class, 
+                [
+                'entry_type' => EvidenciaType::class, 
                 'allow_add' => true, // Permitir agregar nuevas evidencias dinámicamente
                 'allow_delete' => true, // Permitir eliminar evidencias
                 'by_reference' => false, // Importante para que Symfony maneje correctamente la relación
                 'label' => 'Evidencias',
-                'attr' => [
-                    'class' => 'evidencias-collection', // Clase CSS para estilos
-                ],
-            ]);
+                ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
