@@ -46,7 +46,16 @@ public function create(Request $request, EntityManagerInterface $entityManager):
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-        // Asignar la fecha y hora de creación en la zona horaria de Buenos Aires
+        // Asignar un estado inicial (por ejemplo, "Pendiente")
+        $estadoPendiente = $entityManager->getRepository(EstadoDenuncia::class)->findOneBy(['nombre' => 'Pendiente']);
+        
+        if (!$estadoPendiente) {
+            throw new \Exception('El estado "Pendiente" no existe en la base de datos.');
+        }
+
+        $emergency->setEstado($estadoPendiente); // ✅ Asigna el estado predeterminado
+        
+        // Asignar la fecha de creación con la zona horaria de Argentina
         $fechaCreacion = new \DateTime('now', new \DateTimeZone('America/Argentina/Buenos_Aires'));
         $emergency->setFechaCreacion($fechaCreacion);
 
@@ -63,6 +72,7 @@ public function create(Request $request, EntityManagerInterface $entityManager):
         'form' => $form->createView(),
     ]);
 }
+
 
     #[Route('/view/{id}', name: 'emergency_view', methods: ['GET'])]
     public function view(int $id): Response
