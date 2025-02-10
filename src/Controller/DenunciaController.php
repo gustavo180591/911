@@ -39,40 +39,47 @@ class DenunciaController extends AbstractController
     }
 
     #[Route('/create', name: 'emergency_create', methods: ['GET', 'POST'])]
-public function create(Request $request, EntityManagerInterface $entityManager): Response
-{
-    $emergency = new Denuncia();
-    $form = $this->createForm(DenunciaType::class, $emergency);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        // Asignar un estado inicial (por ejemplo, "Pendiente")
-        $estadoPendiente = $entityManager->getRepository(EstadoDenuncia::class)->findOneBy(['nombre' => 'Pendiente']);
-        
-        if (!$estadoPendiente) {
-            throw new \Exception('El estado "Pendiente" no existe en la base de datos.');
+    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $emergency = new Denuncia();
+        $form = $this->createForm(DenunciaType::class, $emergency);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            // ✅ Asignar un estado inicial (por ejemplo, "Pendiente")
+            $estadoPendiente = $entityManager->getRepository(EstadoDenuncia::class)->findOneBy(['nombre' => 'Pendiente']);
+            if (!$estadoPendiente) {
+                throw new \Exception('El estado "Pendiente" no existe en la base de datos.');
+            }
+            $emergency->setEstado($estadoPendiente);
+    
+            // ✅ Asignar una categoría por defecto si no se ha seleccionado ninguna
+            if (!$emergency->getCategoria()) {
+                $categoriaPorDefecto = $entityManager->getRepository(CategoriaDenuncia::class)->findOneBy(['nombre' => 'General']);
+                if (!$categoriaPorDefecto) {
+                    throw new \Exception('La categoría "General" no existe en la base de datos.');
+                }
+                $emergency->setCategoria($categoriaPorDefecto);
+            }
+    
+            // ✅ Asignar la fecha de creación con la zona horaria de Argentina
+            $fechaCreacion = new \DateTime('now', new \DateTimeZone('America/Argentina/Buenos_Aires'));
+            $emergency->setFechaCreacion($fechaCreacion);
+    
+            // Guardar la emergencia
+            $entityManager->persist($emergency);
+            $entityManager->flush();
+    
+            $this->addFlash('success', 'Emergencia creada exitosamente.');
+            return $this->redirectToRoute('emergency_index');
         }
-
-        $emergency->setEstado($estadoPendiente); // ✅ Asigna el estado predeterminado
-        
-        // Asignar la fecha de creación con la zona horaria de Argentina
-        $fechaCreacion = new \DateTime('now', new \DateTimeZone('America/Argentina/Buenos_Aires'));
-        $emergency->setFechaCreacion($fechaCreacion);
-
-        // Guardar la emergencia
-        $entityManager->persist($emergency);
-        $entityManager->flush();
-
-        $this->addFlash('success', 'Emergencia creada exitosamente.');
-        return $this->redirectToRoute('emergency_index');
+    
+        return $this->render('emergency/create.html.twig', [
+            'title' => 'Registrar Emergencia',
+            'form' => $form->createView(),
+        ]);
     }
-
-    return $this->render('emergency/create.html.twig', [
-        'title' => 'Registrar Emergencia',
-        'form' => $form->createView(),
-    ]);
-}
-
+    
 
     #[Route('/view/{id}', name: 'emergency_view', methods: ['GET'])]
     public function view(int $id): Response
