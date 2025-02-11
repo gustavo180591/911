@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CategoriaDenunciaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategoriaDenunciaRepository::class)]
 class CategoriaDenuncia
@@ -14,10 +15,19 @@ class CategoriaDenuncia
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[Assert\NotBlank(message: 'El nombre es obligatorio.')]
     private string $nombre;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $descripcion = null;
+
+    #[ORM\OneToMany(mappedBy: 'categoria', targetEntity: Denuncia::class)]
+    private Collection $denuncias;
+
+    public function __construct()
+    {
+        $this->denuncias = new ArrayCollection();
+    }
 
     // Getters y Setters
 
@@ -34,7 +44,6 @@ class CategoriaDenuncia
     public function setNombre(string $nombre): self
     {
         $this->nombre = $nombre;
-
         return $this;
     }
 
@@ -46,7 +55,11 @@ class CategoriaDenuncia
     public function setDescripcion(?string $descripcion): self
     {
         $this->descripcion = $descripcion;
-
         return $this;
+    }
+
+    public function getDenuncias(): Collection
+    {
+        return $this->denuncias;
     }
 }
