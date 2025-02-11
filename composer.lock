@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa6d160805ab3fac5114e2385371a2de",
+    "content-hash": "ca1c8c959b71095cf15ecf1b38cf884b",
     "packages": [
         {
             "name": "composer/semver",
@@ -6910,16 +6910,16 @@
         },
         {
             "name": "symfony/ux-map",
-            "version": "v2.22.1",
+            "version": "v2.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-map.git",
-                "reference": "36efce231607de2ba7662cf793eb04cedc48f60b"
+                "reference": "45abfd49f8c58f28a34eed7f607b0d032f925db4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-map/zipball/36efce231607de2ba7662cf793eb04cedc48f60b",
-                "reference": "36efce231607de2ba7662cf793eb04cedc48f60b",
+                "url": "https://api.github.com/repos/symfony/ux-map/zipball/45abfd49f8c58f28a34eed7f607b0d032f925db4",
+                "reference": "45abfd49f8c58f28a34eed7f607b0d032f925db4",
                 "shasum": ""
             },
             "require": {
@@ -6972,7 +6972,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-map/tree/v2.22.1"
+                "source": "https://github.com/symfony/ux-map/tree/v2.23.0"
             },
             "funding": [
                 {
@@ -6988,7 +6988,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-05T14:25:02+00:00"
+            "time": "2025-02-07T23:56:36+00:00"
         },
         {
             "name": "symfony/ux-turbo",

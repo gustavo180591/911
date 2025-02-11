@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\RolRepository;
@@ -24,16 +23,10 @@ class Rol
     #[ORM\OneToMany(mappedBy: 'rol', targetEntity: Usuario::class, cascade: ['persist', 'remove'])]
     private Collection $usuarios;
 
-    #[ORM\ManyToMany(targetEntity: Permiso::class, inversedBy: 'roles')]
-    private Collection $permisos;
-
     public function __construct()
     {
         $this->usuarios = new ArrayCollection();
-        $this->permisos = new ArrayCollection();
     }
-
-    // Getters y Setters
 
     public function getId(): ?int
     {
@@ -48,19 +41,6 @@ class Rol
     public function setNombre(string $nombre): self
     {
         $this->nombre = $nombre;
-
-        return $this;
-    }
-
-    public function getDescripcion(): ?string
-    {
-        return $this->descripcion;
-    }
-
-    public function setDescripcion(?string $descripcion): self
-    {
-        $this->descripcion = $descripcion;
-
         return $this;
     }
 
@@ -75,7 +55,6 @@ class Rol
             $this->usuarios[] = $usuario;
             $usuario->setRol($this);
         }
-
         return $this;
     }
 
@@ -86,31 +65,6 @@ class Rol
                 $usuario->setRol(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getPermisos(): Collection
-    {
-        return $this->permisos;
-    }
-
-    public function addPermiso(Permiso $permiso): self
-    {
-        if (!$this->permisos->contains($permiso)) {
-            $this->permisos[] = $permiso;
-            $permiso->addRol($this);
-        }
-
-        return $this;
-    }
-
-    public function removePermiso(Permiso $permiso): self
-    {
-        if ($this->permisos->removeElement($permiso)) {
-            $permiso->removeRol($this);
-        }
-
         return $this;
     }
 }
