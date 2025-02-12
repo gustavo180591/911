@@ -38,7 +38,7 @@ class DenunciaController extends AbstractController
             $criteria['estado'] = $estado;
         }
 
-        $emergencies = $this->repository->findBy($criteria, ['fechaCreacion' => 'DESC']);
+        $emergencies = $this->repository->findBy($criteria, ['fechaHora' => 'DESC']);
 
         return $this->render('emergency/index.html.twig', [
             'title' => 'Mis Emergencias',
@@ -70,8 +70,8 @@ class DenunciaController extends AbstractController
             $emergency->setUsuario($this->getUser());
 
             // Asignar la fecha de creación
-            $fechaCreacion = new \DateTime('now', new \DateTimeZone('America/Argentina/Buenos_Aires'));
-            $emergency->setFechaCreacion($fechaCreacion);
+            $fechaHora = new \DateTime('now', new \DateTimeZone('America/Argentina/Buenos_Aires'));
+            $emergency->setfechaHora($fechaHora);
 
             
             $entityManager->persist($emergency);

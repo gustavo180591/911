@@ -24,6 +24,9 @@ class Denuncia
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $fechaHora;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $direccion = null;
+
     #[ORM\ManyToOne(targetEntity: CategoriaDenuncia::class, inversedBy: 'denuncias')]
     #[ORM\JoinColumn(nullable: false)]
     private CategoriaDenuncia $categoria;
@@ -64,6 +67,16 @@ class Denuncia
         return $this;
     }
 
+    public function getDireccion(): ?string
+    {
+        return $this->direccion;
+    }
+
+    public function setDireccion(?string $direccion): self
+    {
+        $this->direccion = $direccion;
+        return $this;
+    }
     public function getCategoria(): CategoriaDenuncia
     {
         return $this->categoria;
