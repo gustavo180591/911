@@ -24,15 +24,23 @@ class Denuncia
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $fechaHora;
 
+    // Direccion en texto (campo opcional si la usas como resumen de ubicación)
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $direccion = null;
 
+    // Relación con la entidad CategoriaDenuncia (como antes)
     #[ORM\ManyToOne(targetEntity: CategoriaDenuncia::class, inversedBy: 'denuncias')]
     #[ORM\JoinColumn(nullable: false)]
     private CategoriaDenuncia $categoria;
 
+    // Colección de evidencias (OneToMany)
     #[ORM\OneToMany(mappedBy: 'denuncia', targetEntity: Evidencia::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $evidencias;
+
+    // NUEVO: relación con Ubicacion
+    #[ORM\ManyToOne(targetEntity: Ubicacion::class)]
+    #[ORM\JoinColumn(nullable: true)] // o false, según tu lógica
+    private ?Ubicacion $ubicacion = null;
 
     public function __construct()
     {
@@ -40,6 +48,7 @@ class Denuncia
         $this->fechaHora = new \DateTimeImmutable();
     }
 
+    // Métodos get/set nativos
     public function getId(): ?int
     {
         return $this->id;
@@ -77,6 +86,7 @@ class Denuncia
         $this->direccion = $direccion;
         return $this;
     }
+
     public function getCategoria(): CategoriaDenuncia
     {
         return $this->categoria;
@@ -91,5 +101,17 @@ class Denuncia
     public function getEvidencias(): Collection
     {
         return $this->evidencias;
+    }
+
+    // NUEVO: Ubicacion
+    public function getUbicacion(): ?Ubicacion
+    {
+        return $this->ubicacion;
+    }
+
+    public function setUbicacion(?Ubicacion $ubicacion): self
+    {
+        $this->ubicacion = $ubicacion;
+        return $this;
     }
 }
