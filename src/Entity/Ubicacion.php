@@ -21,9 +21,6 @@ class Ubicacion
     #[ORM\Column(type: 'string', length: 20, nullable: true)]
     private ?string $numero = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $detalles = null;
-
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Regex(
         pattern: '/^-?\d{1,3}\.\d+,-?\d{1,3}\.\d+$/',
@@ -58,18 +55,7 @@ class Ubicacion
         return $this;
     }
 
-    public function getDetalles(): ?string
-    {
-        return $this->detalles;
-    }
-
-    public function setDetalles(?string $detalles): self
-    {
-        $this->detalles = $detalles;
-        return $this;
-    }
-
-    public function getCoordenadas(): ?string
+        public function getCoordenadas(): ?string
     {
         return $this->coordenadas;
     }

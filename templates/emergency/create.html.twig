@@ -12,12 +12,13 @@
         <div class="alert alert-danger">{{ message }}</div>
     {% endfor %}
 
+    {# Form con data-turbo=false para forzar recarga completa al enviar (opcional). #}
     {{ form_start(form, { attr: { 'data-turbo': 'false' } }) }}
 
     {# Descripción #}
     <div class="mb-3">
         {{ form_label(form.descripcion) }}
-        {{ form_widget(form.descripcion, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_widget(form.descripcion, { 'attr': {'class': 'form-control', 'placeholder': 'Describe brevemente la denuncia...'} }) }}
         {{ form_errors(form.descripcion) }}
     </div>
 
@@ -30,46 +31,56 @@
 
     {# Subform Ubicación #}
     <h3>Datos de Ubicación</h3>
-    <div class="mb-3">
-        {{ form_row(form.ubicacion.calle) }}
-    </div>
-    <div class="mb-3">
-        {{ form_row(form.ubicacion.numero) }}
-    </div>
-    <div class="mb-3">
-        {{ form_row(form.ubicacion.detalles) }}
-    </div>
+    {# Campo calle #}
+<div class="mb-3">
+    {{ form_label(form.ubicacion.calle) }}
+    {{ form_widget(form.ubicacion.calle, {
+        'attr': {
+            'onchange': 'onAddressChange()'   # cuando cambia, llamamos geocoding
+        }
+    }) }}
+</div>
 
-    {# Campo "coordenadas" hidden #}
+{# Campo numero #}
+<div class="mb-3">
+    {{ form_label(form.ubicacion.numero) }}
+    {{ form_widget(form.ubicacion.numero, {
+        'attr': {
+            'onchange': 'onAddressChange()'
+        }
+    }) }}
+</div>
+
+        {# Campo "coordenadas" hidden #}
     {{ form_widget(form.ubicacion.coordenadas) }}
 
     {# Mapa Leaflet para ubicar #}
     <div id="map" style="width:100%;height:400px;"></div>
 
     {# Evidencias (colección dinámica) #}
-    <div class="mb-3 mt-3">
-        <h4>Evidencias</h4>
-        {# 
-           data-prototype contendrá el "template" de un sub-form.
-           - e('html_attr') escapa caracteres especiales para que sea válido como HTML.
-        #}
-        <div id="evidencias-container" 
-             data-prototype="{{ form_widget(form.evidencias.vars.prototype)|e('html_attr') }}">
+  <div class="mb-3 mt-3">
+    <h4>Evidencias</h4>
 
-            {# Renderizamos los subformularios existentes en la colección #}
-            {% for evidForm in form.evidencias %}
-                {{ form_row(evidForm) }}
-            {% endfor %}
-        </div>
-
-        {# Botón para agregar nuevos sub-formularios de evidencia #}
-        <button type="button" class="btn btn-secondary" id="add-evid-btn">Agregar Evidencia</button>
+    {# Contenedor donde se inyectarán los subformularios #}
+    <div id="evidencias-container">
+        {% for evidForm in form.evidencias %}
+            {{ form_row(evidForm) }}
+        {% endfor %}
     </div>
 
-    {# Botón final para enviar #}
-    <button type="submit" class="btn btn-primary">
-        {{ form.submit.vars.label|default('Registrar') }}
+    {# Botón para agregar nuevos subformularios #}
+    <button type="button" class="btn btn-secondary" id="add-evid-btn">
+        Agregar Evidencia
     </button>
+</div>
+
+{# Aquí movemos la definición del "prototype" a un <template> #}
+<template id="evidencia-prototype">
+    {{ form_widget(form.evidencias.vars.prototype)|raw }}
+</template>
+
+
+
 
     {{ form_end(form) }}
 
@@ -87,9 +98,10 @@
     let map;
     let marker;
 
-    document.addEventListener('DOMContentLoaded', () => {
+    // Con Turbo, usa "turbo:load"; si lo desactivaste, usa "DOMContentLoaded".
+    document.addEventListener('turbo:load', () => {
         initializeMap();
-        setupDynamicEvidencias();
+        setupDynamicEvidencias(); // tu función para evidencias
     });
 
     function initializeMap() {
@@ -107,51 +119,131 @@
             popupAnchor: [1, -34]
         });
 
+        // Iniciamos el marcador en un punto arbitrario
         marker = L.marker([-27.362778, -55.900555], {
             draggable: true,
             icon: redIcon
         }).addTo(map).bindPopup('Ubicación aproximada').openPopup();
 
-        // Al hacer clic en el mapa, mueve el marcador
+        // CLICK en el mapa => mover marcador + geocodificación inversa
         map.on('click', (e) => {
             const { lat, lng } = e.latlng;
-            marker.setLatLng([lat, lng]).openPopup();
-            // Rellena campo "coordenadas"
-            document.getElementById('{{ form.ubicacion.coordenadas.vars.id }}').value = lat + ',' + lng;
+            placeMarker(lat, lng);
+            reverseGeocode(lat, lng);
         });
 
-        // Al arrastrar el marcador
+        // Cuando suelto el marcador tras arrastrar => actualiza coords + geocodificación inversa
         marker.on('moveend', (e) => {
             const { lat, lng } = e.target.getLatLng();
-            document.getElementById('{{ form.ubicacion.coordenadas.vars.id }}').value = lat + ',' + lng;
+            updateCoords(lat, lng);
+            reverseGeocode(lat, lng);
         });
+
+        // También puedes, al cargar, si ya tienes coords, setear el marcador y hacer reverse
+        // let coordsField = document.getElementById('{{ form.ubicacion.coordenadas.vars.id }}').value;
+        // if (coordsField) {
+        //     let [lat, lng] = coordsField.split(',');
+        //     placeMarker(lat, lng);
+        //     reverseGeocode(lat, lng);
+        // }
     }
 
-    // Lógica para agregar subformularios de evidencias dinámicamente
+    // Mueve el marcador y actualiza el campo hidden de coordenadas
+    function placeMarker(lat, lng) {
+        marker.setLatLng([lat, lng]).openPopup();
+        updateCoords(lat, lng);
+    }
+
+    function updateCoords(lat, lng) {
+        // Actualiza el hidden de coordenadas
+        document.getElementById('{{ form.ubicacion.coordenadas.vars.id }}').value = lat + ',' + lng;
+    }
+
+    /**
+     * Geocodificación inversa: Dadas lat/lng, obtiene la dirección desde Nominatim.
+     * Rellena campos "calle" y "numero" si encuentra datos en la respuesta.
+     */
+    async function reverseGeocode(lat, lng) {
+        try {
+            const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.address) {
+                // Toma de "address" la calle y número. Ojo, puede no estar disponible en todas las direcciones.
+                let road = data.address.road || '';
+                let houseNumber = data.address.house_number || '';
+
+                // Asigna a los campos de tu form
+                document.getElementById('{{ form.ubicacion.calle.vars.id }}').value = road;
+                document.getElementById('{{ form.ubicacion.numero.vars.id }}').value = houseNumber;
+            }
+        } catch (error) {
+            console.error('Error en geocodificación inversa:', error);
+        }
+    }
+
+    /**
+     * Geocodificación directa: Se llama cuando el usuario cambia "calle" o "numero".
+     * Busca lat/lng en Nominatim y actualiza el mapa + coordenadas.
+     */
+    async function onAddressChange() {
+        // Obtiene valores del DOM
+        const calle = document.getElementById('{{ form.ubicacion.calle.vars.id }}').value;
+        const numero = document.getElementById('{{ form.ubicacion.numero.vars.id }}').value;
+
+        if (!calle && !numero) return;
+
+        const address = `${calle} ${numero}, Misiones`; // Ajusta ciudad/provincia/país a tu gusto
+
+        try {
+            const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(address)}`;
+            const resp = await fetch(url);
+            const data = await resp.json();
+
+                if (data.length > 0) {
+            let lat = data[0].lat;
+            let lng = data[0].lon;
+            placeMarker(lat, lng);
+            map.setView([lat, lng], 15);
+}
+        } catch (error) {
+            console.error('Error en geocodificación directa:', error);
+        }
+    }
+
+    // Ejemplo de config para evidencias dinámicas (ajusta a tu caso).
+    function setupDynamicEvidencias() {
+        // ...
+    }
+
+    // Exponemos "onAddressChange" para que puedas llamarlo desde onChange en tus inputs "calle" y "numero"
+    window.onAddressChange = onAddressChange;
+
+}
+
+    // Lógica de evidencias dinámicas (colección)
     function setupDynamicEvidencias() {
         const container = document.getElementById('evidencias-container');
         const addBtn    = document.getElementById('add-evid-btn');
         if (!container || !addBtn) return;
 
-        // Vamos contando cuántos subformularios existen
-        let index = container.querySelectorAll('.form-group').length; 
-        // Ojo: a veces .form-group no coincide; usa un selector que sea consistente con tu markup
+        // Cuántos subformularios existen ya
+        let index = container.querySelectorAll('.form-group, .mb-3, .form-control').length; 
+        // Ajusta el selector a tu HTML real (a veces es .form-group, a veces .mb-3, etc.)
 
         addBtn.addEventListener('click', () => {
-            // Obtiene el prototype
+            // Tomamos el prototype
             let prototype = container.dataset.prototype;
 
-            // Reemplaza __name__ con el índice actual
-            // Symfony usa __name__ como placeholder para la clave del subform
+            // Symfony usa __name__ como placeholder
             let newForm = prototype.replace(/__name__/g, index);
             index++;
 
-            // Inserta el nuevo form en el contenedor
+            // Insertamos el nuevo form en el contenedor
             let div = document.createElement('div');
             div.innerHTML = newForm;
             container.appendChild(div);
-        });
-    }
 })();
 </script>
 {% endblock %}

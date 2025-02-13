@@ -39,14 +39,7 @@ class UbicacionType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('detalles', TextareaType::class, [
-                'label' => 'Detalles Adicionales',
-                'required' => false,
-                'attr' => [
-                    'rows' => 4,
-                    'placeholder' => 'Escribe detalles adicionales sobre la ubicación...',
-                ],
-            ])
+            
             // Campo oculto para "coordenadas"
             ->add('coordenadas', HiddenType::class, [
                 'required' => false,

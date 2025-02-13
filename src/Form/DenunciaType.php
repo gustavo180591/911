@@ -55,20 +55,13 @@ class DenunciaType extends AbstractType
                     'readonly' => true, // evitas que el usuario la modifique
                 ],
             ])
-
-            // Ubicación (sub-form)
-            ->add('ubicacion', UbicacionType::class, [
-                'label' => 'Ubicación Detallada',
-                'required' => false,
-            ])
-
             // Evidencias
             ->add('evidencias', BootstrapCollectionType::class, [
                 'entry_type'   => EvidenciaType::class,
                 'allow_add'    => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-                'label'        => 'Evidencias',
+                // 'label'        => 'Evidencias',
             ])
 
             // Botón de envío
