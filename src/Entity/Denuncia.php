@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Usuario;
 
 #[ORM\Entity(repositoryClass: DenunciaRepository::class)]
 class Denuncia
@@ -32,7 +33,7 @@ class Denuncia
     #[ORM\JoinColumn(nullable: false)]
     private ?CategoriaDenuncia $categoria = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)] 
+    #[ORM\ManyToOne(targetEntity: Usuario::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Usuario $usuario = null;
 

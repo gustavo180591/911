@@ -21,16 +21,16 @@ class Permiso
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $descripcion = null;
 
-    #[ORM\ManyToMany(targetEntity: Rol::class, mappedBy: 'permisos')]
-    private Collection $roles;
+    // Eliminamos la relación ManyToMany a Rol:
+    // #[ORM\ManyToMany(targetEntity: Rol::class, mappedBy: 'permisos')]
+    // private Collection $roles;
 
     public function __construct()
     {
-        $this->roles = new ArrayCollection();
+        // $this->roles = new ArrayCollection(); // No es necesario si no tienes la relación
     }
 
-    // Getters y Setters
-
+    // Getters y Setters básicos
     public function getId(): ?int
     {
         return $this->id;
@@ -44,7 +44,6 @@ class Permiso
     public function setNombre(string $nombre): self
     {
         $this->nombre = $nombre;
-
         return $this;
     }
 
@@ -56,34 +55,8 @@ class Permiso
     public function setDescripcion(?string $descripcion): self
     {
         $this->descripcion = $descripcion;
-
         return $this;
     }
 
-    /**
-     * @return Collection|Rol[]
-     */
-    public function getRoles(): Collection
-    {
-        return $this->roles;
-    }
-
-    public function addRol(Rol $rol): self
-    {
-        if (!$this->roles->contains($rol)) {
-            $this->roles[] = $rol;
-            $rol->addPermiso($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRol(Rol $rol): self
-    {
-        if ($this->roles->removeElement($rol)) {
-            $rol->removePermiso($this);
-        }
-
-        return $this;
-    }
+    // Si eliminas la relación, también puedes eliminar métodos getRoles(), addRol(), removeRol().
 }

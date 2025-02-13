@@ -1,7 +1,6 @@
 <?php
 namespace App\Entity;
 
-
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -17,6 +16,10 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private ?string $email = null;
 
+    /**
+     * Importante: aquí es donde Symfony guardará los roles en la base
+     * como un JSON (p. ej. ["ROLE_USER", "ROLE_ADMIN"]).
+     */
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
@@ -53,51 +56,60 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $fechaRegistro = null;
 
-    #[ORM\ManyToOne(targetEntity: Rol::class)]
-    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
-    private ?Rol $rol;
-
     public function __construct()
     {
         $this->fechaRegistro = new \DateTime();
     }
 
-    // Métodos de UserInterface y PasswordAuthenticatedUserInterface
+    // Métodos obligatorios de UserInterface / PasswordAuthenticatedUserInterface
+    // ----------------------------------------------------------------------------
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getUserIdentifier(): string
     {
-        return $this->email;
+        // Retornamos el email como identificador único
+        return $this->email ?: '';
     }
 
-    public function setEmail(string $email): self
+    public function eraseCredentials(): void
     {
-        $this->email = $email;
-
-        return $this;
+        // Si tienes datos sensibles temporales, límpialos aquí
     }
 
+    /**
+     * Retorna los roles de este usuario como un array de strings.
+     * Si el array está vacío, garantizamos al menos "ROLE_USER".
+     */
     public function getRoles(): array
     {
-        // Garantizar que siempre tenga ROLE_USER como mínimo
+        // Garantiza que tenga al menos ROLE_USER
         $roles = $this->roles;
-        if (!in_array('ROLE_USER', $roles, true)) {
+        if (empty($roles)) {
             $roles[] = 'ROLE_USER';
         }
-
-        return $roles;
+        // Eliminamos duplicados si se diera el caso
+        return array_unique($roles);
     }
 
+    /**
+     * Permite establecer (o sobrescribir) los roles del usuario.
+     * Ejemplo: $usuario->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 
         return $this;
     }
+
+    // ----------------------------------------------------------------------------
+    // Métodos de PasswordAuthenticatedUserInterface
+    // (getPassword/setPassword ya definidos, implementa lo que necesites).
+    // ----------------------------------------------------------------------------
 
     public function getPassword(): ?string
     {
@@ -111,17 +123,20 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUserIdentifier(): string
+    // ----------------------------------------------------------------------------
+    // Resto de propiedades
+    // ----------------------------------------------------------------------------
+
+    public function getEmail(): ?string
     {
-        return $this->email; // El email será el identificador único del usuario
+        return $this->email;
     }
 
-    public function eraseCredentials(): void
+    public function setEmail(string $email): self
     {
-        // Si tienes datos sensibles, límpialos aquí
+        $this->email = $email;
+        return $this;
     }
-
-    // Getters y Setters adicionales para las demás propiedades
 
     public function getNombre(): ?string
     {
@@ -131,7 +146,6 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNombre(string $nombre): self
     {
         $this->nombre = $nombre;
-
         return $this;
     }
 
@@ -143,7 +157,6 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setApellido(string $apellido): self
     {
         $this->apellido = $apellido;
-
         return $this;
     }
 
@@ -155,7 +168,6 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDni(?string $dni): self
     {
         $this->dni = $dni;
-
         return $this;
     }
 
@@ -167,7 +179,6 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTelefono(?string $telefono): self
     {
         $this->telefono = $telefono;
-
         return $this;
     }
 
@@ -176,14 +187,11 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->fechaNacimiento;
     }
 
-
     public function setFechaNacimiento(?\DateTimeInterface $fechaNacimiento): self
     {
         $this->fechaNacimiento = $fechaNacimiento;
-
         return $this;
     }
-
 
     public function getDireccion(): ?string
     {
@@ -193,10 +201,8 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDireccion(?string $direccion): self
     {
         $this->direccion = $direccion;
-
         return $this;
     }
-
 
     public function getGenero(): ?string
     {
@@ -206,7 +212,6 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setGenero(?string $genero): self
     {
         $this->genero = $genero;
-
         return $this;
     }
 
@@ -218,7 +223,6 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAvatar(?string $avatar): self
     {
         $this->avatar = $avatar;
-
         return $this;
     }
 
@@ -230,7 +234,6 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setToken(?string $token): self
     {
         $this->token = $token;
-
         return $this;
     }
 
@@ -242,7 +245,6 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFechaRegistro(\DateTimeInterface $fechaRegistro): self
     {
         $this->fechaRegistro = $fechaRegistro;
-
         return $this;
     }
 }
