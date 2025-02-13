@@ -1,3 +1,4 @@
+{# templates/denuncia/create.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Registrar Denuncia{% endblock %}
@@ -6,7 +7,7 @@
 <div class="container mt-4">
     <h1 class="mb-4">Registrar Nueva Denuncia</h1>
 
-    {# Mensajes flash de error #}
+    {# Muestra mensajes flash de error (si los hay) #}
     {% for message in app.flashes('error') %}
         <div class="alert alert-danger">{{ message }}</div>
     {% endfor %}
@@ -16,18 +17,18 @@
     {# Descripción #}
     <div class="mb-3">
         {{ form_label(form.descripcion) }}
-        {{ form_widget(form.descripcion) }}
+        {{ form_widget(form.descripcion, { 'attr': {'class': 'form-control'} }) }}
         {{ form_errors(form.descripcion) }}
     </div>
 
     {# Fecha/Hora #}
     <div class="mb-3">
         {{ form_label(form.fechaHora) }}
-        {{ form_widget(form.fechaHora) }}
+        {{ form_widget(form.fechaHora, { 'attr': {'class': 'form-control'} }) }}
         {{ form_errors(form.fechaHora) }}
     </div>
 
-    {# Sub-form Ubicacion #}
+    {# Subform Ubicación #}
     <h3>Datos de Ubicación</h3>
     <div class="mb-3">
         {{ form_row(form.ubicacion.calle) }}
@@ -38,31 +39,34 @@
     <div class="mb-3">
         {{ form_row(form.ubicacion.detalles) }}
     </div>
-    {# El campo "coordenadas" es hidden #}
+
+    {# Campo "coordenadas" hidden #}
     {{ form_widget(form.ubicacion.coordenadas) }}
 
-    {# Mapa Leaflet #}
+    {# Mapa Leaflet para ubicar #}
     <div id="map" style="width:100%;height:400px;"></div>
 
-    {# Evidencias #}
+    {# Evidencias (colección dinámica) #}
     <div class="mb-3 mt-3">
-        <h4>Archivos de Evidencia</h4>
+        <h4>Evidencias</h4>
+        {# 
+           data-prototype contendrá el "template" de un sub-form.
+           - e('html_attr') escapa caracteres especiales para que sea válido como HTML.
+        #}
+        <div id="evidencias-container" 
+             data-prototype="{{ form_widget(form.evidencias.vars.prototype)|e('html_attr') }}">
 
-        {# MODO SIMPLE: sin botón de agregar #}
-        {{ form_row(form.evidencias) }}
+            {# Renderizamos los subformularios existentes en la colección #}
+            {% for evidForm in form.evidencias %}
+                {{ form_row(evidForm) }}
+            {% endfor %}
+        </div>
 
-        {# Si quisieras botón para añadir subforms dinámicos, #}
-           haz algo como:
-           <div id="evidencias-container" data-prototype="{{ form_widget(form.evidencias.vars.prototype)|e('html_attr') }}">
-               {% for evid in form.evidencias %}
-                   {{ form_row(evid) }}
-               {% endfor %}
-           </div>
-           <button type="button" class="btn btn-secondary" id="add-evid-btn">Agregar Evidencia</button>
-        
+        {# Botón para agregar nuevos sub-formularios de evidencia #}
+        <button type="button" class="btn btn-secondary" id="add-evid-btn">Agregar Evidencia</button>
     </div>
 
-    {# Botón Registrar #}
+    {# Botón final para enviar #}
     <button type="submit" class="btn btn-primary">
         {{ form.submit.vars.label|default('Registrar') }}
     </button>
@@ -85,10 +89,10 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         initializeMap();
+        setupDynamicEvidencias();
     });
 
     function initializeMap() {
-        // Centro en Misiones aprox.
         map = L.map('map').setView([-27.362778, -55.900555], 10);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -108,17 +112,44 @@
             icon: redIcon
         }).addTo(map).bindPopup('Ubicación aproximada').openPopup();
 
-        // Click en mapa => mover marcador y actualizar coordenadas
+        // Al hacer clic en el mapa, mueve el marcador
         map.on('click', (e) => {
             const { lat, lng } = e.latlng;
             marker.setLatLng([lat, lng]).openPopup();
+            // Rellena campo "coordenadas"
             document.getElementById('{{ form.ubicacion.coordenadas.vars.id }}').value = lat + ',' + lng;
         });
 
-        // Al arrastrar el marcador, actualiza coordenadas
+        // Al arrastrar el marcador
         marker.on('moveend', (e) => {
             const { lat, lng } = e.target.getLatLng();
             document.getElementById('{{ form.ubicacion.coordenadas.vars.id }}').value = lat + ',' + lng;
+        });
+    }
+
+    // Lógica para agregar subformularios de evidencias dinámicamente
+    function setupDynamicEvidencias() {
+        const container = document.getElementById('evidencias-container');
+        const addBtn    = document.getElementById('add-evid-btn');
+        if (!container || !addBtn) return;
+
+        // Vamos contando cuántos subformularios existen
+        let index = container.querySelectorAll('.form-group').length; 
+        // Ojo: a veces .form-group no coincide; usa un selector que sea consistente con tu markup
+
+        addBtn.addEventListener('click', () => {
+            // Obtiene el prototype
+            let prototype = container.dataset.prototype;
+
+            // Reemplaza __name__ con el índice actual
+            // Symfony usa __name__ como placeholder para la clave del subform
+            let newForm = prototype.replace(/__name__/g, index);
+            index++;
+
+            // Inserta el nuevo form en el contenedor
+            let div = document.createElement('div');
+            div.innerHTML = newForm;
+            container.appendChild(div);
         });
     }
 })();
