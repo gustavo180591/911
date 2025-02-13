@@ -34,7 +34,7 @@ class Denuncia
 
     #[ORM\ManyToOne(targetEntity: User::class)] 
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $usuario = null;
+    private ?Usuario $usuario = null;
 
     #[ORM\OneToMany(mappedBy: 'denuncia', targetEntity: Evidencia::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $evidencias;
