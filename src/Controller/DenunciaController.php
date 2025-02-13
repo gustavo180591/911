@@ -33,8 +33,9 @@ class DenunciaController extends AbstractController
     {
         $estado = $request->query->get('estado');
         $criteria = ['usuario' => $this->getUser()];
-        
+
         if ($estado) {
+            // asumiendo que 'estado' es un objeto, probablemente la property de la BD
             $criteria['estado'] = $estado;
         }
 
@@ -49,35 +50,39 @@ class DenunciaController extends AbstractController
     #[Route('/create', name: 'emergency_create', methods: ['GET', 'POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $emergency = new Denuncia();
-        $form = $this->createForm(DenunciaType::class, $emergency);
+        $denuncia = new Denuncia();
+        $form = $this->createForm(DenunciaType::class, $denuncia);
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            $estadoPendiente = $entityManager->getRepository(EstadoDenuncia::class)->findOneBy(['nombre' => 'Pendiente']);
+            // Buscamos "Pendiente" en la tabla estado_denuncia
+            $estadoPendiente = $entityManager->getRepository(EstadoDenuncia::class)
+                ->findOneBy(['nombre' => 'Pendiente']);
             if (!$estadoPendiente) {
                 throw new \Exception('El estado "Pendiente" no existe en la base de datos.');
             }
-            $emergency->setEstado($estadoPendiente);
+            $denuncia->setEstado($estadoPendiente);
 
-            $categoriaPorDefecto = $entityManager->getRepository(CategoriaDenuncia::class)->findOneBy(['nombre' => 'General']);
+            // Buscamos "General" en la tabla categoria_denuncia
+            $categoriaPorDefecto = $entityManager->getRepository(CategoriaDenuncia::class)
+                ->findOneBy(['nombre' => 'General']);
             if (!$categoriaPorDefecto) {
                 throw new \Exception('La categoría "General" no existe en la base de datos.');
             }
-            $emergency->setCategoria($categoriaPorDefecto);
+            $denuncia->setCategoria($categoriaPorDefecto);
 
-            // Asignar datos del denunciante
-            $emergency->setUsuario($this->getUser());
+            // Usuario actual
+            $denuncia->setUsuario($this->getUser());
 
-            // Asignar la fecha de creación
-            $fechaHora = new \DateTime('now', new \DateTimeZone('America/Argentina/Buenos_Aires'));
-            $emergency->setfechaHora($fechaHora);
+            // Fecha/Hora actual
+            $fechaHora = new \DateTimeImmutable('now', new \DateTimeZone('America/Argentina/Buenos_Aires'));
+            $denuncia->setFechaHora($fechaHora);
 
-            
-            $entityManager->persist($emergency);
+            // Persistimos
+            $entityManager->persist($denuncia);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Emergencia creada exitosamente.');
+            $this->addFlash('success', 'Emergencia (Denuncia) creada exitosamente.');
             return $this->redirectToRoute('emergency_index');
         }
     
@@ -88,29 +93,34 @@ class DenunciaController extends AbstractController
     }
 
     #[Route('/accept/{id}', name: 'emergency_accept', methods: ['POST'])]
-    public function accept(int $id, Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
-    {
-        $emergency = $this->repository->find($id);
-        if (!$emergency) {
+    public function accept(
+        int $id,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        MailerInterface $mailer
+    ): Response {
+        $denuncia = $this->repository->find($id);
+        if (!$denuncia) {
             throw $this->createNotFoundException('La emergencia solicitada no existe.');
         }
 
-        if ($this->isCsrfTokenValid('accept_emergency_' . $emergency->getId(), $request->request->get('_token'))) {
-            $estadoAceptado = $entityManager->getRepository(EstadoDenuncia::class)->findOneBy(['nombre' => 'Aceptado']);
+        if ($this->isCsrfTokenValid('accept_emergency_' . $denuncia->getId(), $request->request->get('_token'))) {
+            $estadoAceptado = $entityManager->getRepository(EstadoDenuncia::class)
+                ->findOneBy(['nombre' => 'Aceptado']);
             if (!$estadoAceptado) {
                 throw new \Exception('El estado "Aceptado" no existe.');
             }
 
-            $emergency->setEstado($estadoAceptado);
+            $denuncia->setEstado($estadoAceptado);
             $entityManager->flush();
 
             // Enviar correo al denunciante
             $email = (new Email())
                 ->from('notificaciones@tuweb.com')
-                ->to($emergency->getUsuario()->getEmail())
+                ->to($denuncia->getUsuario()->getEmail())
                 ->subject('Denuncia Aceptada')
                 ->text('Su denuncia ha sido aceptada y será procesada.');
-            
+
             $mailer->send($email);
 
             $this->addFlash('success', 'Emergencia aceptada exitosamente.');
@@ -120,29 +130,34 @@ class DenunciaController extends AbstractController
     }
 
     #[Route('/reject/{id}', name: 'emergency_reject', methods: ['POST'])]
-    public function reject(int $id, Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
-    {
-        $emergency = $this->repository->find($id);
-        if (!$emergency) {
+    public function reject(
+        int $id,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        MailerInterface $mailer
+    ): Response {
+        $denuncia = $this->repository->find($id);
+        if (!$denuncia) {
             throw $this->createNotFoundException('La emergencia solicitada no existe.');
         }
 
-        if ($this->isCsrfTokenValid('reject_emergency_' . $emergency->getId(), $request->request->get('_token'))) {
-            $estadoRechazado = $entityManager->getRepository(EstadoDenuncia::class)->findOneBy(['nombre' => 'Rechazado']);
+        if ($this->isCsrfTokenValid('reject_emergency_' . $denuncia->getId(), $request->request->get('_token'))) {
+            $estadoRechazado = $entityManager->getRepository(EstadoDenuncia::class)
+                ->findOneBy(['nombre' => 'Rechazado']);
             if (!$estadoRechazado) {
                 throw new \Exception('El estado "Rechazado" no existe.');
             }
 
-            $emergency->setEstado($estadoRechazado);
+            $denuncia->setEstado($estadoRechazado);
             $entityManager->flush();
 
             // Enviar correo al denunciante
             $email = (new Email())
                 ->from('notificaciones@tuweb.com')
-                ->to($emergency->getUsuario()->getEmail())
+                ->to($denuncia->getUsuario()->getEmail())
                 ->subject('Denuncia Rechazada')
                 ->text('Su denuncia ha sido rechazada. Puede comunicarse con soporte para más detalles.');
-            
+
             $mailer->send($email);
 
             $this->addFlash('success', 'Emergencia rechazada exitosamente.');

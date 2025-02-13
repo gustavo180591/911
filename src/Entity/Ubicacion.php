@@ -31,10 +31,15 @@ class Ubicacion
     )]
     private ?string $coordenadas = null;
 
-    // Getters y Setters
-    public function getId(): ?int { return $this->id; }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
-    public function getCalle(): string { return $this->calle; }
+    public function getCalle(): string
+    {
+        return $this->calle;
+    }
 
     public function setCalle(string $calle): self
     {
@@ -42,7 +47,10 @@ class Ubicacion
         return $this;
     }
 
-    public function getNumero(): ?string { return $this->numero; }
+    public function getNumero(): ?string
+    {
+        return $this->numero;
+    }
 
     public function setNumero(?string $numero): self
     {
@@ -50,7 +58,10 @@ class Ubicacion
         return $this;
     }
 
-    public function getDetalles(): ?string { return $this->detalles; }
+    public function getDetalles(): ?string
+    {
+        return $this->detalles;
+    }
 
     public function setDetalles(?string $detalles): self
     {
@@ -58,7 +69,10 @@ class Ubicacion
         return $this;
     }
 
-    public function getCoordenadas(): ?string { return $this->coordenadas; }
+    public function getCoordenadas(): ?string
+    {
+        return $this->coordenadas;
+    }
 
     public function setCoordenadas(?string $coordenadas): self
     {
@@ -66,6 +80,7 @@ class Ubicacion
         return $this;
     }
 
+    // Helpers para extraer lat/long
     public function getLatitud(): ?float
     {
         if ($this->coordenadas) {

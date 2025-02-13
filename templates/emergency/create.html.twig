@@ -27,38 +27,54 @@
         {{ form_errors(form.fechaHora) }}
     </div>
 
-    {# Dirección #}
+    {# Sub-form Ubicacion #}
+    <h3>Datos de Ubicación</h3>
     <div class="mb-3">
-        {{ form_label(form.direccion) }}
-        {{ form_widget(form.direccion) }}
-        {{ form_errors(form.direccion) }}
+        {{ form_row(form.ubicacion.calle) }}
     </div>
-
-    {# Lat y Lon ocultas #}
-    {{ form_widget(form.latitud) }}
-    {{ form_widget(form.longitud) }}
-
-    {# Mapa #}
-    <div id="map-container" style="position: relative; min-height: 400px;">
-        <div id="map" style="width:100%;height:400px;"></div>
+    <div class="mb-3">
+        {{ form_row(form.ubicacion.numero) }}
     </div>
+    <div class="mb-3">
+        {{ form_row(form.ubicacion.detalles) }}
+    </div>
+    {# El campo "coordenadas" es hidden #}
+    {{ form_widget(form.ubicacion.coordenadas) }}
+
+    {# Mapa Leaflet #}
+    <div id="map" style="width:100%;height:400px;"></div>
 
     {# Evidencias #}
-    <div class="mb-3">
+    <div class="mb-3 mt-3">
+        <h4>Archivos de Evidencia</h4>
+
+        {# MODO SIMPLE: sin botón de agregar #}
         {{ form_row(form.evidencias) }}
+
+        {# Si quisieras botón para añadir subforms dinámicos, #}
+           haz algo como:
+           <div id="evidencias-container" data-prototype="{{ form_widget(form.evidencias.vars.prototype)|e('html_attr') }}">
+               {% for evid in form.evidencias %}
+                   {{ form_row(evid) }}
+               {% endfor %}
+           </div>
+           <button type="button" class="btn btn-secondary" id="add-evid-btn">Agregar Evidencia</button>
+        
     </div>
 
     {# Botón Registrar #}
-    <button type="submit" class="btn btn-primary">Registrar</button>
+    <button type="submit" class="btn btn-primary">
+        {{ form.submit.vars.label|default('Registrar') }}
+    </button>
 
     {{ form_end(form) }}
 
     <div class="mt-3">
-        <a href="{{ path('denuncia_index') }}" class="btn btn-secondary">Volver a la Lista</a>
+        <a href="{{ path('emergency_index') }}" class="btn btn-secondary">Volver a la Lista</a>
     </div>
 </div>
 
-{# Leaflet y estilos #}
+{# Librerías Leaflet #}
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
@@ -69,103 +85,41 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         initializeMap();
-        setupAddressInput();
     });
 
     function initializeMap() {
-        // 1. Inicializa el mapa
-        map = L.map('map').setView([-27.362778, -55.900555], 13);
+        // Centro en Misiones aprox.
+        map = L.map('map').setView([-27.362778, -55.900555], 10);
 
-        // 2. Capa base
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        // 3. Icono rojo (opcional)
         const redIcon = L.icon({
-            iconUrl: '/images/marker-red.png', 
+            iconUrl: '/images/marker-red.png',
             iconSize: [25, 41],
             iconAnchor: [12, 41],
             popupAnchor: [1, -34]
         });
 
-        // 4. Marcador
         marker = L.marker([-27.362778, -55.900555], {
             draggable: true,
             icon: redIcon
-        }).addTo(map)
-          .bindPopup('Ubicación aproximada')
-          .openPopup();
+        }).addTo(map).bindPopup('Ubicación aproximada').openPopup();
 
-        // 5. Evento click en mapa
-        map.on('click', async (e) => {
+        // Click en mapa => mover marcador y actualizar coordenadas
+        map.on('click', (e) => {
             const { lat, lng } = e.latlng;
             marker.setLatLng([lat, lng]).openPopup();
-
-            // Actualiza campos ocultos
-            document.getElementById('{{ form.latitud.vars.id }}').value = lat;
-            document.getElementById('{{ form.longitud.vars.id }}').value = lng;
-
-            // Geocoding inverso para obtener la dirección
-            await reverseGeocode(lat, lng);
+            document.getElementById('{{ form.ubicacion.coordenadas.vars.id }}').value = lat + ',' + lng;
         });
 
-        // 6. Evento drag del marcador
-        marker.on('moveend', async (e) => {
+        // Al arrastrar el marcador, actualiza coordenadas
+        marker.on('moveend', (e) => {
             const { lat, lng } = e.target.getLatLng();
-            document.getElementById('{{ form.latitud.vars.id }}').value = lat;
-            document.getElementById('{{ form.longitud.vars.id }}').value = lng;
-            await reverseGeocode(lat, lng);
+            document.getElementById('{{ form.ubicacion.coordenadas.vars.id }}').value = lat + ',' + lng;
         });
-    }
-
-    function setupAddressInput() {
-        // Cuando el usuario cambia la dirección manualmente
-        const addressInput = document.getElementById('{{ form.direccion.vars.id }}');
-        addressInput.addEventListener('change', () => {
-            geocodeAddress(addressInput.value);
-        });
-    }
-
-    async function reverseGeocode(lat, lon) {
-        try {
-            const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
-            const response = await fetch(url);
-            const data = await response.json();
-            if (data && data.address) {
-                const { road, house_number, city, state, postcode } = data.address;
-                const addressStr = [
-                    (road || ''), 
-                    (house_number || ''), 
-                    (city || ''), 
-                    (state || ''), 
-                    (postcode || '')
-                ].filter(Boolean).join(', ');
-                
-                document.getElementById('{{ form.direccion.vars.id }}').value = addressStr;
-            }
-        } catch (error) {
-            console.error('Error en reverseGeocode:', error);
-        }
-    }
-
-    async function geocodeAddress(address) {
-        try {
-            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
-            const response = await fetch(url);
-            const data = await response.json();
-            if (data.length > 0) {
-                const { lat, lon } = data[0];
-                marker.setLatLng([lat, lon]).openPopup();
-                map.setView([lat, lon], 15);
-
-                document.getElementById('{{ form.latitud.vars.id }}').value = lat;
-                document.getElementById('{{ form.longitud.vars.id }}').value = lon;
-            }
-        } catch (error) {
-            console.error('Error en geocodeAddress:', error);
-        }
     }
 })();
 </script>

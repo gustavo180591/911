@@ -3,17 +3,15 @@
 namespace App\Form;
 
 use App\Entity\Denuncia;
+use App\Form\UbicacionType;
 use App\Form\EvidenciaType;
 use App\Form\BootstrapCollectionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-// IMPORTS necesarios (asegúrate de tenerlos):
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
@@ -26,7 +24,7 @@ class DenunciaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            // Campo de descripción
+            // Descripción
             ->add('descripcion', TextareaType::class, [
                 'label' => 'Descripción de la Denuncia',
                 'constraints' => [
@@ -45,45 +43,38 @@ class DenunciaType extends AbstractType
                 ],
             ])
 
-            // Fecha/Hora del incidente
+            // Fecha/Hora
             ->add('fechaHora', DateTimeType::class, [
                 'label' => 'Fecha y Hora del Incidente',
                 'widget' => 'single_text',
                 'required' => true,
+                // Se inicializa con la fecha/hora actual (zona: Argentina/Buenos_Aires)
                 'data' => new DateTime('now', new DateTimeZone('America/Argentina/Buenos_Aires')),
                 'attr' => [
                     'class' => 'form-control',
-                    'readonly' => true, // para que no sea editable
+                    'readonly' => true, // evitas que el usuario la modifique
                 ],
             ])
 
-            // Dirección (texto) para sincronizar con Leaflet
-            ->add('direccion', TextType::class, [
-                'label' => 'Dirección',
+            // Ubicación (sub-form)
+            ->add('ubicacion', UbicacionType::class, [
+                'label' => 'Ubicación Detallada',
                 'required' => false,
-                'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => 'Escribe la dirección...',
-                ],
             ])
 
-            // Latitud y Longitud (ocultas)
-            ->add('latitud', HiddenType::class)
-            ->add('longitud', HiddenType::class)
-
-            // Evidencias (colección)
+            // Evidencias
             ->add('evidencias', BootstrapCollectionType::class, [
-                'entry_type' => EvidenciaType::class,
-                'allow_add' => true,
+                'entry_type'   => EvidenciaType::class,
+                'allow_add'    => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-                'label' => 'Evidencias',
+                'label'        => 'Evidencias',
             ])
 
             // Botón de envío
             ->add('submit', SubmitType::class, [
                 'label' => 'Registrar Denuncia',
-                'attr' => [
+                'attr'  => [
                     'class' => 'btn btn-primary',
                 ],
             ])

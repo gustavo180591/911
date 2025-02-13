@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -6,7 +7,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity]
-#[Vich\Uploadable] // Añade esta anotación a la clase
+#[Vich\Uploadable]
 class Evidencia
 {
     #[ORM\Id]
@@ -26,8 +27,6 @@ class Evidencia
     #[ORM\ManyToOne(targetEntity: Denuncia::class, inversedBy: 'evidencias')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Denuncia $denuncia = null;
-
-    // Getters y Setters
 
     public function getId(): ?int
     {

@@ -24,22 +24,23 @@ class Denuncia
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $fechaHora;
 
-    // Direccion en texto (campo opcional si la usas como resumen de ubicación)
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $direccion = null;
+    #[ORM\ManyToOne(targetEntity: EstadoDenuncia::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?EstadoDenuncia $estado = null;
 
-    // Relación con la entidad CategoriaDenuncia (como antes)
     #[ORM\ManyToOne(targetEntity: CategoriaDenuncia::class, inversedBy: 'denuncias')]
     #[ORM\JoinColumn(nullable: false)]
-    private CategoriaDenuncia $categoria;
+    private ?CategoriaDenuncia $categoria = null;
 
-    // Colección de evidencias (OneToMany)
+    #[ORM\ManyToOne(targetEntity: User::class)] 
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $usuario = null;
+
     #[ORM\OneToMany(mappedBy: 'denuncia', targetEntity: Evidencia::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $evidencias;
 
-    // NUEVO: relación con Ubicacion
     #[ORM\ManyToOne(targetEntity: Ubicacion::class)]
-    #[ORM\JoinColumn(nullable: true)] // o false, según tu lógica
+    #[ORM\JoinColumn(nullable: true)]
     private ?Ubicacion $ubicacion = null;
 
     public function __construct()
@@ -48,7 +49,6 @@ class Denuncia
         $this->fechaHora = new \DateTimeImmutable();
     }
 
-    // Métodos get/set nativos
     public function getId(): ?int
     {
         return $this->id;
@@ -76,34 +76,66 @@ class Denuncia
         return $this;
     }
 
-    public function getDireccion(): ?string
+    // ESTADO
+    public function getEstado(): ?EstadoDenuncia
     {
-        return $this->direccion;
+        return $this->estado;
     }
 
-    public function setDireccion(?string $direccion): self
+    public function setEstado(?EstadoDenuncia $estado): self
     {
-        $this->direccion = $direccion;
+        $this->estado = $estado;
         return $this;
     }
 
-    public function getCategoria(): CategoriaDenuncia
+    // CATEGORIA
+    public function getCategoria(): ?CategoriaDenuncia
     {
         return $this->categoria;
     }
 
-    public function setCategoria(CategoriaDenuncia $categoria): self
+    public function setCategoria(?CategoriaDenuncia $categoria): self
     {
         $this->categoria = $categoria;
         return $this;
     }
 
+    // USUARIO
+    public function getUsuario(): ?User
+    {
+        return $this->usuario;
+    }
+
+    public function setUsuario(?User $usuario): self
+    {
+        $this->usuario = $usuario;
+        return $this;
+    }
+
+    // EVIDENCIAS
     public function getEvidencias(): Collection
     {
         return $this->evidencias;
     }
+    public function addEvidencia(Evidencia $evidencia): self
+    {
+        if (!$this->evidencias->contains($evidencia)) {
+            $this->evidencias->add($evidencia);
+            $evidencia->setDenuncia($this);
+        }
+        return $this;
+    }
+    public function removeEvidencia(Evidencia $evidencia): self
+    {
+        if ($this->evidencias->removeElement($evidencia)) {
+            if ($evidencia->getDenuncia() === $this) {
+                $evidencia->setDenuncia(null);
+            }
+        }
+        return $this;
+    }
 
-    // NUEVO: Ubicacion
+    // UBICACION
     public function getUbicacion(): ?Ubicacion
     {
         return $this->ubicacion;

@@ -6,6 +6,7 @@ use App\Entity\Ubicacion;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
@@ -46,12 +47,9 @@ class UbicacionType extends AbstractType
                     'placeholder' => 'Escribe detalles adicionales sobre la ubicación...',
                 ],
             ])
-            ->add('coordenadas', TextType::class, [
-                'label' => 'Coordenadas',
+            // Campo oculto para "coordenadas"
+            ->add('coordenadas', HiddenType::class, [
                 'required' => false,
-                'attr' => [
-                    'placeholder' => 'Ejemplo: -27.3626, -55.9009',
-                ],
                 'constraints' => [
                     new Length([
                         'max' => 255,
