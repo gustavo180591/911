@@ -64,12 +64,10 @@ class DenunciaType extends AbstractType
                 'by_reference' => false, // Importante para que funcione correctamente
                 'label' => 'Evidencias',
             ])
-// Ubicación
-->add('ubicacion', UbicacionType::class, [
-    'label' => false,
-])
-
-
+            // Ubicación
+            ->add('ubicacion', UbicacionType::class, [
+                'label' => false,
+            ])
             // Botón de envío
             ->add('submit', SubmitType::class, [
                 'label' => 'Registrar Denuncia',
