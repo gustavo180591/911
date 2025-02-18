@@ -5,7 +5,7 @@ namespace App\Form;
 use App\Entity\Denuncia;
 use App\Form\UbicacionType;
 use App\Form\EvidenciaType;
-use App\Form\BootstrapCollectionType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -56,13 +56,19 @@ class DenunciaType extends AbstractType
                 ],
             ])
             // Evidencias
-            ->add('evidencias', BootstrapCollectionType::class, [
-                'entry_type'   => EvidenciaType::class,
-                'allow_add'    => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                // 'label'        => 'Evidencias',
+            ->add('evidencias', CollectionType::class, [
+                'entry_type' => EvidenciaType::class, // Usa el formulario EvidenciaType
+                'entry_options' => ['label' => false], // Oculta las etiquetas de cada entrada
+                'allow_add' => true, // Permite agregar nuevas evidencias
+                'allow_delete' => true, // Permite eliminar evidencias
+                'by_reference' => false, // Importante para que funcione correctamente
+                'label' => 'Evidencias',
             ])
+// Ubicación
+->add('ubicacion', UbicacionType::class, [
+    'label' => false,
+])
+
 
             // Botón de envío
             ->add('submit', SubmitType::class, [

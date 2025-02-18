@@ -102,12 +102,12 @@ class Denuncia
     }
 
     // USUARIO
-    public function getUsuario(): ?User
+    public function getUsuario(): ?Usuario
     {
         return $this->usuario;
     }
 
-    public function setUsuario(?User $usuario): self
+    public function setUsuario(?Usuario $usuario): self
     {
         $this->usuario = $usuario;
         return $this;

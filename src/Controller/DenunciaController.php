@@ -35,13 +35,13 @@ class DenunciaController extends AbstractController
         $criteria = ['usuario' => $this->getUser()];
 
         if ($estado) {
-            // asumiendo que 'estado' es un objeto, probablemente la property de la BD
+            // Asumiendo que 'estado' es un objeto, probablemente la propiedad de la BD
             $criteria['estado'] = $estado;
         }
 
         $emergencies = $this->repository->findBy($criteria, ['fechaHora' => 'DESC']);
 
-        return $this->render('emergency/index.html.twig', [
+        return $this->render('emergency/view.html.twig', [
             'title' => 'Mis Emergencias',
             'emergencies' => $emergencies,
         ]);
@@ -71,14 +71,19 @@ class DenunciaController extends AbstractController
             }
             $denuncia->setCategoria($categoriaPorDefecto);
 
-            // Usuario actual
+            // Asignamos el usuario actual
             $denuncia->setUsuario($this->getUser());
 
-            // Fecha/Hora actual
+            // Establecemos la fecha y hora actual
             $fechaHora = new \DateTimeImmutable('now', new \DateTimeZone('America/Argentina/Buenos_Aires'));
             $denuncia->setFechaHora($fechaHora);
 
-            // Persistimos
+            // Persistimos la Ubicacion si existe
+            if ($denuncia->getUbicacion()) {
+                $entityManager->persist($denuncia->getUbicacion());
+            }
+
+            // Persistimos la Denuncia
             $entityManager->persist($denuncia);
             $entityManager->flush();
 
@@ -126,7 +131,7 @@ class DenunciaController extends AbstractController
             $this->addFlash('success', 'Emergencia aceptada exitosamente.');
         }
 
-        return $this->redirectToRoute('emergency_view', ['id' => $id]);
+        return $this->redirectToRoute('emergency/view.html.twig', ['id' => $id]);
     }
 
     #[Route('/reject/{id}', name: 'emergency_reject', methods: ['POST'])]
@@ -163,9 +168,10 @@ class DenunciaController extends AbstractController
             $this->addFlash('success', 'Emergencia rechazada exitosamente.');
         }
 
-        return $this->redirectToRoute('emergency_view', ['id' => $id]);
+        return $this->redirectToRoute('emergency/view.html.twig', ['id' => $id]);
     }
 }
+
 // la fecha y hora que vaya al momento de la denuncia
 // los datos del denunciante que figuren en la denuncia
 // foto del dni, selfie del denunciante para el registro y validar usuario.

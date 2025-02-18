@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Entity;
-
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\CategoriaDenunciaRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;

@@ -29,7 +29,7 @@
             <th>Asociada a Denuncia</th>
             <td>
                 {% if evidence.denuncia %}
-                    <a href="{{ path('emergency_view', { id: evidence.denuncia.id }) }}">Ver Denuncia</a>
+                    <a href="{{ path('emergency/view.html.twig', { id: evidence.denuncia.id }) }}">Ver Denuncia</a>
                 {% else %}
                     No asociada a ninguna denuncia.
                 {% endif %}
