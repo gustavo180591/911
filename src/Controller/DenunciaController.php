@@ -28,7 +28,7 @@ class DenunciaController extends AbstractController
         $this->repository = $repository;
     }
 
-    #[Route('/', name: 'emergency_index', methods: ['GET'])]
+    #[Route('/', name: 'emergency_view', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $estado = $request->query->get('estado');

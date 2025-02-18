@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EstadisticaRepository;
+
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EstadisticaRepository::class)]
