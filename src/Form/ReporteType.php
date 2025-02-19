@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\Reporte;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,25 +14,23 @@ class ReporteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        // Adaptamos el formulario para comentarios, usando solo el campo descripción
         $builder
-            ->add('titulo', TextType::class, [
-                'label' => 'Título del Reporte',
+            ->add('descripcion', TextareaType::class, [
+                'label'       => 'Comentario',
+                'required'    => true,
+                'attr'        => [
+                    'rows'        => 5,
+                    'placeholder' => 'Escribe tu comentario...',
+                ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'El título no puede estar vacío.',
+                        'message' => 'El comentario no puede estar vacío.',
                     ]),
                     new Length([
-                        'max' => 255,
-                        'maxMessage' => 'El título no puede superar los {{ limit }} caracteres.',
+                        'max'        => 1000,
+                        'maxMessage' => 'El comentario no puede superar los {{ limit }} caracteres.',
                     ]),
-                ],
-            ])
-            ->add('descripcion', TextareaType::class, [
-                'label' => 'Descripción',
-                'required' => false,
-                'attr' => [
-                    'rows' => 5,
-                    'placeholder' => 'Escribe los detalles del reporte...',
                 ],
             ]);
     }

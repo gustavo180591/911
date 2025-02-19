@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Reporte;
+use App\Entity\Denuncia; // Asegúrate de que esta entidad exista y esté correctamente definida
 use App\Form\ReporteType;
 use App\Repository\ReporteRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,7 +30,7 @@ class ReportController extends AbstractController
         $reports = $this->repository->findBy([], ['fechaGeneracion' => 'DESC']);
 
         return $this->render('report/index.html.twig', [
-            'title' => 'Listado de Reportes',
+            'title'   => 'Listado de Reportes',
             'reports' => $reports,
         ]);
     }
@@ -55,7 +56,43 @@ class ReportController extends AbstractController
 
         return $this->render('report/create.html.twig', [
             'title' => 'Crear Reporte',
-            'form' => $form->createView(),
+            'form'  => $form->createView(),
+        ]);
+    }
+
+    #[Route('/create-from-emergency/{id}', name: 'report_create_from_emergency', methods: ['GET', 'POST'])]
+    public function createFromEmergency(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Recuperamos la emergencia (denuncia) por su ID
+        $emergency = $entityManager->getRepository(Emergency::class)->find($id);
+        if (!$emergency) {
+            throw $this->createNotFoundException('La emergencia solicitada no existe.');
+        }
+
+        $report = new Reporte();
+        // Asumimos que la entidad Reporte tiene una relación con Emergency (por ejemplo, mediante el método setDenuncia)
+        $report->setDenuncia($emergency);
+
+        $form = $this->createForm(ReporteType::class, $report);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $report->setAutor($this->getUser());
+            $report->setFechaGeneracion(new \DateTime());
+
+            $entityManager->persist($report);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Comentario agregado exitosamente.');
+
+            // Redirigimos a la vista de detalle de la emergencia; ajusta el nombre de la ruta según corresponda
+            return $this->redirectToRoute('emergency_show', ['id' => $emergency->getId()]);
+        }
+
+        return $this->render('report/create_from_emergency.html.twig', [
+            'title'     => 'Agregar Comentario',
+            'form'      => $form->createView(),
+            'emergency' => $emergency,
         ]);
     }
 
@@ -69,7 +106,7 @@ class ReportController extends AbstractController
         }
 
         return $this->render('report/view.html.twig', [
-            'title' => 'Detalle del Reporte',
+            'title'  => 'Detalle del Reporte',
             'report' => $report,
         ]);
     }

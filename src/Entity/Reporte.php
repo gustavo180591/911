@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ReporteRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Denuncia; // Asegúrate de que esta entidad exista y esté correctamente definida
 
 #[ORM\Entity(repositoryClass: ReporteRepository::class)]
 class Reporte
@@ -13,8 +14,9 @@ class Reporte
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $titulo;
+    // Se ha hecho nullable el título para permitir su omisión en comentarios, si fuera necesario
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $titulo = null;
 
     #[ORM\Column(type: 'text')]
     private string $descripcion;
@@ -26,6 +28,11 @@ class Reporte
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $fechaGeneracion;
 
+    // Nueva relación con la entidad Emergency (o Denuncia)
+    #[ORM\ManyToOne(targetEntity: Denuncia::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private Denuncia $denuncia;
+
     // Getters y Setters
 
     public function getId(): ?int
@@ -33,15 +40,14 @@ class Reporte
         return $this->id;
     }
 
-    public function getTitulo(): string
+    public function getTitulo(): ?string
     {
         return $this->titulo;
     }
 
-    public function setTitulo(string $titulo): self
+    public function setTitulo(?string $titulo): self
     {
         $this->titulo = $titulo;
-
         return $this;
     }
 
@@ -53,7 +59,6 @@ class Reporte
     public function setDescripcion(string $descripcion): self
     {
         $this->descripcion = $descripcion;
-
         return $this;
     }
 
@@ -65,7 +70,6 @@ class Reporte
     public function setAutor(Usuario $autor): self
     {
         $this->autor = $autor;
-
         return $this;
     }
 
@@ -77,7 +81,17 @@ class Reporte
     public function setFechaGeneracion(\DateTimeInterface $fechaGeneracion): self
     {
         $this->fechaGeneracion = $fechaGeneracion;
+        return $this;
+    }
 
+    public function getDenuncia(): Denuncia
+    {
+        return $this->denuncia;
+    }
+
+    public function setDenuncia(Denuncia $denuncia): self
+    {
+        $this->denuncia = $denuncia;
         return $this;
     }
 }

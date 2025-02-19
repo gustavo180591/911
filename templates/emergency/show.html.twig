@@ -81,5 +81,14 @@
             Volver al Listado
         </a>
     </div>
+
+    {% if emergency.estado.nombre == 'Aceptado' %}
+        <hr>
+        <h3>Agregar Comentario</h3>
+        {{ form_start(commentForm, {'action': path('report_create_from_emergency', {'id': emergency.id})}) }}
+            {{ form_row(commentForm.descripcion, {'label': 'Comentario'}) }}
+            <button type="submit" class="btn btn-primary">Enviar Comentario</button>
+        {{ form_end(commentForm) }}
+    {% endif %}
 </div>
 {% endblock %}
