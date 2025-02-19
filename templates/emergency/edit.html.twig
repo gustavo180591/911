@@ -1,15 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Editar Emergencia{% endblock %}
+{% block title %}{{ title|default('Editar Emergencia') }}{% endblock %}
 
 {% block body %}
 <div class="container mt-4">
-    <h1 class="mb-4">Editar Emergencia</h1>
+    <h1 class="mb-4">{{ title }}</h1>
 
     {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">
-            {{ message }}
-        </div>
+        <div class="alert alert-danger">{{ message }}</div>
     {% endfor %}
 
     {{ form_start(form) }}
@@ -26,14 +24,16 @@
         {{ form_errors(form.fechaHora) }}
     </div>
 
+    {# Ubicación (puedes hacer un subform tipo create) #}
     <div class="mb-3">
         {{ form_label(form.ubicacion, 'Ubicación') }}
         {{ form_widget(form.ubicacion, { 'attr': {'class': 'form-control'} }) }}
         {{ form_errors(form.ubicacion) }}
     </div>
 
+    {# Evidencias #}
     <div class="mb-3">
-        {{ form_label(form.evidencias, 'Evidencias (Opcional)') }}
+        {{ form_label(form.evidencias, 'Evidencias (opcional)') }}
         {{ form_widget(form.evidencias, { 'attr': {'class': 'form-control'} }) }}
         {{ form_errors(form.evidencias) }}
     </div>
@@ -43,7 +43,7 @@
     {{ form_end(form) }}
 
     <div class="mt-3">
-        <a href="{{ path('emergency_index') }}" class="btn btn-secondary">Volver a la Lista de Emergencias</a>
+        <a href="{{ path('emergency_index') }}" class="btn btn-secondary">Volver al Listado</a>
     </div>
 </div>
 {% endblock %}

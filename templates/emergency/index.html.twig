@@ -1,13 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Listado de Emergencias{% endblock %}
+{% block title %}{{ title|default('Listado de Emergencias') }}{% endblock %}
 
 {% block body %}
 <div class="container mt-4">
-    <h1 class="mb-4">Listado de Emergencias</h1>
+    <h1 class="mb-4">{{ title }}</h1>
 
     {% for message in app.flashes('success') %}
         <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
             {{ message }}
         </div>
     {% endfor %}
@@ -32,18 +37,38 @@
                     <td>{{ emergency.id }}</td>
                     <td>{{ emergency.descripcion }}</td>
                     <td>{{ emergency.fechaHora|date('d-m-Y H:i:s') }}</td>
-                    <td>{{ emergency.ubicacion.calle ~ ', ' ~ emergency.ubicacion.numero }}</td>
                     <td>
-                        <a href="{{ path('emergency/index.html.twig', { id: emergency.id }) }}" class="btn btn-sm btn-warning">Ver</a>
-                        <form method="post" action="{{ path('emergency_delete', { id: emergency.id }) }}" style="display: inline-block;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta emergencia?');">
-                            <input type="hidden" name="token" value="{{ csrf_token('delete_emergency' ~ emergency.id) }}">
+                        {% if emergency.ubicacion %}
+                            {{ emergency.ubicacion.calle ~ ', ' ~ emergency.ubicacion.numero }}
+                        {% else %}
+                            <span class="text-muted">Sin ubicación</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('emergency_show', { id: emergency.id }) }}"
+                           class="btn btn-sm btn-warning">
+                           Ver
+                        </a>
+
+                        <a href="{{ path('emergency_edit', { id: emergency.id }) }}"
+                           class="btn btn-sm btn-secondary">
+                           Editar
+                        </a>
+
+                        <form method="post"
+                              action="{{ path('emergency_delete', { id: emergency.id }) }}"
+                              style="display: inline-block;"
+                              onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta emergencia?');">
+                            <input type="hidden"
+                                   name="token"
+                                   value="{{ csrf_token('delete_emergency' ~ emergency.id) }}">
                             <button class="btn btn-sm btn-danger">Eliminar</button>
                         </form>
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="6" class="text-center">No se encontraron emergencias.</td>
+                    <td colspan="5" class="text-center">No se encontraron emergencias.</td>
                 </tr>
             {% endfor %}
         </tbody>
