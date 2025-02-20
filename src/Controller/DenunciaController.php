@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Denuncia;
 use App\Entity\CategoriaDenuncia;
 use App\Entity\EstadoDenuncia;
+use App\Entity\Reporte;
 use App\Form\DenunciaType;
+use App\Form\ReporteType;
 use App\Repository\DenunciaRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,7 +45,7 @@ class DenunciaController extends AbstractController
         $emergencies = $this->repository->findBy($criteria, ['fechaHora' => 'DESC']);
 
         return $this->render('emergency/index.html.twig', [
-            'title' => 'Listado de Emergencias',
+            'title'       => 'Listado de Emergencias',
             'emergencies' => $emergencies,
         ]);
     }
@@ -96,7 +98,7 @@ class DenunciaController extends AbstractController
 
         return $this->render('emergency/create.html.twig', [
             'title' => 'Registrar Emergencia',
-            'form' => $form->createView(),
+            'form'  => $form->createView(),
         ]);
     }
 
@@ -104,14 +106,21 @@ class DenunciaController extends AbstractController
      * Ver detalle de una emergencia.
      */
     #[Route('/{id}', name: 'emergency_show', methods: ['GET'])]
-    public function show(Denuncia $denuncia): Response
-    {
-        // El ParamConverter inyecta $denuncia desde {id}
-        return $this->render('emergency/show.html.twig', [
-            'title' => 'Detalle de Emergencia',
-            'emergency' => $denuncia,
-        ]);
+public function show(Denuncia $denuncia, Request $request): Response
+{
+    $commentForm = null;
+    if ($denuncia->getEstado() && $denuncia->getEstado()->getNombre() === 'Aceptado') {
+        $report = new Reporte();
+        $report->setDenuncia($denuncia);
+        $commentForm = $this->createForm(ReporteType::class, $report);
+        // No se hace handleRequest aquí, ya que el envío se procesará en ReportController
     }
+    return $this->render('emergency/show.html.twig', [
+        'title'       => 'Detalle de Emergencia',
+        'emergency'   => $denuncia,
+        'commentForm' => $commentForm ? $commentForm->createView() : null,
+    ]);
+}
 
     /**
      * Editar emergencia existente.
@@ -133,7 +142,7 @@ class DenunciaController extends AbstractController
 
         return $this->render('emergency/edit.html.twig', [
             'title' => 'Editar Emergencia',
-            'form' => $form->createView(),
+            'form'  => $form->createView(),
         ]);
     }
 

@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Usuario;
+use App\Entity\Reporte;
+
 
 #[ORM\Entity(repositoryClass: DenunciaRepository::class)]
 class Denuncia
@@ -44,10 +46,14 @@ class Denuncia
     #[ORM\JoinColumn(nullable: true)]
     private ?Ubicacion $ubicacion = null;
 
+    #[ORM\OneToMany(mappedBy: 'denuncia', targetEntity: Reporte::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $reportes;
+
     public function __construct()
     {
         $this->evidencias = new ArrayCollection();
-        $this->fechaHora = new \DateTimeImmutable();
+        $this->reportes   = new ArrayCollection();
+        $this->fechaHora  = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -118,6 +124,7 @@ class Denuncia
     {
         return $this->evidencias;
     }
+
     public function addEvidencia(Evidencia $evidencia): self
     {
         if (!$this->evidencias->contains($evidencia)) {
@@ -126,6 +133,7 @@ class Denuncia
         }
         return $this;
     }
+
     public function removeEvidencia(Evidencia $evidencia): self
     {
         if ($this->evidencias->removeElement($evidencia)) {
@@ -145,6 +153,31 @@ class Denuncia
     public function setUbicacion(?Ubicacion $ubicacion): self
     {
         $this->ubicacion = $ubicacion;
+        return $this;
+    }
+
+    // REPORTES
+    public function getReportes(): Collection
+    {
+        return $this->reportes;
+    }
+
+    public function addReporte(Reporte $reporte): self
+    {
+        if (!$this->reportes->contains($reporte)) {
+            $this->reportes->add($reporte);
+            $reporte->setDenuncia($this);
+        }
+        return $this;
+    }
+
+    public function removeReporte(Reporte $reporte): self
+    {
+        if ($this->reportes->removeElement($reporte)) {
+            if ($reporte->getDenuncia() === $this) {
+                $reporte->setDenuncia(null);
+            }
+        }
         return $this;
     }
 }

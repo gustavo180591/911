@@ -14,11 +14,6 @@
 
     {{ form_start(form) }}
 
-    <div class="mb-3">
-        {{ form_label(form.titulo, 'Título del Reporte') }}
-        {{ form_widget(form.titulo, { 'attr': {'class': 'form-control'} }) }}
-        {{ form_errors(form.titulo) }}
-    </div>
 
     <div class="mb-3">
         {{ form_label(form.descripcion, 'Descripción') }}

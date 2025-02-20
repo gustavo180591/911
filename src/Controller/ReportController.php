@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Reporte;
-use App\Entity\Denuncia; // Asegúrate de que esta entidad exista y esté correctamente definida
+use App\Entity\Denuncia;
 use App\Form\ReporteType;
 use App\Repository\ReporteRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,10 +35,23 @@ class ReportController extends AbstractController
         ]);
     }
 
-    #[Route('/create', name: 'report_create', methods: ['GET', 'POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $report = new Reporte();
+    /**
+     * Método genérico para procesar el formulario del Reporte.
+     *
+     * @param Reporte $report
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param string $redirectRoute Ruta a la que redirigir en caso de éxito
+     * @param array $redirectParams Parámetros para la redirección
+     * @return Response|null
+     */
+    private function handleReportForm(
+        Reporte $report,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        string $redirectRoute,
+        array $redirectParams = []
+    ): ?Response {
         $form = $this->createForm(ReporteType::class, $report);
         $form->handleRequest($request);
 
@@ -51,49 +64,42 @@ class ReportController extends AbstractController
 
             $this->addFlash('success', 'Reporte creado exitosamente.');
 
-            return $this->redirectToRoute('report_index');
+            return $this->redirectToRoute($redirectRoute, $redirectParams);
         }
 
-        return $this->render('report/create.html.twig', [
+        // Renderizamos el formulario si no se ha enviado o hay errores
+        return $this->render('report/form.html.twig', [
             'title' => 'Crear Reporte',
             'form'  => $form->createView(),
         ]);
     }
 
-    #[Route('/create-from-emergency/{id}', name: 'report_create_from_emergency', methods: ['GET', 'POST'])]
-    public function createFromEmergency(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/create', name: 'report_create', methods: ['GET', 'POST'])]
+    public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Recuperamos la emergencia (denuncia) por su ID
-        $emergency = $entityManager->getRepository(Emergency::class)->find($id);
+        $report = new Reporte();
+        // No se asigna denuncia en este caso
+        return $this->handleReportForm($report, $request, $entityManager, 'report_index');
+    }
+
+    #[Route('/create-from-emergency/{id}', name: 'report_create_from_emergency', methods: ['GET', 'POST'])]
+    public function createFromEmergency(
+        int $id,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response {
+        // Recuperamos la denuncia (emergencia) por su ID
+        $emergency = $entityManager->getRepository(Denuncia::class)->find($id);
         if (!$emergency) {
             throw $this->createNotFoundException('La emergencia solicitada no existe.');
         }
 
         $report = new Reporte();
-        // Asumimos que la entidad Reporte tiene una relación con Emergency (por ejemplo, mediante el método setDenuncia)
         $report->setDenuncia($emergency);
 
-        $form = $this->createForm(ReporteType::class, $report);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $report->setAutor($this->getUser());
-            $report->setFechaGeneracion(new \DateTime());
-
-            $entityManager->persist($report);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Comentario agregado exitosamente.');
-
-            // Redirigimos a la vista de detalle de la emergencia; ajusta el nombre de la ruta según corresponda
-            return $this->redirectToRoute('emergency_show', ['id' => $emergency->getId()]);
-        }
-
-        return $this->render('report/create_from_emergency.html.twig', [
-            'title'     => 'Agregar Comentario',
-            'form'      => $form->createView(),
-            'emergency' => $emergency,
-        ]);
+        // Utilizamos el mismo método para procesar el formulario
+        // En este caso, redirigimos a la vista de detalle de la emergencia (denuncia)
+        return $this->handleReportForm($report, $request, $entityManager, 'emergency_show', ['id' => $emergency->getId()]);
     }
 
     #[Route('/view/{id}', name: 'report_view', methods: ['GET'])]

@@ -30,7 +30,6 @@
             {% for report in reports %}
                 <tr>
                     <td>{{ report.id }}</td>
-                    <td>{{ report.titulo }}</td>
                     <td>{{ report.autor.nombre }} {{ report.autor.apellido }}</td>
                     <td>{{ report.fechaGeneracion|date('d-m-Y H:i:s') }}</td>
                     <td>
