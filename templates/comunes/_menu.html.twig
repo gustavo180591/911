@@ -1,7 +1,13 @@
-<header class="row justify-content-between align-items-center pb-3">
-	<h1 class="mb-4">911</h1>
-	<nav class="col-auto navbar-expand">	
-		<ul class="navbar-nav ml-auto">
+<header class="row justify-content-between align-items-center pb-3" style="background-image: url('{{ asset('images/fondo-inicio.png') }}'); background-size: cover; background-repeat: no-repeat; background-position: center; height: 100vh; width: 100vw;">
+	    <div class="d-flex align-items-center">
+        <a href="{{ path('home_index') }}">
+            <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
+            <img src="{{ asset('images/favicon.png') }}" alt="Favicon" class="img-fluid mb-4" style="max-height: 4rem;">
+            <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="img-fluid mb-4" style="max-height: 4rem;">
+        </a>
+    </div>
+	<nav class="col-auto navbar-expand justify-content-end">	
+		<ul class="navbar-nav">
             {% if is_granted('ROLE_JEFE') %}
 			    <li class="nav-item"><a class="nav-link" href="{{ path('app_objeto_new') }}">Añadir objeto</a></li>
 			{% endif %}
@@ -16,3 +22,4 @@
 		</ul>
 	</nav>
 </header>
+

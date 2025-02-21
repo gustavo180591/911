@@ -12,7 +12,7 @@ class HomeController extends AbstractController
     public function index(): Response
     {
         return $this->render('home/index.html.twig', [
-            'title' => 'Bienvenido al Sistema 911',
+            'title' => 'Bienvenido al Sistema de Alerta Ciudadana Integrada',
         ]);
     }
 
@@ -20,8 +20,10 @@ class HomeController extends AbstractController
     public function about(): Response
     {
         return $this->render('home/about.html.twig', [
-            'title' => 'Acerca del Sistema 911',
-            'description' => 'El Sistema 911 permite a los ciudadanos registrar y gestionar emergencias de forma rápida y segura.',
+            'title' => 'Acerca del Sistema de Alerta Ciudadana Integrada',
+            'description' => 'El Sistema de Alerta Ciudadana Integrada Reporta incidentes de manera rápida y eficiente.
+SACI conecta a ciudadanos y autoridades en toda
+la provincia de Misiones..',
         ]);
     }
 
