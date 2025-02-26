@@ -1,35 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}CONTACTO{% endblock %}
+{% block title %}SACI - CONTACTO{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h1>{{ title }}</h1>
-    <p>Si tienes preguntas, no dudes en contactarnos.</p>
+<div class="container-fluid mt-4">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6">
+            <p style="font-family: 'Montserrat', sans-serif; line-height: 2.5; color: white; text-align: center;">{{ title }}</p>
+            <p style="color: white; text-align: center;">Estamos para ayudarte</p>
 
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
-        </div>
-    {% endfor %}
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
 
-    <form method="post" action="{{ path('contact_submit') }}">
-        <div class="mb-3">
-            <label for="name" class="form-label">Nombre</label>
-            <input type="text" id="name" name="name" class="form-control" required>
+            <form method="post" action="{{ path('contact_submit') }}">
+                <div class="mb-3">
+                    <p><label for="email" class="form-label">Correo Electrónico</label></p>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <p><label for="message" class="form-label">Mensaje</label></p>
+                    <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+            <div class="mt-3">
+                <a href="{{ path('home_index') }}" class="btn btn-secondary">Volver al Inicio</a>
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Correo Electrónico</label>
-            <input type="email" id="email" name="email" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label for="message" class="form-label">Mensaje</label>
-            <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Enviar</button>
-        <div class="mt-3">
-        <a href="{{ path('home_index') }}" class="btn btn-secondary">Volver al Inicio</a>
     </div>
-    </form>
 </div>
 {% endblock %}
+

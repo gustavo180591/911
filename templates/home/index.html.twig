@@ -223,9 +223,9 @@
 }
 
     </style>
-    <a href="{{ path('auth_login') }}" class="inicio-button">INICIO</a>
-    <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
-    <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a> 
+    <a href="{{ path('auth_login') }}" class="inicio-button" style="right: 600px;">INICIO</a>
+    <a href="{{ path('home_about') }}" class="about-button" style="right: 400px;">SOBRE NOSOTROS</a>
+    <a href="{{ path('home_contact') }}" class="contact-button" style="right: 240px;">CONTACTO</a> 
     
     <div style="display: flex; align-items: center;">
     <div style="position: relative; left: 20%; top: 20%;">
@@ -235,16 +235,14 @@
     </div>
 <div class="container-fluid mt-4" style="margin-left: 20%;">
     <h1 style="display: block; margin-bottom: 1.5rem; position: relative; left: 0%; font-size: 56px;">BIENVENIDO<br>AL SISTEMA<br><span style="color: #ECB13A;">SACI</span></h1>
-    <p>SISTEMA DE ALERTA CIUDADANA INTEGRADA</p>
-    <p style="line-height: 0.5;">Reporta incidentes de manera <strong>rápida y eficiente.</strong></p>
-    <p style="line-height: 0.5;"><strong>SACI</strong> conecta a ciudadanos y autoridades en toda</p>
-    <p style="line-height: 0.5;">la provincia de Misiones.</p>
-
-        
+    <p style="font-family: 'Montserrat', sans-serif; line-height: 2.5;">SISTEMA DE ALERTA CIUDADANA INTEGRADA</p>
+    <p style="font-family: 'Montserrat', sans-serif; line-height: 0.5;">Reporta incidentes de manera <strong>rápida y eficiente.</strong></p>
+    <p style="font-family: 'Montserrat', sans-serif; line-height: 0.5;"><strong>SACI</strong> conecta a ciudadanos y autoridades en toda</p>
+    <p style="font-family: 'Montserrat', sans-serif; line-height: 0.5;">la provincia de <i>Misiones</i>.</p>
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">
-                    <a href="{{ path('emergency_create') }}" class="my-button">Registrar incidente</a>
+                        <a href="{{ path('emergency_create') }}" class="my-button" style="position: relative; top: 60px; left: 120px;">Registrar incidente</a>
                 </div>
             </div>
         </div>
