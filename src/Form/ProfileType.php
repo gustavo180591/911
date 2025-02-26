@@ -63,22 +63,7 @@ class ProfileType extends AbstractType
                         'maxMessage' => 'El número de teléfono no puede superar los {{ limit }} caracteres.',
                     ]),
                 ],
-            ])
-            ->add('fechaNacimiento', DateType::class, [
-                'label' => 'Fecha de Nacimiento',
-                'widget' => 'single_text',
-                'required' => false,
-            ])
-            ->add('genero', ChoiceType::class, [
-                'label' => 'Género',
-                'choices' => [
-                    'Masculino' => 'M',
-                    'Femenino' => 'F',
-                    'Otro' => 'O',
-                ],
-                'required' => false,
-                'placeholder' => 'Selecciona una opción',
-            ]);
+            ]);           
     }
 
     public function configureOptions(OptionsResolver $resolver): void

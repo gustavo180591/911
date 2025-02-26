@@ -35,22 +35,43 @@ class RegistrationFormType extends AbstractType
                         'message' => 'El apellido no puede estar vacío.',
                     ]),
                 ],
-            ])
-            ->add('email', EmailType::class, [
+                ])
+                ->add('dni', TextType::class, [
+                    'label' => 'DNI',
+                    'constraints' => [
+                        new NotBlank([
+                            'message' => 'El DNI no puede estar vacío.',
+                        ]),
+                    ],
+                ])
+                ->add('direccion', TextType::class, [
+                    'label' => 'Dirección',
+                    'constraints' => [
+                        new NotBlank([
+                            'message' => 'La dirección no puede estar vacío.',
+                        ]),
+                    ],
+                ])
+                ->add('email', EmailType::class, [
                 'label' => 'Correo Electrónico',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'El correo electrónico no puede estar vacío.',
-                    ]),
-                ],
-            ])
-            ->add('Password', RepeatedType::class, [
+                        ]),
+                    ],
+                ])            
+                ->add('telefono', TextType::class, [
+                'label' => 'Teléfono',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'El telefono no puede estar vacío.',
+                        ]),
+                    ],
+                ])       
+                ->add('Password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => [
                     'label' => 'Contraseña',
-                ],
-                'second_options' => [
-                    'label' => 'Repite la contraseña',
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -63,37 +84,6 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
                 'invalid_message' => 'Las contraseñas deben coincidir.',
-            ])
-            ->add('dni', TextType::class, [
-                'label' => 'DNI',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'El DNI no puede estar vacío.',
-                    ]),
-                ],
-            ])
-            ->add('telefono', TextType::class, [
-                'label' => 'Teléfono',
-                'required' => false,
-            ])
-            ->add('fechaNacimiento', DateType::class, [
-                'label' => 'Fecha de Nacimiento',
-                'widget' => 'single_text',
-                'required' => false,
-            ])
-            ->add('genero', ChoiceType::class, [
-                'label' => 'Género',
-                'choices' => [
-                    'Masculino' => 'M',
-                    'Femenino' => 'F',
-                    'Otro' => 'O',
-                ],
-                'required' => false,
-                'placeholder' => 'Selecciona una opción',
-            ])
-            ->add('direccion', TextType::class, [
-                'label' => 'Dirección',
-                'required' => true,
             ]);
             
     }

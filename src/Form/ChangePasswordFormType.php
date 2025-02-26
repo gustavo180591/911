@@ -29,10 +29,7 @@ class ChangePasswordFormType extends AbstractType
                 'first_options' => [
                     'label' => 'Nueva contraseña',
                 ],
-                'second_options' => [
-                    'label' => 'Repite la nueva contraseña',
-                ],
-                'constraints' => [
+                    'constraints' => [
                     new NotBlank([
                         'message' => 'La nueva contraseña no puede estar vacía.',
                     ]),

@@ -31,7 +31,7 @@ la provincia de Misiones..',
     public function contact(): Response
     {
         return $this->render('home/contact.html.twig', [
-            'title' => 'Contáctanos',
+            'title' => 'CONTACTO',
             'email' => 'soporte@sistema911.com',
             'phone' => '+54 123 456 7890',
         ]);

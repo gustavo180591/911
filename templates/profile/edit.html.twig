@@ -39,16 +39,10 @@
     </div>
 
     <div class="mb-3">
-        {{ form_label(form.telefono, 'Teléfono (opcional)') }}
+        {{ form_label(form.telefono, 'Teléfono') }}
         {{ form_widget(form.telefono, { 'attr': {'class': 'form-control'} }) }}
         {{ form_errors(form.telefono) }}
-    </div>
-
-    <div class="mb-3">
-        {{ form_label(form.fechaNacimiento, 'Fecha de Nacimiento (opcional)') }}
-        {{ form_widget(form.fechaNacimiento, { 'attr': {'class': 'form-control'} }) }}
-        {{ form_errors(form.fechaNacimiento) }}
-    </div>
+    </div>   
 
     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
 

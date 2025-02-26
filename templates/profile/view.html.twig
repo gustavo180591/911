@@ -22,11 +22,7 @@
         <tr>
             <th>Teléfono</th>
             <td>{{ user.telefono ? user.telefono : 'No especificado' }}</td>
-        </tr>
-        <tr>
-            <th>Fecha de Nacimiento</th>
-            <td>{{ user.fechaNacimiento ? user.fechaNacimiento|date('d-m-Y') : 'No especificado' }}</td>
-        </tr>
+        </tr>        
         <tr>
             <th>Fecha de Registro</th>
             <td>{{ user.fechaRegistro|date('d-m-Y H:i:s') }}</td>

@@ -1,24 +1,31 @@
+{# templates/base.html.twig #}
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}911{% endblock %}</title>
+        <title>{% block title %}SACI{% endblock %}</title>
         <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
 
         {# Ejemplo de fuente o iconos #}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+        {# Aquí se pueden añadir más CSS propios o de librerías #}
         {% block stylesheets %}{% endblock %}
 
+        {# Scripts de JavaScript, si los necesitas #}
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
+
     <body>
-        <div class="container">
-            {% include "comunes/_menu.html.twig" %}
-            {% block body %}{% endblock %}
-        </div>
+        {# Bloque para el contenido principal de la página #}
+        {% block body %}{% endblock %}
+
+        {# Si tuvieras un footer, podrías incluirlo así:
+            {% include 'partials/_footer.html.twig' %}
+        #}
     </body>
 </html>

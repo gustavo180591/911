@@ -1,45 +1,250 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: url('{{ asset('images/fondo-inicio.png') }}') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .my-button {
+  /* Color de fondo (rojo intenso) */
+  background-color: #FF3B30;
+  
+  /* Texto en blanco */
+  color: #FFFFFF;
+  
+  /* Quitar borde por defecto */
+  border: none;
+  
+  /* Bordes muy redondeados para la forma de píldora */
+  border-radius: 9999px;
+  
+  /* Tipografía y estilo */
+  font-family: 'Montserrat', sans-serif; /* O la que prefieras */
+  font-size: 16px;
+  font-weight: 700; /* Negrita */
+  
+  /* Espaciado interno para que el botón sea cómodo de clicar */
+  padding: 12px 24px;
+  
+  /* Cursor de mano al pasar por encima (en navegadores de escritorio) */
+  cursor: pointer;
+  
+  /* Quitar subrayado si se usa como <a> en vez de <button> */
+  text-decoration: none;
+  
+  /* Transición suave al hacer hover */
+  transition: background-color 0.2s ease;
+}
+
+/* Efecto al pasar el ratón */
+.my-button:hover {
+  background-color: #E22D26; /* Un tono más oscuro */
+}
+
+    </style>
+{% endblock %}
+
 {% block title %}SACI{% endblock %}
 
 {% block body %}
+    <style>
+    /* Fuente base de todo el sitio */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
-<div class="container mt-4">
-       
-    <h1 class="mb-4">Bienvenido al Sistema de Emergencias 911</h1>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            /* Fondo de la imagen */
+            background: url('{{ asset('images/fondo-inicio.png') }}') no-repeat center center fixed;
+            background-size: cover;
+            /* Usar Montserrat en todo el sitio */
+            font-family: 'Montserrat', sans-serif;
+            /* Texto base en blanco */
+            color: #FFFFFF;
+        }
 
-    <p>
-        Este sistema está diseñado para gestionar emergencias de manera eficiente, proporcionando una plataforma
-        accesible para ciudadanos y autoridades.
-    </p>
+        /* Título principal */
+        h1 {
+            font-size: 48px;     /* Tamaño grande para destacar */
+            font-weight: 700;    /* Negrita */
+            margin-bottom: 1rem;
+        }
 
-    <div class="row mt-5">
+        /* Subtítulo o texto destacado */
+        h2, h3, .subtitle {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ECB13A;      /* Acento naranja */
+            margin-bottom: 1rem;
+        }
+
+        /* Párrafos */
+        p {
+            font-size: 18px;
+            line-height: 1.4;    /* Mejor legibilidad */
+            margin-bottom: 0.5rem;
+        }
+
+        /* Ajustes para los botones en la parte superior */
+        .contact-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: inline-block;
+            background-color: #ECB13A;
+            border-radius: 9999px; /* Píldora */
+            padding: 10px 30px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #FFFFFF;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .contact-button:hover {
+            background-color: #FFFFFF;
+            color: #ECB13A;
+        }
+
+        .about-button {
+            position: absolute;
+            top: 20px;
+            right: 180px;
+            display: inline-block;
+            background-color: transparent;
+            border-radius: 9999px;
+            padding: 10px 30px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #ECB13A;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .about-button:hover {
+            background-color: #ECB13A;
+            color: #FFFFFF;
+        }
+
+        .inicio-button {
+            position: absolute;
+            top: 20px;
+            right: 370px;
+            display: inline-block;
+            background-color: transparent;
+            border-radius: 9999px;
+            padding: 10px 30px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #ECB13A;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .inicio-button:hover {
+            background-color: #ECB13A;
+            color: #FFFFFF;
+        }
+
+        /* Opcional: Ajustar títulos dentro de las cards */
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ECB13A;
+        }
+        .card-text {
+            font-size: 16px;
+            color: #FFFFFF;
+        }
+
+        /* Opcional: Ajustar botones de las cards (Bootstrap) */
+        .btn-primary {
+            background-color: #ECB13A;
+            border-color: #ECB13A;
+            font-weight: 700;
+        }
+        .btn-primary:hover {
+            background-color: #FFFFFF;
+            border-color: #FFFFFF;
+            color: #ECB13A;
+        }
+        .btn-secondary {
+            background-color: #FFFFFF;
+            border-color: #FFFFFF;
+            font-weight: 700;
+            color: #ECB13A;
+        }
+        .btn-secondary:hover {
+            background-color: #ECB13A;
+            border-color: #ECB13A;
+            color: #FFFFFF;
+        }
+        .my-button {
+  /* Color de fondo (rojo intenso) */
+  background-color: #FF3B30;
+  
+  /* Texto en blanco */
+  color: #FFFFFF;
+  
+  /* Quitar borde por defecto */
+  border: none;
+  
+  /* Bordes muy redondeados para la forma de píldora */
+  border-radius: 9999px;
+  
+  /* Tipografía y estilo */
+  font-family: 'Montserrat', sans-serif; /* O la que prefieras */
+  font-size: 16px;
+  font-weight: 700; /* Negrita */
+  
+  /* Espaciado interno para que el botón sea cómodo de clicar */
+  padding: 12px 24px;
+  
+  /* Cursor de mano al pasar por encima (en navegadores de escritorio) */
+  cursor: pointer;
+  
+  /* Quitar subrayado si se usa como <a> en vez de <button> */
+  text-decoration: none;
+  
+  /* Transición suave al hacer hover */
+  transition: background-color 0.2s ease;
+}
+
+/* Efecto al pasar el ratón */
+.my-button:hover {
+  background-color: #E22D26; /* Un tono más oscuro */
+}
+
+    </style>
+    <a href="{{ path('auth_login') }}" class="inicio-button">INICIO</a>
+    <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
+    <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a> 
+    
+    <div style="display: flex; align-items: center;">
+    <div style="position: relative; left: 20%; top: 20%;">
+        <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon" style="height: 40px; width: auto; margin-left: 10px; transform: translateY(10%);"/>
+        <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="float-left mt-2" style="height: 50px; width: auto; transform: translateY(20%);"/>
+    </div>
+    </div>
+<div class="container-fluid mt-4" style="margin-left: 20%;">
+    <h1 style="display: block; margin-bottom: 1.5rem; position: relative; left: 0%; font-size: 56px;">BIENVENIDO<br>AL SISTEMA<br><span style="color: #ECB13A;">SACI</span></h1>
+    <p>SISTEMA DE ALERTA CIUDADANA INTEGRADA</p>
+    <p style="line-height: 0.5;">Reporta incidentes de manera <strong>rápida y eficiente.</strong></p>
+    <p style="line-height: 0.5;"><strong>SACI</strong> conecta a ciudadanos y autoridades en toda</p>
+    <p style="line-height: 0.5;">la provincia de Misiones.</p>
+
+        
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">
-                    <h5 class="card-title">Acerca de Nosotros</h5>
-                    <p class="card-text">Conoce más sobre nuestra misión y objetivos.</p>
-                    <a href="{{ path('home_about') }}" class="btn btn-primary">Saber Más</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Contáctanos</h5>
-                    <p class="card-text">¿Tienes dudas? ¡Estamos aquí para ayudarte!</p>
-                    <a href="{{ path('home_contact') }}" class="btn btn-primary">Contáctanos</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Registrar Emergencia</h5>
-                    <p class="card-text">Reporta una emergencia rápidamente.</p>
-                    <a href="{{ path('emergency_create') }}" class="btn btn-primary">Registrar</a>
-                    <p class="card-text">Para ver listado de denuncias.</p>
-                    <p><a href="{{ path('emergency_index') }}" class="btn btn-secondary">Listado</a></p>
+                    <a href="{{ path('emergency_create') }}" class="my-button">Registrar incidente</a>
                 </div>
             </div>
         </div>
