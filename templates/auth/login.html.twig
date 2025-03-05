@@ -1,46 +1,148 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SACI - Iniciar Sesión{% endblock %}
+{% block title %}SACI - INICIAR SESIÓN{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h1 class="mb-4">Iniciar Sesión</h1>
-    <p class="lead">Por favor, inicia sesión para acceder a todas nuestras funciones o regístrate para comenzar tu experiencia.</p>
-    {# Mostrar errores de autenticación si existen #}
-    {% if error %}
-        <div class="alert alert-danger">
-            {{ error.messageKey|trans(error.messageData, 'security') }}
+<!-- Contenedor principal con fondo oscuro y altura completa -->
+<div style="background-color: #171738; min-height: 100vh;">
+    <!-- Cabecera (Header) -->
+    <header style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem;">
+        <!-- Logo + Nombre -->
+        <div style="display: flex; align-items: center;">
+            <!-- Ajusta la ruta si tienes un archivo de imagen -->
+            <img src="{{ asset('images/saci-logo.svg') }}" alt="SACI Logo" style="height: 40px; margin-right: 0.5rem;">
+            <h2 style="color: #FFFFFF; margin: 0;">SACI</h2>
         </div>
-    {% endif %}
+        
+        <!-- Navegación a la derecha -->
+        <nav style="display: flex; gap: 1rem;">
+            <a href="#" style="color: #FFFFFF; text-decoration: none;">SOBRE NOSOTROS</a>
+            <!-- Botón de contacto en naranja -->
+            <a href="#" 
+               style="background-color: #F6A622; color: #FFFFFF; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none;">
+               CONTACTO
+            </a>
+        </nav>
+    </header>
 
-    {# Mostrar mensajes flash relacionados con errores u otras notificaciones #}
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">
-            {{ message }}
-        </div>
-    {% endfor %}
+    <!-- Contenido principal (Login) -->
+    <div class="container" 
+         style="max-width: 400px; margin: 0 auto; padding: 3rem 1rem; color: #FFFFFF;">
+        
+        <h1 style="margin-bottom: 1rem;">Iniciar Sesión</h1>
+        <p style="margin-bottom: 2rem; color: #FFFFFF;">
+            Por favor, inicia sesión para acceder a todas nuestras funciones 
+            o regístrate para comenzar tu experiencia.
+        </p>
 
-    <form method="post" action="{{ path('auth_login') }}">
-        {# Campo para el nombre de usuario o correo electrónico #}
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-        <div class="mb-3">
-            <label for="username" class="form-label">Usuario o Correo Electrónico</label>
-            <input type="text" name="_username" id="username" class="form-control" required autofocus value="{{ last_username|default('') }}">
-        </div>
+        <!-- Mostrar errores si existen -->
+        {% if error %}
+            <div style="background-color: #e14e4e; padding: 0.8rem; border-radius: 5px; margin-bottom: 1rem;">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
 
-        {# Campo para la contraseña #}
-        <div class="mb-3">
-            <label for="password" class="form-label">Contraseña</label>
-            <input type="password" name="_password" id="password" class="form-control" required>
-        </div>
+        <!-- Mostrar mensajes flash -->
+        {% for message in app.flashes('error') %}
+            <div style="background-color: #e14e4e; padding: 0.8rem; border-radius: 5px; margin-bottom: 1rem;">
+                {{ message }}
+            </div>
+        {% endfor %}
+        
+        <!-- Formulario de inicio de sesión -->
+        <form method="post" action="{{ path('auth_login') }}">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            
+            <!-- Campo Usuario/Correo -->
+            <div style="margin-bottom: 1.5rem;">
+                <label for="username" style="display: block; margin-bottom: 0.5rem;">Usuario o Correo Electrónico</label>
+                <input 
+                    type="text" 
+                    name="_username" 
+                    id="username" 
+                    placeholder="ejemplo@hotmail.com"
+                    required 
+                    autofocus 
+                    value="{{ last_username|default('') }}"
+                    style="
+                        width: 100%; 
+                        padding: 0.8rem; 
+                        border-radius: 20px; 
+                        border: 1px solid #555; 
+                        background-color: #2B2B48; 
+                        color: #FFF;
+                        outline: none;
+                    "
+                >
+            </div>
 
-        {# Botón de envío del formulario #}
-        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            <!-- Campo Contraseña -->
+            <div style="margin-bottom: 1rem;">
+                <label for="password" style="display: block; margin-bottom: 0.5rem;">Contraseña</label>
+                
+                <div style="position: relative;">
+                    <input
+                        type="password"
+                        name="_password"
+                        id="password"
+                        placeholder="••••••"
+                        required
+                        style="
+                            width: 100%;
+                            padding: 0.8rem 2.5rem 0.8rem 0.8rem; 
+                            border-radius: 20px; 
+                            border: 1px solid #555;
+                            background-color: #2B2B48; 
+                            color: #FFF;
+                            outline: none;
+                        "
+                    >
+                    <!-- Ícono ojo (ejemplo de Font Awesome); ajusta si usas otra librería -->
+                    <span class="fa fa-eye"
+                          style="
+                              position: absolute;
+                              right: 0.8rem;
+                              top: 50%;
+                              transform: translateY(-50%);
+                              cursor: pointer;
+                              color: #FFF;
+                          ">
+                    </span>
+                </div>
+            </div>
 
-        {# Enlace para registrarse si no tiene cuenta #}
-        <div class="mt-3">
-            <p>¿No tienes una cuenta? <a href="{{ path('auth_register') }}">Regístrate acá</a>.</p>
-        </div>
-    </form>
+            <!-- Enlace Olvidé mi contraseña (opcional) -->
+            <div style="margin-bottom: 1.5rem;">
+                <a href="#" style="color: #FFFFFF; text-decoration: none;">
+                    Olvidé mi contraseña
+                </a>
+            </div>
+
+            <!-- Botón de iniciar sesión -->
+            <button type="submit" 
+                    style="
+                        width: 100%; 
+                        background-color: #FFFFFF; 
+                        color: #171738; 
+                        padding: 0.8rem; 
+                        border: none; 
+                        border-radius: 20px; 
+                        font-weight: bold;
+                        cursor: pointer;
+                    ">
+                Iniciar
+            </button>
+
+            <!-- Registro -->
+            <div style="margin-top: 1.5rem;">
+                <p>
+                    ¿No tenés una cuenta?
+                    <a href="{{ path('auth_register') }}" style="color: #FFFFFF; text-decoration: underline;">
+                        regístrate acá
+                    </a>
+                </p>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}
