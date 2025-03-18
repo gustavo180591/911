@@ -1,123 +1,127 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SACI - INICIAR SESIÓN{% endblock %}
-
-{% block body %}
-    <header>
-         <div style="position: relative; left: 20%; top: 20%;">
-        <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon" style="height: 40px; width: auto; margin-left: 10px; transform: translateY(10%);"/>
-        <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="float-left mt-2" style="height: 50px; width: auto; transform: translateY(20%);"/>
-    </div>
-        <nav>
-            <a href="{{ path('home_about') }}" class="about-button" style="right: 400px;">SOBRE NOSOTROS</a>
-    <a href="{{ path('home_contact') }}" class="contact-button" style="right: 240px;">CONTACTO</a> 
-        </nav>
-    </header>
-
-    <style>
-        body {
-            background-color: #191D33;
-        }
-        .about-button {
-            position: absolute;
-            top: 20px;
-            right: 180px;
-            display: inline-block;
-            background-color: transparent;
-            border-radius: 9999px;
-            padding: 10px 30px;
-            font-weight: bold;
-            font-size: 16px;
-            color: #ECB13A;
-            text-align: center;
-            text-decoration: none;
-            transition: background-color 0.2s ease, color 0.2s ease;
-        }
-        .about-button:hover {
-            color: #FFFFFF;
-        }
-        .contact-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: inline-block;
-            background-color: #ECB13A;
-            border-radius: 9999px; /* Píldora */
-            padding: 10px 30px;
-            font-weight: bold;
-            font-size: 16px;
-            color: #FFFFFF;
-            text-align: center;
-            text-decoration: none;
-            transition: background-color 0.2s ease, color 0.2s ease;
-        }
-        .contact-button:hover {
-            background-color: #FFFFFF;
-            color: #ECB13A;
-        }
-    </style>
-
-    <div class="container">
-        <h1>Iniciar Sesión</h1>
-        <p>Por favor, inicia sesión para acceder a todas nuestras funciones o regístrate para comenzar tu experiencia.</p>
-
-        {% if error %}
-            <div class="alert alert-danger">
-                {{ error.messageKey|trans(error.messageData, 'security') }}
-            </div>
-        {% endif %}
-
-        {% for message in app.flashes('error') %}
-            <div class="alert alert-danger">
-                {{ message }}
-            </div>
-        {% endfor %}
-
-        <form method="post" action="{{ path('auth_login') }}">
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-            <div>
-                <label for="username">Usuario o Correo Electrónico</label>
-                <input type="text" name="_username" id="username" placeholder="ejemplo@hotmail.com" required autofocus value="{{ last_username|default('') }}">
-            </div>
-
-            <div>
-                <label for="password">Contraseña</label>
-                <div>
-                    <input type="password" name="_password" id="password" placeholder="••••••" required>
-                    <span class="fa fa-eye" id="togglePassword"></span>
-                </div>
-            </div>
-
-            <div>
-                <a href="#">Olvidé mi contraseña</a>
-            </div>
-
-            <button type="submit">Iniciar</button>
-
-            <div>
-                <p>¿No tenés una cuenta? <a href="{{ path('auth_register') }}">regístrate acá</a></p>
-            </div>
-        </form>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const passwordField = document.getElementById('password');
-            const togglePasswordIcon = document.getElementById('togglePassword');
-
-            togglePasswordIcon.addEventListener('click', function() {
-                if (passwordField.type === 'password') {
-                    passwordField.type = 'text';
-                    togglePasswordIcon.classList.remove('fa-eye');
-                    togglePasswordIcon.classList.add('fa-eye-slash');
-                } else {
-                    passwordField.type = 'password';
-                    togglePasswordIcon.classList.remove('fa-eye-slash');
-                    togglePasswordIcon.classList.add('fa-eye');
-                }
-            });
-        });
-    </script>
+{% block title %}SACI - INICIAR SESIÓN
 {% endblock %}
 
+{% block body %}
+	<header>
+		<div style="position: relative; left: 20%; top: 20%;">
+			<img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon" style="height: 40px; width: auto; margin-left: 10px; transform: translateY(10%);"/>
+			<img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="float-left mt-2" style="height: 50px; width: auto; transform: translateY(20%);"/>
+		</div>
+		<nav>
+			<a href="{{ path('home_about') }}" class="about-button" style="right: 400px;">SOBRE NOSOTROS</a>
+			<a href="{{ path('home_contact') }}" class="contact-button" style="right: 240px;">CONTACTO</a>
+		</nav>
+	</header>
+
+	<style>
+		body {
+			background-color: #191D33;
+			font-family: 'Montserrat', sans-serif;
+			color: #FFFFFF;
+		}
+		.about-button {
+			position: absolute;
+			top: 20px;
+			right: 180px;
+			display: inline-block;
+			background-color: transparent;
+			border-radius: 9999px;
+			padding: 10px 30px;
+			font-weight: bold;
+			font-size: 16px;
+			color: #ECB13A;
+			text-align: center;
+			text-decoration: none;
+			transition: background-color 0.2s ease, color 0.2s ease;
+		}
+		.about-button:hover {
+			color: #FFFFFF;
+		}
+		.contact-button {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			display: inline-block;
+			background-color: #ECB13A;
+			border-radius: 9999px; /* Píldora */
+			padding: 10px 30px;
+			font-weight: bold;
+			font-size: 16px;
+			color: #FFFFFF;
+			text-align: center;
+			text-decoration: none;
+			transition: background-color 0.2s ease, color 0.2s ease;
+		}
+		.contact-button:hover {
+			background-color: #FFFFFF;
+			color: #ECB13A;
+		}
+	</style>
+
+	<div class="container">
+		<h1 style="font-family: 'Montserrat', sans-serif;">Iniciar Sesión</h1>
+		<p style="font-family: 'Montserrat', sans-serif;">Por favor, inicia sesión para acceder a todas nuestras funciones o regístrate para comenzar tu experiencia.</p>
+
+		{% if error %}
+			<div class="alert alert-danger">
+				{{ error.messageKey|trans(error.messageData, 'security') }}
+			</div>
+		{% endif %}
+
+		{% for message in app.flashes('error') %}
+			<div class="alert alert-danger">
+				{{ message }}
+			</div>
+		{% endfor %}
+
+		<form method="post" action="{{ path('auth_login') }}">
+			<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+			<div>
+				<label for="username" style="font-family: 'Montserrat', sans-serif;">Usuario o Correo Electrónico</label>
+				<input type="text" name="_username" id="username" placeholder="ejemplo@hotmail.com" required autofocus value="{{ last_username|default('') }}" style="font-family: 'Montserrat', sans-serif;">
+			</div>
+
+			<div>
+				<label for="password" style="font-family: 'Montserrat', sans-serif;">Contraseña</label>
+				<div>
+					<input type="password" name="_password" id="password" placeholder="••••••" required style="font-family: 'Montserrat', sans-serif;">
+					<span class="fa fa-eye" id="togglePassword"></span>
+				</div>
+			</div>
+
+			<div>
+				<a href="#" style="font-family: 'Montserrat', sans-serif;">Olvidé mi contraseña</a>
+			</div>
+
+			<button type="submit" style="font-family: 'Montserrat', sans-serif;">Iniciar</button>
+
+			<div>
+				<p style="font-family: 'Montserrat', sans-serif;">¿No tenés una cuenta?
+					<a href="{{ path('auth_register') }}" style="font-family: 'Montserrat', sans-serif;">regístrate acá</a>
+				</p>
+			</div>
+		</form>
+	</div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+const passwordField = document.getElementById('password');
+const togglePasswordIcon = document.getElementById('togglePassword');
+
+togglePasswordIcon.addEventListener('click', function () {
+if (passwordField.type === 'password') {
+passwordField.type = 'text';
+togglePasswordIcon.classList.remove('fa-eye');
+togglePasswordIcon.classList.add('fa-eye-slash');
+} else {
+passwordField.type = 'password';
+togglePasswordIcon.classList.remove('fa-eye-slash');
+togglePasswordIcon.classList.add('fa-eye');
+}
+});
+});
+	</script>
+{% endblock %}

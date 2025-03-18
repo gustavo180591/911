@@ -94,4 +94,38 @@ class AuthController extends AbstractController
     {
         return $this->render('auth/success.html.twig');
     }
+
+    #[Route('/forgot-password', name: 'auth_forgot_password', methods: ['GET', 'POST'])]
+    public function forgotPassword(
+        Request $request,
+        MailerInterface $mailer // si planeas enviar correo
+    ): Response {
+        if ($request->isMethod('POST')) {
+            $emailIntroducido = $request->request->get('email');
+
+            // Aquí colocarías la lógica para:
+            // 1. Verificar que el email existe en la base de datos.
+            // 2. Generar un token único y guardarlo (en la tabla del usuario, por ejemplo).
+            // 3. Enviar un correo con el link de restablecimiento.
+
+            // Ejemplo de envío sencillo de correo (debes configurar tus credenciales de Mailer en .env)
+            /*
+            $email = (new Email())
+                ->from('no-reply@saci.com')
+                ->to($emailIntroducido)
+                ->subject('Recuperación de contraseña')
+                ->text('Haz clic en el siguiente enlace para restablecer tu contraseña: [TU_LINK]');
+            
+            $mailer->send($email);
+            */
+
+            // Mensaje flash de confirmación (puedes personalizarlo).
+            $this->addFlash('success', 'Si el email existe en nuestro sistema, te enviaremos instrucciones para restablecer la contraseña.');
+
+            return $this->redirectToRoute('auth_login');
+        }
+
+        // Renderizar la vista con el formulario para introducir el email
+        return $this->render('auth/forgot_password.html.twig');
+    }
 }
