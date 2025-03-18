@@ -3,146 +3,121 @@
 {% block title %}SACI - INICIAR SESIÓN{% endblock %}
 
 {% block body %}
-<!-- Contenedor principal con fondo oscuro y altura completa -->
-<div style="background-color: #171738; min-height: 100vh;">
-    <!-- Cabecera (Header) -->
-    <header style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem;">
-        <!-- Logo + Nombre -->
-        <div style="display: flex; align-items: center;">
-            <!-- Ajusta la ruta si tienes un archivo de imagen -->
-            <img src="{{ asset('images/saci-logo.svg') }}" alt="SACI Logo" style="height: 40px; margin-right: 0.5rem;">
-            <h2 style="color: #FFFFFF; margin: 0;">SACI</h2>
-        </div>
-        
-        <!-- Navegación a la derecha -->
-        <nav style="display: flex; gap: 1rem;">
-            <a href="#" style="color: #FFFFFF; text-decoration: none;">SOBRE NOSOTROS</a>
-            <!-- Botón de contacto en naranja -->
-            <a href="#" 
-               style="background-color: #F6A622; color: #FFFFFF; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none;">
-               CONTACTO
-            </a>
+    <header>
+         <div style="position: relative; left: 20%; top: 20%;">
+        <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon" style="height: 40px; width: auto; margin-left: 10px; transform: translateY(10%);"/>
+        <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="float-left mt-2" style="height: 50px; width: auto; transform: translateY(20%);"/>
+    </div>
+        <nav>
+            <a href="{{ path('home_about') }}" class="about-button" style="right: 400px;">SOBRE NOSOTROS</a>
+    <a href="{{ path('home_contact') }}" class="contact-button" style="right: 240px;">CONTACTO</a> 
         </nav>
     </header>
 
-    <!-- Contenido principal (Login) -->
-    <div class="container" 
-         style="max-width: 400px; margin: 0 auto; padding: 3rem 1rem; color: #FFFFFF;">
-        
-        <h1 style="margin-bottom: 1rem;">Iniciar Sesión</h1>
-        <p style="margin-bottom: 2rem; color: #FFFFFF;">
-            Por favor, inicia sesión para acceder a todas nuestras funciones 
-            o regístrate para comenzar tu experiencia.
-        </p>
+    <style>
+        body {
+            background-color: #191D33;
+        }
+        .about-button {
+            position: absolute;
+            top: 20px;
+            right: 180px;
+            display: inline-block;
+            background-color: transparent;
+            border-radius: 9999px;
+            padding: 10px 30px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #ECB13A;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .about-button:hover {
+            color: #FFFFFF;
+        }
+        .contact-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: inline-block;
+            background-color: #ECB13A;
+            border-radius: 9999px; /* Píldora */
+            padding: 10px 30px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #FFFFFF;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .contact-button:hover {
+            background-color: #FFFFFF;
+            color: #ECB13A;
+        }
+    </style>
 
-        <!-- Mostrar errores si existen -->
+    <div class="container">
+        <h1>Iniciar Sesión</h1>
+        <p>Por favor, inicia sesión para acceder a todas nuestras funciones o regístrate para comenzar tu experiencia.</p>
+
         {% if error %}
-            <div style="background-color: #e14e4e; padding: 0.8rem; border-radius: 5px; margin-bottom: 1rem;">
+            <div class="alert alert-danger">
                 {{ error.messageKey|trans(error.messageData, 'security') }}
             </div>
         {% endif %}
 
-        <!-- Mostrar mensajes flash -->
         {% for message in app.flashes('error') %}
-            <div style="background-color: #e14e4e; padding: 0.8rem; border-radius: 5px; margin-bottom: 1rem;">
+            <div class="alert alert-danger">
                 {{ message }}
             </div>
         {% endfor %}
-        
-        <!-- Formulario de inicio de sesión -->
+
         <form method="post" action="{{ path('auth_login') }}">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-            
-            <!-- Campo Usuario/Correo -->
-            <div style="margin-bottom: 1.5rem;">
-                <label for="username" style="display: block; margin-bottom: 0.5rem;">Usuario o Correo Electrónico</label>
-                <input 
-                    type="text" 
-                    name="_username" 
-                    id="username" 
-                    placeholder="ejemplo@hotmail.com"
-                    required 
-                    autofocus 
-                    value="{{ last_username|default('') }}"
-                    style="
-                        width: 100%; 
-                        padding: 0.8rem; 
-                        border-radius: 20px; 
-                        border: 1px solid #555; 
-                        background-color: #2B2B48; 
-                        color: #FFF;
-                        outline: none;
-                    "
-                >
+
+            <div>
+                <label for="username">Usuario o Correo Electrónico</label>
+                <input type="text" name="_username" id="username" placeholder="ejemplo@hotmail.com" required autofocus value="{{ last_username|default('') }}">
             </div>
 
-            <!-- Campo Contraseña -->
-            <div style="margin-bottom: 1rem;">
-                <label for="password" style="display: block; margin-bottom: 0.5rem;">Contraseña</label>
-                
-                <div style="position: relative;">
-                    <input
-                        type="password"
-                        name="_password"
-                        id="password"
-                        placeholder="••••••"
-                        required
-                        style="
-                            width: 100%;
-                            padding: 0.8rem 2.5rem 0.8rem 0.8rem; 
-                            border-radius: 20px; 
-                            border: 1px solid #555;
-                            background-color: #2B2B48; 
-                            color: #FFF;
-                            outline: none;
-                        "
-                    >
-                    <!-- Ícono ojo (ejemplo de Font Awesome); ajusta si usas otra librería -->
-                    <span class="fa fa-eye"
-                          style="
-                              position: absolute;
-                              right: 0.8rem;
-                              top: 50%;
-                              transform: translateY(-50%);
-                              cursor: pointer;
-                              color: #FFF;
-                          ">
-                    </span>
+            <div>
+                <label for="password">Contraseña</label>
+                <div>
+                    <input type="password" name="_password" id="password" placeholder="••••••" required>
+                    <span class="fa fa-eye" id="togglePassword"></span>
                 </div>
             </div>
 
-            <!-- Enlace Olvidé mi contraseña (opcional) -->
-            <div style="margin-bottom: 1.5rem;">
-                <a href="#" style="color: #FFFFFF; text-decoration: none;">
-                    Olvidé mi contraseña
-                </a>
+            <div>
+                <a href="#">Olvidé mi contraseña</a>
             </div>
 
-            <!-- Botón de iniciar sesión -->
-            <button type="submit" 
-                    style="
-                        width: 100%; 
-                        background-color: #FFFFFF; 
-                        color: #171738; 
-                        padding: 0.8rem; 
-                        border: none; 
-                        border-radius: 20px; 
-                        font-weight: bold;
-                        cursor: pointer;
-                    ">
-                Iniciar
-            </button>
+            <button type="submit">Iniciar</button>
 
-            <!-- Registro -->
-            <div style="margin-top: 1.5rem;">
-                <p>
-                    ¿No tenés una cuenta?
-                    <a href="{{ path('auth_register') }}" style="color: #FFFFFF; text-decoration: underline;">
-                        regístrate acá
-                    </a>
-                </p>
+            <div>
+                <p>¿No tenés una cuenta? <a href="{{ path('auth_register') }}">regístrate acá</a></p>
             </div>
         </form>
     </div>
-</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordField = document.getElementById('password');
+            const togglePasswordIcon = document.getElementById('togglePassword');
+
+            togglePasswordIcon.addEventListener('click', function() {
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    togglePasswordIcon.classList.remove('fa-eye');
+                    togglePasswordIcon.classList.add('fa-eye-slash');
+                } else {
+                    passwordField.type = 'password';
+                    togglePasswordIcon.classList.remove('fa-eye-slash');
+                    togglePasswordIcon.classList.add('fa-eye');
+                }
+            });
+        });
+    </script>
 {% endblock %}
+

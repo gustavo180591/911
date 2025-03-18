@@ -4,6 +4,58 @@
 {% block title %}SACI - REGISTRO DE USUARIO{% endblock %}
 
 {% block body %}
+<header>
+         <div style="position: relative; left: 20%; top: 20%;">
+        <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon" style="height: 40px; width: auto; margin-left: 10px; transform: translateY(10%);"/>
+        <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="float-left mt-2" style="height: 50px; width: auto; transform: translateY(20%);"/>
+    </div>
+        <nav>
+            <a href="{{ path('home_about') }}" class="about-button" style="right: 400px;">SOBRE NOSOTROS</a>
+    <a href="{{ path('home_contact') }}" class="contact-button" style="right: 240px;">CONTACTO</a> 
+         </nav>
+    </header>
+     <style>
+        body {
+            background-color: #191D33;
+        }
+        .about-button {
+            position: absolute;
+            top: 20px;
+            right: 180px;
+            display: inline-block;
+            background-color: transparent;
+            border-radius: 9999px;
+            padding: 10px 30px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #ECB13A;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .about-button:hover {
+            color: #FFFFFF;
+        }
+        .contact-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: inline-block;
+            background-color: #ECB13A;
+            border-radius: 9999px; /* Píldora */
+            padding: 10px 30px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #FFFFFF;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .contact-button:hover {
+            background-color: #FFFFFF;
+            color: #ECB13A;
+        }
+    </style>
 <div class="container mt-4">
     <h1 class="mb-3">Registro de Usuario</h1>
     <p class="mb-4">Completá con tus datos para crear una cuenta</p>
