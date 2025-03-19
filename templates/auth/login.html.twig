@@ -58,52 +58,133 @@
 			background-color: #FFFFFF;
 			color: #ECB13A;
 		}
+
+		.login-form {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			margin-top: 5rem;
+			margin-left: 10%;
+			transform: translateX(12%);
+		}
 	</style>
 
-	<div class="container">
-		<h1 style="font-family: 'Montserrat', sans-serif;">Iniciar Sesión</h1>
-		<p style="font-family: 'Montserrat', sans-serif;">Por favor, inicia sesión para acceder a todas nuestras funciones o regístrate para comenzar tu experiencia.</p>
+	<div class="login-form">
+		<div style="width: 30rem;">
+			<h1 style="font-family: 'Montserrat', sans-serif;">Iniciar Sesión</h1>
+			<p style="font-family: 'Montserrat', sans-serif;">Por favor, inicia sesión para acceder a todas nuestras funciones o regístrate para comenzar tu experiencia.</p>
 
-		{% if error %}
-			<div class="alert alert-danger">
-				{{ error.messageKey|trans(error.messageData, 'security') }}
-			</div>
-		{% endif %}
+			{% if error %}
+				<div class="alert alert-danger">
+					{{ error.messageKey|trans(error.messageData, 'security') }}
+				</div>
+			{% endif %}
 
-		{% for message in app.flashes('error') %}
-			<div class="alert alert-danger">
-				{{ message }}
-			</div>
-		{% endfor %}
+			{% for message in app.flashes('error') %}
+				<div class="alert alert-danger">
+					{{ message }}
+				</div>
+			{% endfor %}
 
-		<form method="post" action="{{ path('auth_login') }}">
-			<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-			<div>
-				<label for="username" style="font-family: 'Montserrat', sans-serif;">Usuario o Correo Electrónico</label>
-				<input type="text" name="_username" id="username" placeholder="ejemplo@hotmail.com" required autofocus value="{{ last_username|default('') }}" style="font-family: 'Montserrat', sans-serif;">
-			</div>
-
-			<div>
-				<label for="password" style="font-family: 'Montserrat', sans-serif;">Contraseña</label>
+			<form method="post" action="{{ path('auth_login') }}">
+				<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+				<br />
 				<div>
-					<input type="password" name="_password" id="password" placeholder="••••••" required style="font-family: 'Montserrat', sans-serif;">
+					<label for="username" style="font-family: 'Montserrat', sans-serif;">Usuario o Correo Electrónico</label>
+				</div>
+				<div>
+				<input type="text" name="_username" id="username" placeholder="ejemplo@hotmail.com" required autofocus style="
+                    font-family: 'Montserrat', sans-serif;
+					font-size: 1.1rem;
+                    font-weight: bold;
+                    background-color: #191D33;
+                    color: white;
+                    border: 1px solid white;
+                    border-radius: 0.5rem;
+                    transition: border-color 0.2s ease, border-width 0.2s ease;
+                    width: 430px;
+                    height: 35px;
+					
+                " onmouseover="
+                    this.style.border = '2px solid #ECB13A';
+                " onmouseout="
+                    if (!this.matches(':focus') && this.value === '') {
+                        this.style.border = '1px solid white';
+                    }
+                " onfocus="
+                    this.style.border = '2px solid #ECB13A';
+                " onblur="
+                    if (this.value === '') {
+                        this.style.border = '1px solid white';
+                    } else {
+                        this.style.border = '2px solid #ECB13A';
+                    }
+                ">
+				</div>
+
+<br />
+				<div>
+					<label for="password" style="font-family: 'Montserrat', sans-serif;">Contraseña</label>
+				</div>
+
+				<div><input type="password" name="_password" id="password" placeholder="••••••" required style="
+					    font-family: 'Montserrat', sans-serif;
+						font-size: 1.1rem;
+                    	font-weight: bold;
+					    background-color: #191D33;
+					    color: white;
+					    border: 1px solid white;
+					    border-radius: 0.5rem;
+					    transition: border-color 0.2s ease, border-width 0.2s ease;
+						width: 430px;
+					            height: 35px;
+					" onmouseover="
+					    /* Pase lo que pase, al pasar el mouse, el borde se vuelve dorado y grueso */
+					    this.style.border = '2px solid #ECB13A';
+					" onmouseout="
+					    /* Si NO está en foco y está vacío, vuelve a blanco */
+					    if(!this.matches(':focus') && this.value === '') {
+					        this.style.border = '1px solid white';
+					    }
+					" onfocus="
+					    /* Al hacer click/focus, se mantiene dorado y grueso */
+					    this.style.border = '2px solid #ECB13A';
+					" onblur="
+					            /*
+					                Si está vacío al perder el foco, vuelve a blanco.
+					                Si NO está vacío, queda dorado.
+					            */
+					    if(this.value === '') {
+					        this.style.border = '1px solid white';
+					    } else {
+					        this.style.border = '2px solid #ECB13A';
+					    }
+					">
 					<span class="fa fa-eye" id="togglePassword"></span>
 				</div>
-			</div>
+<br />
+<br />
+				<div>
+					<a href="#" style="font-family: 'Montserrat', sans-serif; font-weight: bold; color: white; text-decoration: none;">Olvidé mi contraseña</a>
+				</div>
 
-			<div>
-				<a href="#" style="font-family: 'Montserrat', sans-serif;">Olvidé mi contraseña</a>
-			</div>
-
-			<button type="submit" style="font-family: 'Montserrat', sans-serif;">Iniciar</button>
-
-			<div>
-				<p style="font-family: 'Montserrat', sans-serif;">¿No tenés una cuenta?
-					<a href="{{ path('auth_register') }}" style="font-family: 'Montserrat', sans-serif;">regístrate acá</a>
-				</p>
-			</div>
-		</form>
+<br />
+				<div>
+					<p style="font-family: 'Montserrat', sans-serif;">¿No tenés una cuenta?
+						<a href="{{ path('auth_register') }}" style="font-family: 'Montserrat', sans-serif; font-weight: bold; color: white; text-decoration: none;">regístrate acá</a>
+					</p>
+				</div>
+				<br />
+				<br />
+				                <button type="submit" style="font-family: 'Montserrat', sans-serif;
+                    font-weight: bold;
+                    font-size: 18px;
+                    background-color: #FFFFFF;
+                    border-radius: 9999px;
+                    padding: 10px 30px;
+                    cursor: pointer;">Iniciar</button>
+			</form>
+		</div>
 	</div>
 
 	<script>
@@ -125,3 +206,4 @@ togglePasswordIcon.classList.add('fa-eye');
 });
 	</script>
 {% endblock %}
+

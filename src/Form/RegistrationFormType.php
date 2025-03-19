@@ -68,23 +68,19 @@ class RegistrationFormType extends AbstractType
                         ]),
                     ],
                 ])       
-                ->add('Password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'first_options' => [
+                ->add('Password', PasswordType::class, [
                     'label' => 'Contraseña',
-                ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'La contraseña no puede estar vacía.',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'La contraseña debe tener al menos {{ limit }} caracteres.',
-                        'max' => 4096,
-                    ]),
-                ],
-                'invalid_message' => 'Las contraseñas deben coincidir.',
-            ]);
+                    'constraints' => [
+                        new NotBlank([
+                            'message' => 'La contraseña no puede estar vacía.',
+                        ]),
+                        new Length([
+                            'min' => 6,
+                            'minMessage' => 'La contraseña debe tener al menos {{ limit }} caracteres.',
+                            'max' => 4096,
+                        ]),
+                    ],
+                ]);
             
     }
 
