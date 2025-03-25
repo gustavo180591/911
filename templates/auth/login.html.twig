@@ -1,209 +1,302 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SACI - INICIAR SESIÓN
-{% endblock %}
+{% block title %}SACI - INICIAR SESIÓN{% endblock %}
 
 {% block body %}
-	<header>
-		<div style="position: relative; left: 20%; top: 20%;">
+    <style>
+        body {
+            background-color: #1a1a36; /* Color de fondo ajustado para coincidir con la imagen */
+            font-family: 'Montserrat', sans-serif;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+        }
+        
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .about-button {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .about-button:hover {
+            color: white;
+        }
+        
+        .contact-button {
+            background-color: #e8a76b;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .contact-button:hover {
+            background-color: #d99659;
+        }
+        
+        .login-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        .login-form {
+            max-width: 450px;
+        }
+        
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .input-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            background-color: #1a1a36;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border: 2px solid #e8a76b;
+        }
+        
+        .password-container {
+            position: relative;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+        }
+        
+        .forgot-password {
+            display: block;
+            font-size: 14px;
+            color: white;
+            text-decoration: none;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .register-link {
+            font-size: 14px;
+            margin: 20px 0;
+        }
+        
+        .register-link a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .btn-login {
+            background-color: white;
+            color: #1a1a36;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-login:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .alert {
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        .alert-danger {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+    </style>
+
+    <header>
+        <div style="position: relative; left: 20%; top: 20%;">
 			<img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon" style="height: 40px; width: auto; margin-left: 10px; transform: translateY(10%);"/>
 			<img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="float-left mt-2" style="height: 50px; width: auto; transform: translateY(20%);"/>
 		</div>
-		<nav>
-			<a href="{{ path('home_about') }}" class="about-button" style="right: 400px;">SOBRE NOSOTROS</a>
-			<a href="{{ path('home_contact') }}" class="contact-button" style="right: 240px;">CONTACTO</a>
+        <nav>
+		<a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
+		<a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
 		</nav>
-	</header>
+    </header>
 
-	<style>
-		body {
-			background-color: #191D33;
-			font-family: 'Montserrat', sans-serif;
-			color: #FFFFFF;
-		}
-		.about-button {
-			position: absolute;
-			top: 20px;
-			right: 180px;
-			display: inline-block;
-			background-color: transparent;
-			border-radius: 9999px;
-			padding: 10px 30px;
-			font-weight: bold;
-			font-size: 16px;
-			color: #ECB13A;
-			text-align: center;
-			text-decoration: none;
-			transition: background-color 0.2s ease, color 0.2s ease;
-		}
-		.about-button:hover {
-			color: #FFFFFF;
-		}
-		.contact-button {
-			position: absolute;
-			top: 20px;
-			right: 20px;
-			display: inline-block;
-			background-color: #ECB13A;
-			border-radius: 9999px; /* Píldora */
-			padding: 10px 30px;
-			font-weight: bold;
-			font-size: 16px;
-			color: #FFFFFF;
-			text-align: center;
-			text-decoration: none;
-			transition: background-color 0.2s ease, color 0.2s ease;
-		}
-		.contact-button:hover {
-			background-color: #FFFFFF;
-			color: #ECB13A;
-		}
+    <div class="login-container">
+        <div class="login-form">
+            <h1>Iniciar Sesión</h1>
+            <p>Por favor, inicia sesión para acceder a todas nuestras funciones y disfrutar de la mejor experiencia.</p>
+            
+            {% if error %}
+                <div class="alert alert-danger">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
 
-		.login-form {
-			display: flex;
-			justify-content: flex-start;
-			align-items: center;
-			margin-top: 5rem;
-			margin-left: 10%;
-			transform: translateX(12%);
-		}
-	</style>
+            {% if app.user %}
+                <div class="alert alert-info">
+                    You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                </div>
+            {% endif %}
+            
+            <form method="post">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                
+                <div class="form-group">
+                    <label for="inputEmail">Usuario o Correo Electrónico</label>
+                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="ejemplo@hotmail.com" required autofocus>
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputPassword">Contraseña</label>
+                    <div class="password-container">
+                        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="••••••" required>
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <input type="hidden" name="_remember_me" value="on">
+                
+                <a href="#" class="forgot-password">Olvidé mi contraseña</a>
+                
+                <div class="register-link">
+                    <p>¿No tenés una cuenta? <a href="{{ path('auth_register') }}">regístrate acá</a></p>
+                </div>
+                
+                <button type="submit" class="btn-login">Iniciar</button>
+            </form>
+        </div>
+    </div>
 
-	<div class="login-form">
-		<div style="width: 30rem;">
-			<h1 style="font-family: 'Montserrat', sans-serif;">Iniciar Sesión</h1>
-			<p style="font-family: 'Montserrat', sans-serif;">Por favor, inicia sesión para acceder a todas nuestras funciones o regístrate para comenzar tu experiencia.</p>
-
-			{% if error %}
-				<div class="alert alert-danger">
-					{{ error.messageKey|trans(error.messageData, 'security') }}
-				</div>
-			{% endif %}
-
-			{% for message in app.flashes('error') %}
-				<div class="alert alert-danger">
-					{{ message }}
-				</div>
-			{% endfor %}
-
-			<form method="post" action="{{ path('auth_login') }}">
-				<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-				<br />
-				<div>
-					<label for="username" style="font-family: 'Montserrat', sans-serif;">Usuario o Correo Electrónico</label>
-				</div>
-				<div>
-				<input type="text" name="_username" id="username" placeholder="ejemplo@hotmail.com" required autofocus style="
-                    font-family: 'Montserrat', sans-serif;
-					font-size: 1.1rem;
-                    font-weight: bold;
-                    background-color: #191D33;
-                    color: white;
-                    border: 1px solid white;
-                    border-radius: 0.5rem;
-                    transition: border-color 0.2s ease, border-width 0.2s ease;
-                    width: 430px;
-                    height: 35px;
-					
-                " onmouseover="
-                    this.style.border = '2px solid #ECB13A';
-                " onmouseout="
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordField = document.getElementById('inputPassword');
+            const togglePasswordButton = document.getElementById('togglePassword');
+            
+            togglePasswordButton.addEventListener('click', function() {
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    togglePasswordButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
+                } else {
+                    passwordField.type = 'password';
+                    togglePasswordButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+                }
+            });
+            
+            // Efecto de borde para los inputs
+            const inputs = document.querySelectorAll('.form-control');
+            
+            inputs.forEach(input => {
+                // Al pasar el mouse
+                input.addEventListener('mouseover', function() {
+                    this.style.border = '2px solid #e8a76b';
+                });
+                
+                // Al quitar el mouse
+                input.addEventListener('mouseout', function() {
                     if (!this.matches(':focus') && this.value === '') {
-                        this.style.border = '1px solid white';
+                        this.style.border = '1px solid rgba(255, 255, 255, 0.7)';
                     }
-                " onfocus="
-                    this.style.border = '2px solid #ECB13A';
-                " onblur="
+                });
+                
+                // Al enfocar
+                input.addEventListener('focus', function() {
+                    this.style.border = '2px solid #e8a76b';
+                });
+                
+                // Al perder el foco
+                input.addEventListener('blur', function() {
                     if (this.value === '') {
-                        this.style.border = '1px solid white';
+                        this.style.border = '1px solid rgba(255, 255, 255, 0.7)';
                     } else {
-                        this.style.border = '2px solid #ECB13A';
+                        this.style.border = '2px solid #e8a76b';
                     }
-                ">
-				</div>
-
-<br />
-				<div>
-					<label for="password" style="font-family: 'Montserrat', sans-serif;">Contraseña</label>
-				</div>
-
-				<div><input type="password" name="_password" id="password" placeholder="••••••" required style="
-					    font-family: 'Montserrat', sans-serif;
-						font-size: 1.1rem;
-                    	font-weight: bold;
-					    background-color: #191D33;
-					    color: white;
-					    border: 1px solid white;
-					    border-radius: 0.5rem;
-					    transition: border-color 0.2s ease, border-width 0.2s ease;
-						width: 430px;
-					            height: 35px;
-					" onmouseover="
-					    /* Pase lo que pase, al pasar el mouse, el borde se vuelve dorado y grueso */
-					    this.style.border = '2px solid #ECB13A';
-					" onmouseout="
-					    /* Si NO está en foco y está vacío, vuelve a blanco */
-					    if(!this.matches(':focus') && this.value === '') {
-					        this.style.border = '1px solid white';
-					    }
-					" onfocus="
-					    /* Al hacer click/focus, se mantiene dorado y grueso */
-					    this.style.border = '2px solid #ECB13A';
-					" onblur="
-					            /*
-					                Si está vacío al perder el foco, vuelve a blanco.
-					                Si NO está vacío, queda dorado.
-					            */
-					    if(this.value === '') {
-					        this.style.border = '1px solid white';
-					    } else {
-					        this.style.border = '2px solid #ECB13A';
-					    }
-					">
-					<span class="fa fa-eye" id="togglePassword"></span>
-				</div>
-<br />
-<br />
-				<div>
-					<a href="#" style="font-family: 'Montserrat', sans-serif; font-weight: bold; color: white; text-decoration: none;">Olvidé mi contraseña</a>
-				</div>
-
-<br />
-				<div>
-					<p style="font-family: 'Montserrat', sans-serif;">¿No tenés una cuenta?
-						<a href="{{ path('auth_register') }}" style="font-family: 'Montserrat', sans-serif; font-weight: bold; color: white; text-decoration: none;">regístrate acá</a>
-					</p>
-				</div>
-				<br />
-				<br />
-				                <button type="submit" style="font-family: 'Montserrat', sans-serif;
-                    font-weight: bold;
-                    font-size: 18px;
-                    background-color: #FFFFFF;
-                    border-radius: 9999px;
-                    padding: 10px 30px;
-                    cursor: pointer;">Iniciar</button>
-			</form>
-		</div>
-	</div>
-
-	<script>
-		document.addEventListener('DOMContentLoaded', function () {
-const passwordField = document.getElementById('password');
-const togglePasswordIcon = document.getElementById('togglePassword');
-
-togglePasswordIcon.addEventListener('click', function () {
-if (passwordField.type === 'password') {
-passwordField.type = 'text';
-togglePasswordIcon.classList.remove('fa-eye');
-togglePasswordIcon.classList.add('fa-eye-slash');
-} else {
-passwordField.type = 'password';
-togglePasswordIcon.classList.remove('fa-eye-slash');
-togglePasswordIcon.classList.add('fa-eye');
-}
-});
-});
-	</script>
+                });
+            });
+        });
+    </script>
 {% endblock %}
-
