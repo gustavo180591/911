@@ -18,7 +18,7 @@
     {% endfor %}
 
     <div class="mb-3">
-        <a href="{{ path('emergency_create') }}" class="btn btn-primary">Registrar Nueva Emergencia</a>
+        <a href="{{ path('emergency_create') }}" class="btn btn-primary" style="color: white; font-weight: bold; text-decoration: none;">Registrar Nueva Emergencia</a>
     </div>
 
     <table class="table table-striped">
@@ -46,12 +46,12 @@
                     </td>
                     <td>
                         <a href="{{ path('emergency_show', { id: emergency.id }) }}"
-                           class="btn btn-sm btn-warning">
+                           class="btn btn-sm btn-warning" style="font-weight: bold; text-decoration: none; color: white;">
                            Ver
                         </a>
 
                         <a href="{{ path('emergency_edit', { id: emergency.id }) }}"
-                           class="btn btn-sm btn-secondary">
+                           class="btn btn-sm btn-secondary" style="font-weight: bold; text-decoration: none; color: white;">
                            Editar
                         </a>
 
@@ -62,7 +62,7 @@
                             <input type="hidden"
                                    name="token"
                                    value="{{ csrf_token('delete_emergency' ~ emergency.id) }}">
-                            <button class="btn btn-sm btn-danger">Eliminar</button>
+                            <button class="btn btn-sm btn-danger" style="font-weight: bold; text-decoration: none; color: white;">Eliminar</button>
                         </form>
                     </td>
                 </tr>
@@ -73,6 +73,6 @@
             {% endfor %}
         </tbody>
     </table>
-    <p><a href="{{ path('home_index') }}">Volver al inicio</a></p>
+    <p style="font-weight: bold; color: white; text-decoration: none;"><strong><a href="{{ path('home_index') }}" style="text-decoration: none;">Volver al inicio</a></strong></p>
 </div>
 {% endblock %}

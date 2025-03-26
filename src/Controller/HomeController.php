@@ -19,7 +19,7 @@ class HomeController extends AbstractController
     #[Route('/about', name: 'home_about', methods: ['GET'])]
     public function about(): Response
     {
-        return $this->render('home/about.html.twig', [
+        return $this->render('home/nuestramision.html.twig', [
             'title' => 'Acerca del Sistema de Alerta Ciudadana Integrada',
             'description' => 'El Sistema de Alerta Ciudadana Integrada Reporta incidentes de manera rápida y eficiente.
 SACI conecta a ciudadanos y autoridades en toda
