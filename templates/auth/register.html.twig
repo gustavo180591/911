@@ -47,17 +47,38 @@
             color: white;
         }
         
-        .contact-button {
-            background-color: #e8a76b;
-            color: white;
-            padding: 0.5rem 1rem;
+         .about-button {
+            display: inline-block;
+            background-color: transparent;
             border-radius: 9999px;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #FFFFFF;
+            text-align: center;
             text-decoration: none;
-            transition: background-color 0.2s;
+            transition: color 0.2s ease;
         }
-        
+
+        .about-button:hover {
+            color: #ECB13A;
+        }
+
+        .contact-button {
+            display: inline-block;
+            background-color: #ECB13A;
+            border-radius: 9999px;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #FFFFFF;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
         .contact-button:hover {
-            background-color: #d99659;
+            background-color: #ECB13A;
         }
         
         .registration-container {
@@ -113,7 +134,7 @@
         
         .form-control:focus {
             outline: none;
-            border: 2px solid #e8a76b;
+            border: 2px solid #ECB13A;
         }
         
         .password-container {
@@ -194,13 +215,13 @@
 {% block body %}
 <div class="container">
     <header>
-    <div style="position: relative; left: 20%; top: 20%;">
+       <div style="position: relative; left: 20%; top: 20%; cursor: pointer;" onclick="window.location.href='{{ path('home_index') }}'">
 			<img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon" style="height: 40px; width: auto; margin-left: 10px; transform: translateY(10%);"/>
 			<img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="float-left mt-2" style="height: 50px; width: auto; transform: translateY(20%);"/>
 		</div>
-        <nav>
-            <a href="{{ path('home_about') }}">SOBRE NOSOTROS</a>
-            <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
+         <nav>
+            <a href="{{ path('home_about') }}" class="about-button" style="text-decoration: none;">SOBRE NOSOTROS</a>
+            <a href="{{ path('home_contact') }}" class="contact-button" style="text-decoration: none;">CONTACTO</a>
         </nav>
     </header>
     

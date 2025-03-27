@@ -56,7 +56,7 @@
     .inicio-button {
         right: 600px;
         background-color: transparent;
-        color: #ECB13A;
+        color: #E5A74E;
         padding: 10px 30px;
     }
     .inicio-button:hover {
@@ -66,7 +66,7 @@
     .about-button {
         right: 400px;
         background-color: transparent;
-        color: #ECB13A;
+        color: #E5A74E;
         padding: 10px 30px;
     }
     .about-button:hover {
@@ -75,18 +75,18 @@
 
     .contact-button {
         right: 240px;
-        background-color: #ECB13A;
+        background-color: #E5A74E;
         color: #FFFFFF;
         padding: 10px 30px;
     }
     .contact-button:hover {
         background-color: #FFFFFF;
-        color: #ECB13A;
+        color: #E5A74E;
     }
 
     /* Botón rojo de “Registrar Incidente” */
     .my-button {
-        background-color: #FF3B30;
+        background-color: #EA633F;
         color: #FFFFFF;
         border: none;
         border-radius: 9999px;
@@ -123,7 +123,7 @@
 
         <h1 style="font-size: 56px; margin-top: 1.5rem;">
             BIENVENIDO<br>AL SISTEMA<br>
-            <span style="color: #ECB13A;">SACI</span>
+            <span style="color: #E5A74E;">SACI</span>
         </h1>
         <p>SISTEMA DE ALERTA CIUDADANA INTEGRADA</p>
         <p>Reporta incidentes de manera <strong>rápida y eficiente.</strong></p>
@@ -141,7 +141,7 @@
 
 <!-- Segunda sección: al hacer scroll, aparece este contenido -->
 <section class="content-section">
-    <h2 style="color: #ECB13A;">Conocé Nuestros Principios</h2>
+    <h2 style="color: #E5A74E;">Conocé Nuestros Principios</h2>
     <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 2rem;">
         <div style="flex: 1;">
             <h3>Accesibilidad</h3>

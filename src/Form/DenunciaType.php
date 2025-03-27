@@ -62,7 +62,7 @@ class DenunciaType extends AbstractType
                 'allow_add' => true, // Permite agregar nuevas evidencias
                 'allow_delete' => true, // Permite eliminar evidencias
                 'by_reference' => false, // Importante para que funcione correctamente
-                'label' => 'Evidencias',
+                'label' => false,
             ])
             // Ubicación
             ->add('ubicacion', UbicacionType::class, [
@@ -70,7 +70,7 @@ class DenunciaType extends AbstractType
             ])
             // Botón de envío
             ->add('submit', SubmitType::class, [
-                'label' => 'Registrar Denuncia',
+                'label' => 'Registrar Incidente',
                 'attr'  => [
                     'class' => 'btn btn-primary',
                 ],

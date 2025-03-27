@@ -18,6 +18,16 @@
             padding: 0;
         }
         
+         nav {
+            display: flex;
+            gap: 20px;
+        }
+         header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+        }
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -60,7 +70,7 @@
         }
         
         .highlight {
-            color: #ECB13A;
+            color: #E5A74E;
         }
         
         .mission-description {
@@ -104,25 +114,22 @@
             padding: 20px 0;
         }
         
-        .about-button {
-            position: absolute;
-            top: 20px;
-            right: 180px;
+        .contact-button {
             display: inline-block;
-            background-color: transparent;
+            background-color: #ECB13A;
             border-radius: 9999px;
-            padding: 10px 30px;
+            padding: 10px 20px;
             font-weight: bold;
-            font-size: 16px;
-            color: #ECB13A;
+            font-size: 14px;
+            color: #FFFFFF;
             text-align: center;
             text-decoration: none;
-            transition: background-color 0.2s ease, color 0.2s ease;
-            font-family: 'Montserrat', sans-serif;
+            transition: background-color 0.2s ease;
+            margin-right: 80px; /* Adjusted to move button to the right */
         }
-        
-        .about-button:hover {
-            color: #FFFFFF;
+
+        .contact-button:hover {
+            background-color: #ECB13A;
         }
         
         @media (max-width: 992px) {
@@ -148,8 +155,8 @@
             <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon" style="height: 40px; width: auto; margin-left: 10px; transform: translateY(10%);" />
             <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="float-left mt-2" style="height: 50px; width: auto; transform: translateY(20%);" />
         </div>
-        <nav>
-            <a href="{{ path('home_contact') }}" class="about-button">CONTACTO</a>
+        <nav>           
+            <a href="{{ path('home_contact') }}" class="contact-button" style="text-decoration: none;">CONTACTO</a>
         </nav>
     </header>
 
