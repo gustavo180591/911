@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Usuario;
 use App\Form\RegistrationFormType;
+use App\Form\ForgotPasswordFormType; // Corrección: Importar desde App\Form
 use App\Security\LoginFormAuthenticator;
+use Symfony\Component\Mailer\MailerInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,7 +33,8 @@ class AuthController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 // Comprobar si el usuario ya existe
-                $existingUser = $entityManager->getRepository(Usuario::class)->findOneBy(['email' => $user->getEmail()]);
+                $existingUser = $entityManager->getRepository(Usuario::class)
+                    ->findOneBy(['email' => $user->getEmail()]);
 
                 if ($existingUser) {
                     $this->addFlash('error', 'El correo electrónico ya está registrado. Intente con otro.');
@@ -39,6 +42,7 @@ class AuthController extends AbstractController
                 }
 
                 // Cifrar la contraseña
+                // Nota: Verifica que el nombre del campo en tu RegistrationFormType sea "Password" o ajústalo según corresponda.
                 $password = password_hash($form->get('Password')->getData(), PASSWORD_BCRYPT);
                 $user->setPassword($password);
                 $user->setRoles(['ROLE_USER']);
@@ -53,10 +57,6 @@ class AuthController extends AbstractController
                     $authenticator,
                     $request
                 );
-
-                // ✅ Redirigir a la página de éxito o al home
-                return $this->redirectToRoute('auth_success');
-
             } catch (UniqueConstraintViolationException $e) {
                 $this->addFlash('error', 'El correo electrónico ya está en uso. Intente con otro.');
                 return $this->redirectToRoute('auth_register');
@@ -71,9 +71,8 @@ class AuthController extends AbstractController
     #[Route('/login', name: 'auth_login', methods: ['GET', 'POST'])]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // Si el usuario ya está autenticado, redirigirlo
         if ($this->getUser()) {
-            return $this->redirectToRoute('home_index'); // Ruta de inicio
+            return $this->redirectToRoute('home_index'); // Redirige al inicio si ya está autenticado
         }
 
         return $this->render('auth/login.html.twig', [
@@ -96,36 +95,26 @@ class AuthController extends AbstractController
     }
 
     #[Route('/forgot-password', name: 'auth_forgot_password', methods: ['GET', 'POST'])]
-    public function forgotPassword(
-        Request $request,
-        MailerInterface $mailer // si planeas enviar correo
-    ): Response {
-        if ($request->isMethod('POST')) {
-            $emailIntroducido = $request->request->get('email');
+    public function forgotPassword(Request $request, MailerInterface $mailer): Response
+    {
+        // Crea el formulario utilizando ForgotPasswordFormType
+        $form = $this->createForm(ForgotPasswordFormType::class);
+        $form->handleRequest($request);
 
-            // Aquí colocarías la lógica para:
-            // 1. Verificar que el email existe en la base de datos.
-            // 2. Generar un token único y guardarlo (en la tabla del usuario, por ejemplo).
-            // 3. Enviar un correo con el link de restablecimiento.
-
-            // Ejemplo de envío sencillo de correo (debes configurar tus credenciales de Mailer en .env)
-            /*
-            $email = (new Email())
-                ->from('no-reply@saci.com')
-                ->to($emailIntroducido)
-                ->subject('Recuperación de contraseña')
-                ->text('Haz clic en el siguiente enlace para restablecer tu contraseña: [TU_LINK]');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $emailIntroducido = $form->get('email')->getData();
             
-            $mailer->send($email);
-            */
+            // Aquí iría la lógica para:
+            // 1. Verificar que el email existe.
+            // 2. Generar un token único y guardarlo.
+            // 3. Enviar un correo de recuperación utilizando $mailer.
 
-            // Mensaje flash de confirmación (puedes personalizarlo).
             $this->addFlash('success', 'Si el email existe en nuestro sistema, te enviaremos instrucciones para restablecer la contraseña.');
-
             return $this->redirectToRoute('auth_login');
         }
 
-        // Renderizar la vista con el formulario para introducir el email
-        return $this->render('auth/forgot_password.html.twig');
+        return $this->render('auth/forgot_password.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }
