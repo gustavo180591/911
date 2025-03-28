@@ -119,7 +119,84 @@
             font-size: 0.875rem;
             margin-bottom: 0.25rem;
         }
-        
+.phone-container {
+  display: flex;
+  align-items: center;
+  background-color: #1a1a2e; /* Fondo oscuro para el contenedor principal */
+  border-radius: 25px;
+  overflow: hidden;
+  height: 50px;
+}
+
+.country-code {
+  position: relative;
+  background-color: #1a1a2e; /* Fondo blanco para el selector de país */
+  border-radius: 20px;
+  margin: 5px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  min-width: 90px;
+}
+
+.form-control1 {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-weight: 500;
+  padding-right: 15px;
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Añadir una flecha personalizada para el dropdown */
+.country-code::after {
+  content: "";
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #333;
+  pointer-events: none;
+}
+
+.phone-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  height: 100%;
+}
+
+/* Asegurarse que el texto del código de país esté bien alineado */
+#countryCode {
+  font-size: 14px;
+}
+
+/* Estilo para el label */
+label[for] {
+  color: white;
+  margin-bottom: 8px;
+  display: block;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+}
+
+/* Quitar el borde de focus */
+.form-control1:focus,
+.phone-input:focus {
+  outline: none;
+}
+
+
+
         .form-control {
             width: 100%;
             padding: 0.5rem 0.75rem;
@@ -298,22 +375,27 @@
             }) }}
         </div>
         
-        {# Teléfono #}
-        <div class="form-group">
-            <label for="{{ registrationForm.telefono.vars.id }}">Número de Teléfono</label>
-            <div class="phone-container">
-                <div class="country-code">
-                    <img src="{{ asset('images/argentina-flag.png') }}" alt="Argentina">
-                    <span>+54</span>
-                </div>
-                {{ form_widget(registrationForm.telefono, {
-                    'attr': {
-                        'class': 'form-control phone-input',
-                        'placeholder': ''
-                    }
-                }) }}
-            </div>
+        <!-- Tu código HTML existente permanece igual -->
+<div class="form-group">
+    <label for="{{ registrationForm.telefono.vars.id }}">Número de Teléfono</label>
+    <div class="phone-container">
+        <div class="country-code">
+            <select id="countryCode" name="countryCode" class="form-control1">
+                {% for country in phoneCodes %}
+                    <option value="{{ country.phoneCode }}" {% if country.code == 'AR' %}selected{% endif %}>
+                        {{ country.flagEmoji }} {{ country.phoneCode }}
+                    </option>
+                {% endfor %}
+            </select>
         </div>
+        {{ form_widget(registrationForm.telefono, {
+            'attr': {
+                'class': 'form-control phone-input',
+                'placeholder': ''
+            }
+        }) }}
+    </div>
+</div>
         
         {# Contraseña #}
         <div class="form-group">

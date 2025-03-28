@@ -62,6 +62,7 @@ class RegistrationFormType extends AbstractType
                 ])            
                 ->add('telefono', TextType::class, [
                 'label' => 'Teléfono',
+                'attr' => ['class' => 'form-control phone-input'],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'El telefono no puede estar vacío.',

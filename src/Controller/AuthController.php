@@ -30,6 +30,11 @@ class AuthController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
+        // Carga el JSON con los códigos de teléfono
+        $jsonPath = $this->getParameter('kernel.project_dir') . '/public/json/phone-code.json';
+        $jsonData = file_get_contents($jsonPath);
+        $phoneCodes = json_decode($jsonData, true);
+
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 // Comprobar si el usuario ya existe
@@ -65,6 +70,7 @@ class AuthController extends AbstractController
 
         return $this->render('auth/register.html.twig', [
             'registrationForm' => $form->createView(),
+            'phoneCodes' => $phoneCodes,
         ]);
     }
 

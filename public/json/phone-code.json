@@ -1,0 +1,81 @@
+[
+  {
+    "name": "Argentina",
+    "code": "AR",
+    "phoneCode": "+54",
+    "flagEmoji": "🇦🇷"
+  },
+  {
+    "name": "Brasil",
+    "code": "BR",
+    "phoneCode": "+55",
+    "flagEmoji": "🇧🇷"
+  },
+  {
+    "name": "Chile",
+    "code": "CL",
+    "phoneCode": "+56",
+    "flagEmoji": "🇨🇱"
+  },
+  {
+    "name": "Uruguay",
+    "code": "UY",
+    "phoneCode": "+598",
+    "flagEmoji": "🇺🇾"
+  },
+  {
+    "name": "Paraguay",
+    "code": "PY",
+    "phoneCode": "+595",
+    "flagEmoji": "🇵🇾"
+  },
+  {
+    "name": "Bolivia",
+    "code": "BO",
+    "phoneCode": "+591",
+    "flagEmoji": "🇧🇴"
+  },
+  {
+    "name": "Perú",
+    "code": "PE",
+    "phoneCode": "+51",
+    "flagEmoji": "🇵🇪"
+  },
+  {
+    "name": "Ecuador",
+    "code": "EC",
+    "phoneCode": "+593",
+    "flagEmoji": "🇪🇨"
+  },
+  {
+    "name": "Colombia",
+    "code": "CO",
+    "phoneCode": "+57",
+    "flagEmoji": "🇨🇴"
+  },
+  {
+    "name": "Venezuela",
+    "code": "VE",
+    "phoneCode": "+58",
+    "flagEmoji": "🇻🇪"
+  },
+  {
+    "name": "México",
+    "code": "MX",
+    "phoneCode": "+52",
+    "flagEmoji": "🇲🇽"
+  },
+  {
+    "name": "España",
+    "code": "ES",
+    "phoneCode": "+34",
+    "flagEmoji": "🇪🇸"
+  },
+  {
+    "name": "Estados Unidos",
+    "code": "US",
+    "phoneCode": "+1",
+    "flagEmoji": "🇺🇸"
+  }
+]
+
