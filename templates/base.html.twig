@@ -12,7 +12,13 @@
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
         {# Aquí se pueden añadir más CSS propios o de librerías #}
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+            <style>
+                body {
+                    color: white;
+                }
+            </style>
+        {% endblock %}
 
         {# Scripts de JavaScript, si los necesitas #}
         {% block javascripts %}
@@ -29,3 +35,4 @@
         #}
     </body>
 </html>
+

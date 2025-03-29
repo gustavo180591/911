@@ -1,7 +1,7 @@
-{# templates/registro.html.twig #}
+{# templates/register.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}SACI - REGISTRO DE USUARIO{% endblock %}
+{% block title %}Registro de Usuario{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -47,7 +47,7 @@
             color: white;
         }
         
-         .about-button {
+        .about-button {
             display: inline-block;
             background-color: transparent;
             border-radius: 9999px;
@@ -119,84 +119,7 @@
             font-size: 0.875rem;
             margin-bottom: 0.25rem;
         }
-.phone-container {
-  display: flex;
-  align-items: center;
-  background-color: #1a1a2e; /* Fondo oscuro para el contenedor principal */
-  border-radius: 25px;
-  overflow: hidden;
-  height: 50px;
-}
-
-.country-code {
-  position: relative;
-  background-color: #1a1a2e; /* Fondo blanco para el selector de país */
-  border-radius: 20px;
-  margin: 5px;
-  padding: 5px 10px;
-  display: flex;
-  align-items: center;
-  min-width: 90px;
-}
-
-.form-control1 {
-  background: transparent;
-  border: none;
-  color: #fff;
-  font-weight: 500;
-  padding-right: 15px;
-  width: 100%;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-}
-
-/* Añadir una flecha personalizada para el dropdown */
-.country-code::after {
-  content: "";
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid #333;
-  pointer-events: none;
-}
-
-.phone-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: white;
-  padding: 10px 15px;
-  height: 100%;
-}
-
-/* Asegurarse que el texto del código de país esté bien alineado */
-#countryCode {
-  font-size: 14px;
-}
-
-/* Estilo para el label */
-label[for] {
-  color: white;
-  margin-bottom: 8px;
-  display: block;
-  font-size: 14px;
-  letter-spacing: 0.1em;
-}
-
-/* Quitar el borde de focus */
-.form-control1:focus,
-.phone-input:focus {
-  outline: none;
-}
-
-
-
+        
         .form-control {
             width: 100%;
             padding: 0.5rem 0.75rem;
@@ -214,6 +137,7 @@ label[for] {
             border: 2px solid #ECB13A;
         }
         
+        /* Estilos para el contenedor de contraseña */
         .password-container {
             position: relative;
         }
@@ -229,31 +153,93 @@ label[for] {
             cursor: pointer;
         }
         
+        /* Estilos específicos para el selector de teléfono */
         .phone-container {
             display: flex;
             align-items: center;
+            background-color: #191D33;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
         }
         
-        .country-code {
+        .country-selector {
+            position: relative;
+            background-color: white;
+            border-radius: 0.5rem 0 0 0.5rem;
+            margin: 3px;
+            padding: 0 10px;
             display: flex;
             align-items: center;
-            background-color: #191D33;
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            border-radius: 0.5rem 0 0 0.5rem;
-            padding: 0 0.5rem;
-            height: 40px;
-            margin-right: -1px;
+            min-width: 90px;
+            height: calc(100% - 6px);
+            cursor: pointer;
         }
         
-        .country-code img {
-            width: 24px;
-            margin-right: 0.25rem;
+        .country-selector.active {
+            border: 1px solid #ECB13A;
+        }
+        
+        .country-selector-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 200px;
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            display: none;
+        }
+        
+        .country-selector-dropdown.show {
+            display: block;
+        }
+        
+        .country-option {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            cursor: pointer;
+            color: #333;
+        }
+        
+        .country-option:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .selected-flag {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        .selected-code {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .dropdown-arrow {
+            margin-left: 8px;
+            color: #333;
         }
         
         .phone-input {
-            border-radius: 0 0.5rem 0.5rem 0;
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 0 15px;
+            height: 100%;
         }
         
+        .phone-input:focus {
+            outline: none;
+        }
+        
+        /* Estilos para el botón de registro */
         .register-button {
             background-color: white;
             color: #1a1a36;
@@ -292,11 +278,11 @@ label[for] {
 {% block body %}
 <div class="container">
     <header>
-       <div style="position: relative; left: 20%; top: 20%; cursor: pointer;" onclick="window.location.href='{{ path('home_index') }}'">
-			<img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon" style="height: 40px; width: auto; margin-left: 10px; transform: translateY(10%);"/>
-			<img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="float-left mt-2" style="height: 50px; width: auto; transform: translateY(20%);"/>
-		</div>
-         <nav>
+        <div style="position: relative; left: 20%; top: 20%; cursor: pointer;" onclick="window.location.href='{{ path('home_index') }}'">
+            <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon" style="height: 40px; width: auto; margin-left: 10px; transform: translateY(10%);"/>
+            <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="float-left mt-2" style="height: 50px; width: auto; transform: translateY(20%);"/>
+        </div>
+        <nav>
             <a href="{{ path('home_about') }}" class="about-button" style="text-decoration: none;">SOBRE NOSOTROS</a>
             <a href="{{ path('home_contact') }}" class="contact-button" style="text-decoration: none;">CONTACTO</a>
         </nav>
@@ -375,27 +361,33 @@ label[for] {
             }) }}
         </div>
         
-        <!-- Tu código HTML existente permanece igual -->
-<div class="form-group">
-    <label for="{{ registrationForm.telefono.vars.id }}">Número de Teléfono</label>
-    <div class="phone-container">
-        <div class="country-code">
-            <select id="countryCode" name="countryCode" class="form-control1">
-                {% for country in phoneCodes %}
-                    <option value="{{ country.phoneCode }}" {% if country.code == 'AR' %}selected{% endif %}>
-                        {{ country.flagEmoji }} {{ country.phoneCode }}
-                    </option>
-                {% endfor %}
-            </select>
+        {# Número de Teléfono con selector de país #}
+        <div class="form-group">
+            <label for="{{ registrationForm.telefono.vars.id }}">Número de Teléfono</label>
+            <div class="phone-container">
+                <div id="countrySelector" class="country-selector">
+                    <span id="selectedFlag" class="selected-flag">🇦🇷</span>
+                    <span id="selectedCode" class="selected-code">+54</span>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                {{ form_widget(registrationForm.telefono, {
+                    'attr': {
+                        'class': 'form-control phone-input',
+                        'placeholder': ''
+                    }
+                }) }}
+                
+                <div id="countrySelectorDropdown" class="country-selector-dropdown">
+                    {% for country in phoneCodes %}
+                        <div class="country-option" data-code="{{ country.phoneCode }}" data-flag="{{ country.flagEmoji }}">
+                            <span class="flag">{{ country.flagEmoji }}</span>
+                            <span class="code">{{ country.phoneCode }}</span>
+                            <span class="name">{{ country.name }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-        {{ form_widget(registrationForm.telefono, {
-            'attr': {
-                'class': 'form-control phone-input',
-                'placeholder': ''
-            }
-        }) }}
-    </div>
-</div>
         
         {# Contraseña #}
         <div class="form-group">
@@ -415,6 +407,9 @@ label[for] {
         
         <button type="submit" class="register-button">Registrar</button>
         
+        {# Campo oculto para almacenar el código de país seleccionado #}
+        <input type="hidden" name="countryCode" id="countryCodeInput" value="+54">
+        
         {{ form_end(registrationForm) }}
         
         <div class="login-link">
@@ -424,6 +419,7 @@ label[for] {
 </div>
 
 <script>
+    // Función para alternar la visibilidad de la contraseña
     function togglePassword() {
         const passwordInput = document.getElementById('{{ registrationForm.Password.vars.id }}');
         const passwordToggle = document.querySelector('.password-toggle svg');
@@ -436,6 +432,48 @@ label[for] {
             passwordToggle.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
         }
     }
+    
+    // Funcionalidad para el selector de país
+    document.addEventListener('DOMContentLoaded', function() {
+        const countrySelector = document.getElementById('countrySelector');
+        const dropdown = document.getElementById('countrySelectorDropdown');
+        const selectedFlag = document.getElementById('selectedFlag');
+        const selectedCode = document.getElementById('selectedCode');
+        const countryCodeInput = document.getElementById('countryCodeInput');
+        const countryOptions = document.querySelectorAll('.country-option');
+        
+        // Mostrar/ocultar el dropdown al hacer clic en el selector
+        countrySelector.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('show');
+            countrySelector.classList.toggle('active');
+        });
+        
+        // Cerrar el dropdown al hacer clic fuera de él
+        document.addEventListener('click', function() {
+            dropdown.classList.remove('show');
+            countrySelector.classList.remove('active');
+        });
+        
+        // Evitar que el dropdown se cierre al hacer clic dentro de él
+        dropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+        
+        // Seleccionar un país
+        countryOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const code = this.getAttribute('data-code');
+                const flag = this.getAttribute('data-flag');
+                
+                selectedFlag.textContent = flag;
+                selectedCode.textContent = code;
+                countryCodeInput.value = code;
+                
+                dropdown.classList.remove('show');
+                countrySelector.classList.remove('active');
+            });
+        });
+    });
 </script>
 {% endblock %}
-
