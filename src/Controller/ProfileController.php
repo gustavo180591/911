@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Usuario;
 use App\Form\ProfileType;
+use App\Form\ChangePasswordType; // Asegúrate de tener este formulario creado
+use App\Repository\DenunciaRepository; // <-- Agrega esta línea
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,12 +18,20 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 class ProfileController extends AbstractController
 {
-    #[Route('/', name: 'profile_view', methods: ['GET'])]
-    public function view(): Response
+    #[Route('/view', name: 'profile_view', methods: ['GET'])]
+    public function view(Request $request, EntityManagerInterface $entityManager): Response
     {
+        /** @var Usuario $user */
+        $user = $this->getUser();
+
+        $profileForm = $this->createForm(ProfileType::class, $user);
+        $profileForm->handleRequest($request);
+
         return $this->render('profile/view.html.twig', [
             'title' => 'Mi Perfil',
-            'user' => $this->getUser(),
+            'user' => $user,
+            'profileForm' => $profileForm->createView(),
+            'dni' => $user->getDni(),
         ]);
     }
 
@@ -31,10 +41,10 @@ class ProfileController extends AbstractController
         /** @var Usuario $user */
         $user = $this->getUser();
 
-        $form = $this->createForm(ProfileType::class, $user);
-        $form->handleRequest($request);
+        $profileForm = $this->createForm(ProfileType::class, $user);
+        $profileForm->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($profileForm->isSubmitted() && $profileForm->isValid()) {
             $entityManager->flush();
 
             $this->addFlash('success', 'Perfil actualizado exitosamente.');
@@ -44,7 +54,7 @@ class ProfileController extends AbstractController
 
         return $this->render('profile/edit.html.twig', [
             'title' => 'Editar Perfil',
-            'form' => $form->createView(),
+            'profileForm' => $profileForm->createView(),
         ]);
     }
 
@@ -57,9 +67,14 @@ class ProfileController extends AbstractController
         /** @var Usuario $user */
         $user = $this->getUser();
 
-        if ($request->isMethod('POST')) {
-            $currentPassword = $request->request->get('current_password');
-            $newPassword = $request->request->get('new_password');
+        // Creamos el formulario de cambio de contraseña
+        $changePasswordForm = $this->createForm(ChangePasswordType::class);
+        $changePasswordForm->handleRequest($request);
+
+        if ($changePasswordForm->isSubmitted() && $changePasswordForm->isValid()) {
+            $data = $changePasswordForm->getData();
+            $currentPassword = $data['current_password'];
+            $newPassword = $data['new_password'];
 
             if (!$passwordHasher->isPasswordValid($user, $currentPassword)) {
                 $this->addFlash('error', 'La contraseña actual no es correcta.');
@@ -78,6 +93,18 @@ class ProfileController extends AbstractController
 
         return $this->render('profile/change_password.html.twig', [
             'title' => 'Cambiar Contraseña',
+            'profileForm' => $changePasswordForm->createView(),
+        ]);
+    }
+
+    #[Route('/mis-denuncias', name: 'profile_show_my_complaints', methods: ['GET'])]
+    public function showMyComplaints(DenunciaRepository $denunciaRepository): Response
+    {
+        // Obtener las denuncias del usuario actual
+        $denuncias = $denunciaRepository->findBy(['usuario' => $this->getUser()]);
+
+        return $this->render('emergency/my_complaints.html.twig', [
+            'denuncias' => $denuncias,
         ]);
     }
 }

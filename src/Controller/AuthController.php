@@ -123,4 +123,19 @@ class AuthController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+    
+    #[Route('/delete-account', name: 'account_delete_success', methods: ['GET'])]
+    public function deleteAccount(Request $request): Response
+    {
+        if ($this->isGranted('ROLE_USER')) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $user = $this->getUser();
+            $entityManager->remove($user);
+            $entityManager->flush();
+            $this->addFlash('success', 'Tu cuenta ha sido eliminada con éxito.');
+            return $this->redirectToRoute('home_index');
+        }
+
+        return $this->redirectToRoute('auth_login');
+    }
 }

@@ -54,6 +54,28 @@ class ProfileType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('dni', TextType::class, [
+                'label' => 'DNI',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'El DNI no puede estar vacío.',
+                    ]),
+                    new Length([
+                        'max' => 9,
+                        'maxMessage' => 'El DNI no puede superar los {{ limit }} caracteres.',
+                    ]),
+                ],
+            ])                
+            ->add('direccion', TextType::class, [
+                'label' => 'Dirección',
+                'required' => false,
+                'constraints' => [
+                    new Length([
+                        'max' => 255,
+                        'maxMessage' => 'La dirección no puede superar los {{ limit }} caracteres.',
+                    ]),
+                ],
+            ])
             ->add('telefono', TextType::class, [
                 'label' => 'Teléfono',
                 'required' => false,
@@ -61,6 +83,16 @@ class ProfileType extends AbstractType
                     new Length([
                         'max' => 20,
                         'maxMessage' => 'El número de teléfono no puede superar los {{ limit }} caracteres.',
+                    ]),
+                ],
+            ])
+            ->add('password', TextType::class, [
+                'label' => 'Contraseña',
+                'required' => false,
+                'constraints' => [
+                    new Length([
+                        'max' => 255,
+                        'maxMessage' => 'La contraseña no puede superar los {{ limit }} caracteres.',
                     ]),
                 ],
             ]);           

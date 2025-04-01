@@ -243,4 +243,5 @@ public function show(Denuncia $denuncia, Request $request): Response
 
         return $this->redirectToRoute('emergency_index');
     }
+
 }

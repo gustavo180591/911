@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cuenta eliminada con éxito{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Cuenta eliminada con éxito</h1>
+        <p>
+            Tu cuenta ha sido eliminada con éxito. Si deseas crear una nueva cuenta, puedes hacerlo
+            <a href="{{ path('auth_register') }}">aquí</a>.
+        </p>
+    </div>
+{% endblock %}

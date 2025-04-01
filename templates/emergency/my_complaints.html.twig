@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mis denuncias{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Mis denuncias</h1>
+
+    {% if app.user.emergencies|length > 0 %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Descripción</th>
+                    <th>Fecha y Hora</th>
+                    <th>Ubicación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for emergency in app.user.emergencies %}
+                    {% if emergency.usuario.id == app.user.id %}
+                        <tr>
+                            <td>{{ emergency.id }}</td>
+                            <td>{{ emergency.descripcion }}</td>
+                            <td>{{ emergency.fechaHora|date('d-m-Y H:i:s') }}</td>
+                            <td>
+                                {% if emergency.ubicacion %}
+                                    {{ emergency.ubicacion.calle ~ ', ' ~ emergency.ubicacion.numero }}
+                                {% else %}
+                                    <span class="text-muted">Sin ubicación</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('emergency_show', {id: emergency.id}) }}" class="btn btn-primary" style="color: white; font-weight: bold; text-decoration: none;">Ver</a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">
+            No has registrado ninguna denuncia.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

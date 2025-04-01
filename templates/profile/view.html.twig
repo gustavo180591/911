@@ -1,37 +1,469 @@
+{# templates/profile/profile.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Mi Perfil{% endblock %}
+{% block title %}Mi perfil{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #191D33;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .logo img.favicon {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .logo img.logo-text {
+            height: 50px;
+        }
+        
+        nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        nav a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        nav a:hover {
+            color: white;
+        }
+        
+        .about-button {
+            display: inline-block;
+            background-color: transparent;
+            border-radius: 9999px;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #FFFFFF;
+            text-align: center;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .about-button:hover {
+            color: #ECB13A;
+        }
+
+        .contact-button {
+            display: inline-block;
+            background-color: #ECB13A;
+            border-radius: 9999px;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #FFFFFF;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .contact-button:hover {
+            background-color: #d9a235;
+        }
+        
+        .profile-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        label {
+            display: block;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            background-color: #191D33;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 0.5rem;
+            color: white;
+            box-sizing: border-box;
+            height: 40px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border: 2px solid #ECB13A;
+        }
+        
+        /* Estilos para el contenedor de contraseña */
+        .password-container {
+            position: relative;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+        }
+        
+        /* Estilos específicos para el selector de teléfono */
+        .phone-container {
+            display: flex;
+            align-items: center;
+            background-color: #191D33;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+        
+        .country-selector {
+            display: flex;
+            align-items: center;
+            background-color: transparent;
+            padding: 0 10px;
+            height: 100%;
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .selected-flag {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        .phone-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 0 15px;
+            height: 100%;
+        }
+        
+        .phone-input:focus {
+            outline: none;
+        }
+        
+        /* Estilos para los enlaces de acción */
+        .action-links {
+            margin-top: 2rem;
+        }
+        
+        .action-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 0;
+            transition: color 0.2s;
+        }
+        
+        .action-link:hover {
+            color: #ECB13A;
+        }
+        
+        .delete-account {
+            color: #ff6b6b;
+            cursor: pointer;
+        }
+        
+        .delete-account:hover {
+            color: #ff4757;
+        }
+        
+        /* Estilos para el perfil de usuario en la barra superior */
+        .user-profile {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .profile-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #1E2240;
+            border-radius: 0.25rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 150px;
+            z-index: 10;
+            display: none;
+            margin-top: 5px;
+            padding: 8px 0;
+        }
+        
+        .profile-dropdown.show {
+            display: block;
+        }
+        
+        .dropdown-item {
+            display: block;
+            padding: 10px 15px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            font-size: 14px;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #2e325a;
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 5px 0;
+        }
+        
+        /* Estilos para el botón de perfil con flecha */
+        .profile-button {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0;
+        }
+        
+        .profile-button .arrow {
+            margin-left: 5px;
+            font-size: 12px;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h1 class="mb-4">Mi Perfil</h1>
+<div class="container">
+    <header>
+        <div class="logo" onclick="window.location.href='{{ path('home_index') }}'">
+            <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon"/>
+            <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="logo-text"/>
+        </div>
+        <nav>
+            <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
+            <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
+            <div class="user-profile">
+                <button class="profile-button" id="profileButton">
+                    <img src="{{ asset('images/logo-perfil.png') }}" alt="Perfil" class="profile-image"/>
+                    <span class="arrow">▼</span>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="{{ path('profile_view') }}" class="dropdown-item">Mi perfil</a>
+                    <a href="{{ path('app_logout') }}" class="dropdown-item">Cerrar sesión</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="profile-container">
+        <h1>Mi perfil</h1>
+        
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
 
-    <table class="table table-bordered">
-        <tr>
-            <th>Nombre</th>
-            <td>{{ user.nombre }}</td>
-        </tr>
-        <tr>
-            <th>Apellido</th>
-            <td>{{ user.apellido }}</td>
-        </tr>
-        <tr>
-            <th>Correo Electrónico</th>
-            <td>{{ user.email }}</td>
-        </tr>
-        <tr>
-            <th>Teléfono</th>
-            <td>{{ user.telefono ? user.telefono : 'No especificado' }}</td>
-        </tr>        
-        <tr>
-            <th>Fecha de Registro</th>
-            <td>{{ user.fechaRegistro|date('d-m-Y H:i:s') }}</td>
-        </tr>
-    </table>
-
-    <div class="mt-3">
-        <a href="{{ path('profile_edit') }}" class="btn btn-primary">Editar Perfil</a>
-        <a href="{{ path('profile_change_password') }}" class="btn btn-secondary">Cambiar Contraseña</a>
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+        
+        {{ form_start(profileForm) }}
+        
+        {# Nombre y Apellido #}
+        <div class="form-row">
+            <div class="form-col">
+                <label for="{{ profileForm.nombre.vars.id }}">Nombre</label>
+                {{ form_widget(profileForm.nombre, {
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': ''
+                    }
+                }) }}
+            </div>
+            <div class="form-col">
+                <label for="{{ profileForm.apellido.vars.id }}">Apellido</label>
+                {{ form_widget(profileForm.apellido, {
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': ''
+                    }
+                }) }}
+            </div>
+        </div>
+        
+        {# DNI y Dirección #}
+        <div class="form-row">
+            <div class="form-col">
+                <label for="{{ profileForm.dni.vars.id }}">DNI</label>
+                {{ form_widget(profileForm.dni, {
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': ''
+                    }
+                }) }}
+            </div>
+            <div class="form-col">
+                <label for="{{ profileForm.direccion.vars.id }}">Dirección</label>
+                {{ form_widget(profileForm.direccion, {
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': ''
+                    }
+                }) }}
+            </div>
+        </div>
+        
+        {# Correo electrónico #}
+        <div class="form-group">
+            <label for="{{ profileForm.email.vars.id }}">Correo electrónico</label>
+            {{ form_widget(profileForm.email, {
+                'attr': {
+                    'class': 'form-control',
+                    'placeholder': ''
+                }
+            }) }}
+        </div>
+        
+        {# Número de Teléfono con selector de país #}
+        <div class="form-group">
+            <label for="{{ profileForm.telefono.vars.id }}">Número de Teléfono</label>
+            <div class="phone-container">
+                <div class="country-selector">
+                    <span class="selected-flag">🇦🇷</span>
+                    <span class="selected-code">+54</span>
+                </div>
+                {{ form_widget(profileForm.telefono, {
+                    'attr': {
+                        'class': 'phone-input',
+                        'placeholder': ''
+                    }
+                }) }}
+            </div>
+        </div>
+        
+        {# Contraseña #}
+        <div class="form-group">
+            <label for="{{ profileForm.password.vars.id }}">Contraseña</label>
+            <div class="password-container">
+                {{ form_widget(profileForm.password, {
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': '••••••',
+                        'type': 'password'
+                    }
+                }) }}
+                <button type="button" class="password-toggle" onclick="togglePassword()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+            </div>
+        </div>
+        
+        {{ form_end(profileForm) }}
+        
+        <div class="action-links">
+            <a href="{{ path('complaint_show') }}" class="action-link">Mi historial de denuncias</a>
+            <a href="#" class="action-link delete-account" onclick="confirmDelete()">Eliminar cuenta</a>
+        </div>
     </div>
 </div>
+
+<script>
+    // Función para alternar la visibilidad de la contraseña
+    function togglePassword() {
+        const passwordInput = document.getElementById('{{ profileForm.password.vars.id }}');
+        const passwordToggle = document.querySelector('.password-toggle svg');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordToggle.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+        } else {
+            passwordInput.type = 'password';
+            passwordToggle.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+        }
+    }
+    
+    // Función para mostrar/ocultar el menú desplegable del perfil
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileButton = document.getElementById('profileButton');
+        const profileDropdown = document.getElementById('profileDropdown');
+        
+        profileButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('show');
+        });
+        
+        // Cerrar el dropdown al hacer clic fuera de él
+        document.addEventListener('click', function() {
+            profileDropdown.classList.remove('show');
+        });
+    });
+    
+    // Función para confirmar la eliminación de la cuenta
+    function confirmDelete() {
+        if (confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.')) {
+            window.location.href = '{{ path("account_delete_success") }}';
+        }
+    }
+</script>
 {% endblock %}
