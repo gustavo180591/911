@@ -97,7 +97,7 @@ class ProfileController extends AbstractController
         ]);
     }
 
-    #[Route('/mis-denuncias', name: 'profile_show_my_complaints', methods: ['GET'])]
+    #[Route('/mis-denuncias', name: 'complaint_show', methods: ['GET'])]
     public function showMyComplaints(DenunciaRepository $denunciaRepository): Response
     {
         // Obtener las denuncias del usuario actual
