@@ -4,6 +4,7 @@
 
 {% block body %}
 <style>
+    /* ================== RESET / BASE ================== */
     body {
         font-family: 'Montserrat', sans-serif;
         background-color: #191D33;
@@ -11,118 +12,90 @@
         margin: 0;
         padding: 0;
     }
-    
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 1rem;
-    }
-    
+
+    /* ================== HEADER ================== */
     header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
         padding: 20px 40px;
+        background-color: #191D33;
     }
-    
-    .btn-primary {
-        background-color: #EA633F;
-        color: white;
-        font-weight: bold;
-        border-radius: 9999px;
-        padding: 12px 24px;
-        font-size: 18px;
+    .logo-container {
+        display: flex;
+        align-items: center;
         cursor: pointer;
     }
-
-    .btn-primary:hover {
-        background-color: #E22D26;
-        color: white;
+    .logo-container img.favicon {
+        height: 40px;
+        width: auto;
+        margin-right: 10px;
     }
-
+    .saci-logo {
+        height: 50px;
+        width: auto;
+    }
+    /* Contenedor para agrupar el menú y el perfil y empujarlo a la derecha */
+    .header-right {
+        display: flex;
+        align-items: center;
+        margin-left: auto; /* Esto empuja los elementos a la derecha */
+        gap: 30px; /* Espaciado entre el menú y el perfil */
+    }
+    nav.main-nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .inicio-button {
+        background-color: transparent;
+        border-radius: 9999px;
+        padding: 10px 30px;
+        font-weight: bold;
+        font-size: 16px;
+        color: #E5A74E;
+        text-decoration: none;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .inicio-button:hover {
+        color: #FFFFFF;
+    }
     .about-button {
-        display: inline-block;
         background-color: transparent;
         border-radius: 9999px;
         padding: 10px 20px;
         font-weight: bold;
         font-size: 14px;
         color: #FFFFFF;
-        text-align: center;
         text-decoration: none;
         transition: color 0.2s ease;
     }
-
     .about-button:hover {
         color: #ECB13A;
     }
-    
     .contact-button {
-        display: inline-block;
         background-color: #ECB13A;
         border-radius: 9999px;
         padding: 10px 20px;
         font-weight: bold;
         font-size: 14px;
         color: #FFFFFF;
-        text-align: center;
         text-decoration: none;
         transition: background-color 0.2s ease;
     }
-
     .contact-button:hover {
-        background-color: #ECB13A;
+        background-color: #dca02a;
     }
-    
-    /* Estilos actualizados para coincidir con la imagen */
-    .form-control {
-        width: 100%;
-        padding: 0.5rem 0.75rem;
-        background-color: #191D33;
-        border: 1px solid rgba(255, 255, 255, 0.7);
-        border-radius: 0.5rem;
-        color: white;
-        box-sizing: border-box;
-        height: 40px;
-        font-family: 'Montserrat', sans-serif;
-    }
-    
-    .form-control:focus {
-        outline: none;
-        border: 2px solid #ECB13A;
-    }
-    
-    .form-control1 {
-        width: 100%;
-        padding: 0.5rem 0.75rem;
-        background-color: #191D33;
-        border: 1px solid rgba(255, 255, 255, 0.7);
-        border-radius: 0.5rem;
-        color: white;
-        box-sizing: border-box;
-        height: 100px;
-        font-family: 'Montserrat', sans-serif;
-    }
-    
-    .form-control1:focus {
-        outline: none;
-        border: 2px solid #ECB13A;
-    }
-    
-    /* Estilos para el perfil de usuario en la barra superior */
     .user-profile {
         position: relative;
         display: flex;
         align-items: center;
     }
-    
     .profile-image {
         width: 40px;
         height: 40px;
         border-radius: 50%;
         cursor: pointer;
     }
-    
     .profile-dropdown {
         position: absolute;
         top: 100%;
@@ -136,11 +109,9 @@
         margin-top: 5px;
         padding: 8px 0;
     }
-    
     .profile-dropdown.show {
         display: block;
     }
-    
     .dropdown-item {
         display: block;
         padding: 10px 15px;
@@ -149,75 +120,9 @@
         transition: background-color 0.2s;
         font-size: 14px;
     }
-    
     .dropdown-item:hover {
         background-color: #2e325a;
     }
-    
-    .dropdown-divider {
-        height: 1px;
-        background-color: rgba(255, 255, 255, 0.1);
-        margin: 5px 0;
-    }
-    
-    /* Estilos adicionales para coincidir con la imagen */
-    h1 {
-        font-size: 1.75rem;
-        font-weight: 600;
-        margin-bottom: 1.5rem;
-    }
-    
-    label {
-        display: block;
-        font-size: 0.875rem;
-        margin-bottom: 0.5rem;
-    }
-    
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-    
-    .map-container {
-        border-radius: 0.5rem;
-        overflow: hidden;
-        margin-bottom: 1.5rem;
-    }
-    
-    .evidence-upload {
-        background-color: #FFFFFF;
-        border-radius: 0.5rem;
-        padding: 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        color: #666;
-        cursor: pointer;
-    }
-    
-    .evidence-upload svg {
-        margin-bottom: 0.5rem;
-    }
-    
-    .register-button {
-        background-color: #EA633F;
-        color: white;
-        font-weight: bold;
-        border: none;
-        border-radius: 9999px;
-        padding: 12px 24px;
-        font-size: 18px;
-        cursor: pointer;
-        display: inline-block;
-        text-align: center;
-        text-decoration: none;
-    }
-    
-    .register-button:hover {
-        background-color: #E22D26;
-    }
-    
-    /* Estilos para el botón de perfil con flecha */
     .profile-button {
         display: flex;
         align-items: center;
@@ -227,34 +132,137 @@
         cursor: pointer;
         padding: 0;
     }
-    
     .profile-button .arrow {
         margin-left: 5px;
         font-size: 12px;
     }
-    
-    /* Estilos para el calendario */
+
+    /* ================== FORMULARIO ================== */
+    /* Contenedor del formulario alineado a la izquierda */
+    .container.mt-4 {
+        max-width: 600px;
+        margin: 2rem 0 2rem 2rem; /* márgen izquierdo fijo */
+    }
+    h1 {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+    label {
+        display: block;
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+        color: #ffffff;
+    }
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background-color:#191D33;
+        color: #ffffff;
+        border: 1px solid #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-sizing: border-box;
+        font-size: 0.9rem;
+    }
+    .form-control:focus {
+        outline: none;
+        border: 2px solid #ECB13A;
+    }
+    .form-control1 {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background-color: #191D33;
+        color: #FFFFFF;
+        border: 1px solid #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-sizing: border-box;
+        font-size: 0.9rem;
+        resize: vertical;
+        min-height: 120px;
+    }
+    .form-control1:focus {
+        outline: none;
+        border: 2px solid #ECB13A;
+    }
     .date-input-container {
         position: relative;
         display: flex;
         align-items: center;
     }
-    
     .date-input-container .calendar-icon {
         position: absolute;
-        right: 10px;
+        right: 15px;
         pointer-events: none;
+        color: #999999;
+    }
+    .map-container {
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    #map {
+        width: 100%;
+        height: 200px;
+    }
+    .evidence-upload {
+        background-color: #F5F5F5;
+        border-radius: 8px;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: #666;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    .evidence-upload:hover {
+        background-color: #E9E9E9;
+    }
+    .evidence-upload svg {
+        margin-bottom: 0.5rem;
+    }
+    .register-button {
+        background-color: #EA633F;
+        color: #FFFFFF;
+        font-weight: bold;
+        border: none;
+        border-radius: 9999px;
+        padding: 12px 24px;
+        font-size: 18px;
+        cursor: pointer;
+        display: block;
+        margin: 1.5rem auto 0 auto;
+    }
+    .register-button:hover {
+        background-color: #E22D26;
+    }
+    .alert.alert-danger {
+        background-color: #ff4d4d;
+        color: #ffffff;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
     }
 </style>
 
 <header>
-    <div style="position: relative; cursor: pointer;" onclick="window.location.href='{{ path('home_index') }}'">
-        <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon" style="height: 40px; width: auto; margin-right: 10px;"/>
-        <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="float-left mt-2" style="height: 50px; width: auto;"/>
+    <div class="logo-container" onclick="window.location.href='{{ path('home_index') }}'">
+        <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon"/>
+        <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="saci-logo"/>
     </div>
-    <nav>
-        <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
-        <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
+    <div class="header-right">
+        <nav class="main-nav">
+            <a href="{{ path('auth_login') }}" class="inicio-button">INICIO</a>
+            <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
+            <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
+        </nav>
         <div class="user-profile">
             <button class="profile-button" id="profileButton">
                 <img src="{{ asset('images/logo-perfil.png') }}" alt="Perfil" class="profile-image"/>
@@ -265,7 +273,7 @@
                 <a href="{{ path('auth_logout') }}" class="dropdown-item">Cerrar sesión</a>
             </div>
         </div>
-    </nav>
+    </div>
 </header>
 
 <div class="container mt-4">
@@ -287,13 +295,21 @@
                 }
             }) }}
             <span class="calendar-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
             </span>
         </div>
         {{ form_errors(form.fechaHora) }}
     </div>
 
-    <div class="form-group">
+   <div class="form-group" style="display: flex; gap: 1rem;">
+    <div style="flex: 1;">
         {{ form_label(form.ubicacion.calle, 'Ubicación') }}
         {{ form_widget(form.ubicacion.calle, {
             'attr': {
@@ -304,22 +320,23 @@
         }) }}
         {{ form_errors(form.ubicacion.calle) }}
     </div>
-
-    <div class="form-group">
-        {{ form_label(form.ubicacion.numero, null, {'label_attr': {'class': 'sr-only'}}) }}
+    <div style="width: 150px;">
+        {{ form_label(form.ubicacion.numero, 'Número') }}
         {{ form_widget(form.ubicacion.numero, {
             'attr': {
-                'class': 'form-control d-none',
-                'onchange': 'onAddressChange()'
+                'class': 'form-control',
+                'onchange': 'onAddressChange()',
+                'placeholder': 'Número'
             }
         }) }}
         {{ form_errors(form.ubicacion.numero) }}
     </div>
+</div>
 
     <div class="form-group">
         <label>Vista previa del mapa</label>
         <div class="map-container">
-            <div id="map" style="width:100%;height:200px;"></div>
+            <div id="map"></div>
         </div>
     </div>
 
@@ -337,7 +354,13 @@
     <div class="form-group">
         {{ form_label(form.evidencias.vars.prototype.imageFile, 'Evidencia') }}
         <div class="evidence-upload" id="evidence-upload-container">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
             <span>Upload a File</span>
             <span style="font-size: 12px;">Drag and drop files here</span>
         </div>
@@ -359,161 +382,145 @@
 </div>
 
 <script>
-// Función para mostrar/ocultar el menú desplegable del perfil
-document.addEventListener('DOMContentLoaded', function() {
-    const profileButton = document.getElementById('profileButton');
-    const profileDropdown = document.getElementById('profileDropdown');
-    
-    if (profileButton && profileDropdown) {
-        profileButton.addEventListener('click', function(e) {
-            e.stopPropagation();
-            profileDropdown.classList.toggle('show');
-        });
+    // Manejo del dropdown del perfil
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileButton = document.getElementById('profileButton');
+        const profileDropdown = document.getElementById('profileDropdown');
         
-        // Cerrar el dropdown al hacer clic fuera de él
-        document.addEventListener('click', function() {
-            profileDropdown.classList.remove('show');
+        if (profileButton && profileDropdown) {
+            profileButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+            document.addEventListener('click', function() {
+                profileDropdown.classList.remove('show');
+            });
+        }
+        
+        // Manejo de evidencia
+        const evidenceUploadContainer = document.getElementById('evidence-upload-container');
+        const addEvidenciaBtn = document.getElementById('add-evidencia-btn');
+        const evidenciasList = document.getElementById('evidencias-list');
+        
+        if (evidenceUploadContainer && evidenciasList) {
+            evidenceUploadContainer.addEventListener('click', function() {
+                if (addEvidenciaBtn) {
+                    addEvidenciaBtn.click();
+                } else {
+                    const prototype = evidenciasList.dataset.prototype;
+                    const index = evidenciasList.children.length;
+                    const newForm = prototype.replace(/_name_/g, index);
+                    const newFormLi = document.createElement('li');
+                    newFormLi.innerHTML = newForm;
+                    evidenciasList.appendChild(newFormLi);
+                    const fileInput = newFormLi.querySelector('input[type="file"]');
+                    if (fileInput) {
+                        fileInput.click();
+                    }
+                }
+            });
+        }
+    });
+
+    // Mapa y geocodificación
+    document.addEventListener('turbo:load', function() {
+        const mapElement = document.getElementById('map');
+        if (!mapElement) return;
+        if (mapElement._leaflet_id) {
+            mapElement._leaflet_id = null;
+        }
+        const initialCoords = [-27.362778, -55.900555];
+        window.map = L.map(mapElement).setView(initialCoords, 10);
+        L.tileLayer(`https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`, {
+            maxZoom: 19,
+            attribution: '  OpenStreetMap contributors'
+        }).addTo(window.map);
+        const redIcon = L.icon({
+            iconUrl: '/images/marker-icon.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34]
         });
-    }
-    
-    // Configurar el contenedor de evidencia para activar el input de archivo
-    const evidenceUploadContainer = document.getElementById('evidence-upload-container');
-    const addEvidenciaBtn = document.getElementById('add-evidencia-btn');
-    const evidenciasList = document.getElementById('evidencias-list');
-    
-    if (evidenceUploadContainer && evidenciasList) {
-        evidenceUploadContainer.addEventListener('click', function() {
-            if (addEvidenciaBtn) {
-                addEvidenciaBtn.click();
-            } else {
-                // Si no existe el botón, crear un nuevo elemento de evidencia
-                const prototype = evidenciasList.dataset.prototype;
-                const index = evidenciasList.children.length;
+        const marker = L.marker(initialCoords, {
+            draggable: true,
+            icon: redIcon
+        }).addTo(window.map);
+        window.map.on('click', (e) => {
+            const { lat, lng } = e.latlng;
+            placeMarker(marker, lat, lng);
+            reverseGeocode(lat, lng);
+        });
+        marker.on('moveend', (e) => {
+            const { lat, lng } = e.target.getLatLng();
+            updateCoords(lat, lng);
+            reverseGeocode(lat, lng);
+        });
+        function placeMarker(marker, lat, lng) {
+            marker.setLatLng([lat, lng]).openPopup();
+            updateCoords(lat, lng);
+        }
+        function updateCoords(lat, lng) {
+            const coordsField = document.getElementById('{{ form.ubicacion.coordenadas.vars.id }}');
+            if (coordsField) {
+                coordsField.value = `${lat},${lng}`;
+            }
+        }
+        async function reverseGeocode(lat, lng) {
+            try {
+                const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                if (data.address) {
+                    const road = data.address.road || '';
+                    const houseNumber = data.address.house_number || '';
+                    const calleField = document.getElementById('{{ form.ubicacion.calle.vars.id }}');
+                    const numeroField = document.getElementById('{{ form.ubicacion.numero.vars.id }}');
+                    if (calleField) calleField.value = road;
+                    if (numeroField) numeroField.value = houseNumber;
+                }
+            } catch (error) {
+                console.error('Error en geocodificación inversa:', error);
+            }
+        }
+        async function onAddressChange() {
+            const calleField = document.getElementById('{{ form.ubicacion.calle.vars.id }}');
+            const numeroField = document.getElementById('{{ form.ubicacion.numero.vars.id }}');
+            if (!calleField || !numeroField) return;
+            const calle = calleField.value;
+            const numero = numeroField.value;
+            if (!calle && !numero) return;
+            const address = `${calle} ${numero}, Misiones`;
+            try {
+                const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(address)}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                if (data.length > 0) {
+                    const { lat, lon } = data[0];
+                    placeMarker(marker, lat, lon);
+                    window.map.setView([lat, lon], 15);
+                }
+            } catch (error) {
+                console.error('Error en geocodificación directa:', error);
+            }
+        }
+        const calleField = document.getElementById('{{ form.ubicacion.calle.vars.id }}');
+        const numeroField = document.getElementById('{{ form.ubicacion.numero.vars.id }}');
+        if (calleField) calleField.addEventListener('change', onAddressChange);
+        if (numeroField) numeroField.addEventListener('change', onAddressChange);
+        const evidenciasList = document.getElementById('evidencias-list');
+        const addEvidenciaBtn = document.getElementById('add-evidencia-btn');
+        if (evidenciasList && addEvidenciaBtn) {
+            const prototype = evidenciasList.dataset.prototype;
+            let index = evidenciasList.children.length;
+            addEvidenciaBtn.addEventListener('click', function() {
                 const newForm = prototype.replace(/_name_/g, index);
                 const newFormLi = document.createElement('li');
                 newFormLi.innerHTML = newForm;
                 evidenciasList.appendChild(newFormLi);
-                
-                // Activar el input de archivo recién creado
-                const fileInput = newFormLi.querySelector('input[type="file"]');
-                if (fileInput) {
-                    fileInput.click();
-                }
-            }
-        });
-    }
-});
-
-document.addEventListener('turbo:load', function() {
-    const mapElement = document.getElementById('map');
-    if (!mapElement) return;
-
-    if (mapElement._leaflet_id) {
-        mapElement._leaflet_id = null;
-    }
-
-    const initialCoords = [-27.362778, -55.900555];
-    window.map = L.map(mapElement).setView(initialCoords, 10);
-
-    L.tileLayer(`https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`, {
-        maxZoom: 19,
-        attribution: '  OpenStreetMap contributors'
-    }).addTo(window.map);
-
-    const redIcon = L.icon({
-        iconUrl: '/images/marker-icon.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34]
-    });
-
-    const marker = L.marker(initialCoords, {
-        draggable: true,
-        icon: redIcon
-    }).addTo(window.map);
-
-    window.map.on('click', (e) => {
-        const { lat, lng } = e.latlng;
-        placeMarker(marker, lat, lng);
-        reverseGeocode(lat, lng);
-    });
-
-    marker.on('moveend', (e) => {
-        const { lat, lng } = e.target.getLatLng();
-        updateCoords(lat, lng);
-        reverseGeocode(lat, lng);
-    });
-
-    function placeMarker(marker, lat, lng) {
-        marker.setLatLng([lat, lng]).openPopup();
-        updateCoords(lat, lng);
-    }
-
-    function updateCoords(lat, lng) {
-        const coordsField = document.getElementById('{{ form.ubicacion.coordenadas.vars.id }}');
-        if (coordsField) {
-            coordsField.value = `${lat},${lng}`;
+                index++;
+            });
         }
-    }
-
-    async function reverseGeocode(lat, lng) {
-        try {
-            const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`;
-            const response = await fetch(url);
-            const data = await response.json();
-            if (data.address) {
-                const road = data.address.road || '';
-                const houseNumber = data.address.house_number || '';
-                const calleField = document.getElementById('{{ form.ubicacion.calle.vars.id }}');
-                const numeroField = document.getElementById('{{ form.ubicacion.numero.vars.id }}');
-                if (calleField) calleField.value = road;
-                if (numeroField) numeroField.value = houseNumber;
-            }
-        } catch (error) {
-            console.error('Error en geocodificación inversa:', error);
-        }
-    }
-
-    async function onAddressChange() {
-        const calleField = document.getElementById('{{ form.ubicacion.calle.vars.id }}');
-        const numeroField = document.getElementById('{{ form.ubicacion.numero.vars.id }}');
-        if (!calleField || !numeroField) return;
-        const calle = calleField.value;
-        const numero = numeroField.value;
-        if (!calle && !numero) return;
-        const address = `${calle} ${numero}, Misiones`;
-        try {
-            const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(address)}`;
-            const response = await fetch(url);
-            const data = await response.json();
-            if (data.length > 0) {
-                const { lat, lon } = data[0];
-                placeMarker(marker, lat, lon);
-                window.map.setView([lat, lon], 15);
-            }
-        } catch (error) {
-            console.error('Error en geocodificación directa:', error);
-        }
-    }
-
-    const calleField = document.getElementById('{{ form.ubicacion.calle.vars.id }}');
-    const numeroField = document.getElementById('{{ form.ubicacion.numero.vars.id }}');
-    if (calleField) calleField.addEventListener('change', onAddressChange);
-    if (numeroField) numeroField.addEventListener('change', onAddressChange);
-
-    const evidenciasList = document.getElementById('evidencias-list');
-    const addEvidenciaBtn = document.getElementById('add-evidencia-btn');
-    if (evidenciasList && addEvidenciaBtn) {
-        const prototype = evidenciasList.dataset.prototype;
-        let index = evidenciasList.children.length;
-        addEvidenciaBtn.addEventListener('click', function() {
-            const newForm = prototype.replace(/_name_/g, index);
-            const newFormLi = document.createElement('li');
-            newFormLi.innerHTML = newForm;
-            evidenciasList.appendChild(newFormLi);
-            index++;
-        });
-    }
-});
+    });
 </script>
 {% endblock %}
+

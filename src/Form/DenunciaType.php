@@ -73,6 +73,7 @@ class DenunciaType extends AbstractType
                 'label' => 'Registrar Incidente',
                 'attr'  => [
                     'class' => 'btn btn-primary',
+                    'style' => 'display:none;', // Ocultar el botón
                 ],
             ])
         ;
