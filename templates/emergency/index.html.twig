@@ -4,122 +4,164 @@
 
 {% block body %}
 <style>
- body {
-            background-color: #191D33;
-            font-family: 'Montserrat', sans-serif;
-            color: #FFFFFF;
-            margin: 0;
-            padding: 0;
-        }
- header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 40px;
-        }
- nav {
-            display: flex;
-            gap: 20px;
-        }
-.about-button {
-            display: inline-block;
-            background-color: transparent;
-            border-radius: 9999px;
-            padding: 10px 20px;
-            font-weight: bold;
-            font-size: 14px;
-            color: #FFFFFF;
-            text-align: center;
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
+body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: #191D33;
+        color: #FFFFFF;
+        margin: 0;
+        padding: 0;
+    }
 
-        .about-button:hover {
-            color: #ECB13A;
-        }
+    /* ================== HEADER ================== */
+    header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* Distribuye el logo a la izquierda y los elementos de la derecha de forma exacta */
+        padding: 20px 40px;
+        background-color: #191D33;
+    }
+    .logo-container {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        /* Se ha eliminado el margen extra para alinear el logo justo a la izquierda */
+    }
+    .logo-container img.favicon {
+        height: 40px;
+        width: auto;
+        margin-right: 10px;
+    }
+    .saci-logo {
+        height: 50px;
+        width: auto;
+    }
+    /* Contenedor para agrupar el menú y el perfil a la derecha */
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 30px; /* Espaciado uniforme entre elementos */
+        /* Se eliminan márgenes adicionales ya que el header con justify-content: space-between se encarga de la distribución */
+    }
+    nav.main-nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .inicio-button {
+        background-color: transparent;
+        border-radius: 9999px;
+        padding: 10px 30px;
+        font-weight: bold;
+        font-size: 16px;
+        color: #E5A74E;
+        text-decoration: none;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .inicio-button:hover {
+        color: #FFFFFF;
+    }
+    .about-button {
+        background-color: transparent;
+        border-radius: 9999px;
+        padding: 10px 20px;
+        font-weight: bold;
+        font-size: 14px;
+        color: #FFFFFF;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    .about-button:hover {
+        color: #ECB13A;
+    }
+    .contact-button {
+        background-color: #ECB13A;
+        border-radius: 9999px;
+        padding: 10px 20px;
+        font-weight: bold;
+        font-size: 14px;
+        color: #FFFFFF;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+    }
+    .contact-button:hover {
+        background-color: #dca02a;
+    }
+    .user-profile {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    .profile-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    .profile-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: #1E2240;
+        border-radius: 0.25rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 150px;
+        z-index: 10;
+        display: none;
+        margin-top: 5px;
+        padding: 8px 0;
+    }
+    .profile-dropdown.show {
+        display: block;
+    }
+    .dropdown-item {
+        display: block;
+        padding: 10px 15px;
+        color: white;
+        text-decoration: none;
+        transition: background-color 0.2s;
+        font-size: 14px;
+    }
+    .dropdown-item:hover {
+        background-color: #2e325a;
+    }
+    .profile-button {
+        display: flex;
+        align-items: center;
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 0;
+    }
+    .profile-button .arrow {
+        margin-left: 5px;
+        font-size: 12px;
+    }
 
-        .contact-button {
-            display: inline-block;
-            background-color: #ECB13A;
-            border-radius: 9999px;
-            padding: 10px 20px;
-            font-weight: bold;
-            font-size: 14px;
-            color: #FFFFFF;
-            text-align: center;
-            text-decoration: none;
-            transition: background-color 0.2s ease;
-        }
-
-        .contact-button:hover {
-            background-color: #ECB13A;
-        }
-          /* Estilos para el perfil de usuario en la barra superior */
-        .user-profile {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-        
-        .profile-image {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        
-        .profile-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: #242842;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 150px;
-            z-index: 10;
-            display: none;
-        }
-        
-        .profile-dropdown.show {
-            display: block;
-        }
-        
-        .dropdown-item {
-            display: block;
-            padding: 10px 15px;
-            color: white;
-            text-decoration: none;
-            transition: background-color 0.2s;
-        }
-        
-        .dropdown-item:hover {
-            background-color: #2e325a;
-        }
-        
-        .dropdown-divider {
-            height: 1px;
-            background-color: rgba(255, 255, 255, 0.1);
-            margin: 5px 0;
-        }
 </style>
- <header>
-        <div style="position: relative; left: 20%; top: 20%; cursor: pointer;" onclick="window.location.href='{{ path('home_index') }}'">
-			<img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon" style="height: 40px; width: auto; margin-left: 10px; transform: translateY(10%);"/>
-			<img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="float-left mt-2" style="height: 50px; width: auto; transform: translateY(20%);"/>
-		</div>
-        <nav>
+<header>
+    <div class="logo-container" onclick="window.location.href='{{ path('home_index') }}'">
+        <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon"/>
+        <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="saci-logo"/>
+    </div>
+    <div class="header-right">
+        <nav class="main-nav">
+            <a href="{{ path('auth_login') }}" class="inicio-button">INICIO</a>
             <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
             <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
-            <div class="user-profile">
-                <img src="{{ asset('images/logo-perfil.png') }}" alt="Perfil" class="profile-image" id="profileImage"/>
-                <div class="profile-dropdown" id="profileDropdown">
-                    <a href="{{ path('profile_view') }}" class="dropdown-item">Mi perfil</a>
-                    <div class="dropdown-divider"></div>
-                    <a href="{{ path('auth_logout') }}" class="dropdown-item">Cerrar sesión</a>
-                </div>
-            </div>
         </nav>
-    </header>
+        <div class="user-profile">
+            <button class="profile-button" id="profileButton">
+                <img src="{{ asset('images/logo-perfil.png') }}" alt="Perfil" class="profile-image"/>
+                <span class="arrow">▼</span>
+            </button>
+            <div class="profile-dropdown" id="profileDropdown">
+                <a href="{{ path('profile_view') }}" class="dropdown-item">Mi perfil</a>
+                <a href="{{ path('auth_logout') }}" class="dropdown-item">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+</header>
 <div class="container mt-4">
     <h1 class="mb-4">{{ title }}</h1>
 
@@ -198,4 +240,21 @@
         <a href="{{ path('home_index') }}" class="btn btn-secondary" style="color: white; font-weight: bold; text-decoration: none; font-size: 1.2rem;">Volver al inicio</a>
     </div>
 </div>
+<script>
+// Manejo del dropdown del perfil
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileButton = document.getElementById('profileButton');
+        const profileDropdown = document.getElementById('profileDropdown');
+        
+        if (profileButton && profileDropdown) {
+            profileButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+            document.addEventListener('click', function() {
+                profileDropdown.classList.remove('show');
+            });
+        }
+        });
+</script> 
 {% endblock %}
