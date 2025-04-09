@@ -4,6 +4,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Denuncia; // Asegúrate de importar la entidad Denuncia
 
 #[ORM\Entity]
 class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
@@ -44,9 +47,15 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $fechaRegistro = null;
 
+    // Agrega esta propiedad para las denuncias (o emergencias)
+    #[ORM\OneToMany(mappedBy: 'usuario', targetEntity: Denuncia::class)]
+    private Collection $denuncias;
+
+    
     public function __construct()
     {
         $this->fechaRegistro = new \DateTime();
+        $this->denuncias = new ArrayCollection();
     }
 
     // Métodos obligatorios de UserInterface / PasswordAuthenticatedUserInterface
@@ -189,5 +198,17 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->fechaRegistro = $fechaRegistro;
         return $this;
+    }
+    // Getter para la colección de denuncias
+    public function getDenuncias(): Collection
+    {
+        return $this->denuncias;
+    }
+
+    // Opcional: si prefieres llamarla "emergencies" en la plantilla,
+    // puedes agregar un getter alias:
+    public function getEmergencies(): Collection
+    {
+        return $this->denuncias;
     }
 }

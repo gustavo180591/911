@@ -6,22 +6,36 @@
 
 {% block body %}
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+
         body {
             background-color: #191D33;
             font-family: 'Montserrat', sans-serif;
             color: #FFFFFF;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
         }
 
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 40px;
+            padding: 20px 50px;
         }
 
-        .logo img {
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img.favicon {
+            height: 40px;
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .logo-container img.logo-text {
             height: 40px;
             width: auto;
         }
@@ -35,9 +49,9 @@
             display: inline-block;
             background-color: transparent;
             border-radius: 9999px;
-            padding: 10px 20px;
-            font-weight: bold;
-            font-size: 14px;
+            padding: 10px 30px;
+            font-weight: 700;
+            font-size: 16px;
             color: #FFFFFF;
             text-align: center;
             text-decoration: none;
@@ -52,9 +66,9 @@
             display: inline-block;
             background-color: #ECB13A;
             border-radius: 9999px;
-            padding: 10px 20px;
-            font-weight: bold;
-            font-size: 14px;
+            padding: 10px 30px;
+            font-weight: 700;
+            font-size: 16px;
             color: #FFFFFF;
             text-align: center;
             text-decoration: none;
@@ -62,24 +76,24 @@
         }
 
         .contact-button:hover {
-            background-color: #ECB13A;
+            background-color: #d9a035;
         }
 
         .container {
             max-width: 400px;
-            margin: 80px auto 0;
+            margin: 60px auto 0;
             padding: 0 20px;
         }
 
         h1 {
-            font-size: 24px;
+            font-size: 32px;
             margin-bottom: 10px;
-            font-weight: bold;
+            font-weight: 700;
         }
 
         p {
-            font-size: 14px;
-            margin-bottom: 25px;
+            font-size: 16px;
+            margin-bottom: 30px;
             opacity: 0.8;
             line-height: 1.5;
         }
@@ -90,35 +104,36 @@
 
         label {
             display: block;
-            font-size: 14px;
-            margin-bottom: 8px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: 500;
         }
 
-       input[type="text"],
-input[type="password"] {
-    width: 100%;
-    padding: 12px 15px;
-    border-radius: 5px;
-    border: 1px solid transparent;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
-    font-size: 14px;
-    box-sizing: border-box;
-    transition: border-color 0.2s ease;
-}
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid transparent;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease;
+        }
 
-input[type="text"]:hover,
-input[type="password"]:hover,
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="text"]:active,
-input[type="password"]:active {
-    border-color: #ECB13A;
-    outline: none; /* Opcional: elimina el contorno predeterminado */
-}
+        input[type="text"]:hover,
+        input[type="password"]:hover,
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #ECB13A;
+            outline: none;
+        }
 
         input::placeholder {
             color: rgba(255, 255, 255, 0.5);
+            font-family: 'Montserrat', sans-serif;
         }
 
         .password-container {
@@ -132,30 +147,43 @@ input[type="password"]:active {
             transform: translateY(-50%);
             cursor: pointer;
             color: rgba(255, 255, 255, 0.7);
+            font-size: 18px;
+        }
+
+        #togglePassword:hover {
+            color: #ECB13A;
         }
 
         a {
             color: #ECB13A;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 16px;
+            font-weight: 500;
         }
 
         a:hover {
             text-decoration: underline;
         }
 
+        .forgot-password {
+            display: block;
+            margin-top: 5px;
+        }
+
         button[type="submit"] {
             display: block;
-            width: 120px;
-            margin: 30px auto;
-            padding: 10px 20px;
+            width: 150px;
+            margin: 40px auto;
+            padding: 12px 20px;
             background-color: #FFFFFF;
             color: #191D33;
-            border: none;
+            border: 2px solid transparent;
             border-radius: 9999px;
-            font-weight: bold;
+            font-weight: 700;
+            font-size: 18px;
+            font-family: 'Montserrat', sans-serif;
             cursor: pointer;
-            transition: border-color 0.2s ease;
+            transition: all 0.2s ease;
         }
 
         button[type="submit"]:hover {
@@ -163,34 +191,40 @@ input[type="password"]:active {
         }
 
         button[type="submit"]:active {
-            border-color: #ECB13A;
             background-color: #ECB13A;
             color: #FFFFFF;
+            border-color: #ECB13A;
         }
 
-        form div:last-child {
+        .register-text {
             text-align: center;
             margin-top: 20px;
-            font-size: 14px;
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        .register-text a {
+            font-weight: 700;
         }
 
         .alert {
             background-color: #f44336;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 15px;
             border-radius: 5px;
             margin-bottom: 20px;
+            font-size: 14px;
         }
     </style>
 
     <header>
-        <div style="position: relative; left: 20%; top: 20%;">
-			<img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon" style="height: 40px; width: auto; margin-left: 10px; transform: translateY(10%);"/>
-			<img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="float-left mt-2" style="height: 50px; width: auto; transform: translateY(20%);"/>
-		</div>
+        <div class="logo-container">
+            <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon">
+            <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="logo-text">
+        </div>
         <nav>
-            <a href="{{ path('home_about') }}" class="about-button" style="text-decoration: none;">SOBRE NOSOTROS</a>
-            <a href="{{ path('home_contact') }}" class="contact-button" style="text-decoration: none;">CONTACTO</a>
+            <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
+            <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
         </nav>
     </header>
 
@@ -201,13 +235,13 @@ input[type="password"]:active {
         </p>
 
         {% if error %}
-            <div class="alert alert-danger">
+            <div class="alert">
                 {{ error.messageKey|trans(error.messageData, 'security') }}
             </div>
         {% endif %}
         
         {% for message in app.flashes('error') %}
-            <div class="alert alert-danger">
+            <div class="alert">
                 {{ message }}
             </div>
         {% endfor %}
@@ -227,13 +261,11 @@ input[type="password"]:active {
             </div>
 
             <div>
-                <a href="{{ path('auth_forgot_password') }}">Olvidé mi contraseña</a>
+                <a href="{{ path('auth_forgot_password') }}" class="forgot-password">Olvidé mi contraseña</a>
             </div>
-            <button type="submit" style="font-size: 1.2rem;">Iniciar</button>
-            <div>
-                <p>¿No tenés una cuenta?
-                    <a href="{{ path('auth_register') }}">regístrate acá</a>
-                </p>
+            <button type="submit">Iniciar</button>
+            <div class="register-text">
+                ¿No tenés una cuenta? <a href="{{ path('auth_register') }}">regístrate acá</a>
             </div>
         </form>
     </div>

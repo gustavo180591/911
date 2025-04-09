@@ -94,9 +94,10 @@ class AuthController extends AbstractController
         throw new \LogicException('Este método puede estar vacío, Symfony lo gestiona automáticamente.');
     }
 
-    #[Route('/success', name: 'auth_success', methods: ['GET'])]
-    public function success(): Response
+    #[Route('/auth/success', name: 'auth_success')]
+    public function success()
     {
+        // Lógica de la página de éxito
         return $this->render('auth/success.html.twig');
     }
 

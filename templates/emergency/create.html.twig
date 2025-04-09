@@ -17,15 +17,15 @@
     header {
         display: flex;
         align-items: center;
-        padding: 20px 40px; /* Mantengo el padding original */
+        justify-content: space-between; /* Distribuye el logo a la izquierda y los elementos de la derecha de forma exacta */
+        padding: 20px 40px;
         background-color: #191D33;
     }
     .logo-container {
         display: flex;
         align-items: center;
         cursor: pointer;
-        /* Agrego margen extra para moverlo hacia la derecha */
-        margin-left: 20px;
+        /* Se ha eliminado el margen extra para alinear el logo justo a la izquierda */
     }
     .logo-container img.favicon {
         height: 40px;
@@ -36,14 +36,12 @@
         height: 50px;
         width: auto;
     }
-    /* Contenedor para agrupar el menú y el perfil y empujarlo a la derecha */
+    /* Contenedor para agrupar el menú y el perfil a la derecha */
     .header-right {
         display: flex;
         align-items: center;
-        margin-left: auto; /* Esto empuja los elementos a la derecha */
-        /* Agrego margen extra para que se acerquen al centro */
-        margin-right: 20px;
-        gap: 30px; /* Espaciado entre el menú y el perfil */
+        gap: 30px; /* Espaciado uniforme entre elementos */
+        /* Se eliminan márgenes adicionales ya que el header con justify-content: space-between se encarga de la distribución */
     }
     nav.main-nav {
         display: flex;
@@ -142,10 +140,10 @@
     }
 
     /* ================== FORMULARIO ================== */
-    /* Contenedor del formulario alineado a la izquierda */
+    /* Contenedor del formulario centrado según la imagen */
     .container.mt-4 {
         max-width: 600px;
-        margin: 2rem 0 2rem 2rem; /* margen izquierdo fijo */
+        margin: 2rem auto; /* Centrado horizontal */
     }
     h1 {
         font-size: 1.75rem;
@@ -313,7 +311,7 @@
     </div>
 
    <div class="form-group" style="display: flex; gap: 1rem;">
-       <!-- Se agregan márgenes internos para ajustar el posicionamiento -->
+       <!-- Ajuste interno para posicionamiento exacto -->
        <div style="flex: 1; margin-right: 10px;">
            {{ form_label(form.ubicacion.calle, 'Ubicación') }}
            {{ form_widget(form.ubicacion.calle, {

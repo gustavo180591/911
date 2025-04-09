@@ -1,225 +1,189 @@
 {% extends 'base.html.twig' %}
 
-{% block stylesheets %}
-    <style>
-        html,
-        body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            background: url('{{ asset('images/fondo-inicio.png') }}') no-repeat center center fixed;
-            background-size: cover;
-        }
-        .my-button {
-            /* Color de fondo (rojo intenso) */
-            background-color: #FF3B30;
-            /* Texto en blanco */
-            color: #FFFFFF;
-            /* Quitar borde por defecto */
-            border: none;
-            /* Bordes muy redondeados para la forma de píldora */
-            border-radius: 9999px;
-            /* Tipografía y estilo */
-            font-family: 'Montserrat', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            /* Espaciado interno */
-            padding: 12px 24px;
-            /* Cursor de mano */
-            cursor: pointer;
-            /* Quitar subrayado */
-            text-decoration: none;
-            /* Transición suave al hover */
-            transition: background-color 0.2s ease;
-        }
-        .my-button:hover {
-            background-color: #E22D26;
-        }
-    </style>
-{% endblock %}
-
 {% block title %}SACI - INICIO{% endblock %}
 
-{% block body %}
+{% block stylesheets %}
+    {{ parent() }}
     <style>
         /* Fuente base */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
-        html,
-        body {
+        html, body {
             margin: 0;
             padding: 0;
             height: 100%;
-            background: url('{{ asset('images/fondo-inicio.png') }}') no-repeat center center fixed;
-            background-size: cover;
             font-family: 'Montserrat', sans-serif;
             color: #FFFFFF;
+            overflow-x: hidden;
         }
 
-        h1 {
-            font-size: 48px;
+        body {
+            background: linear-gradient(rgba(48, 47, 70, 0.7), rgba(48, 47, 70, 0.7)), 
+                        url('{{ asset('images/fondo-inicio.png') }}') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            position: relative;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img.logo {
+            height: 50px;
+            width: auto;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 10px 30px;
             font-weight: 700;
-            margin-bottom: 1rem;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.2s ease;
         }
 
-        h2,
-        h3,
+        .nav-link.inicio {
+            color: #E5A74E;
+        }
+
+        .nav-link.inicio:hover {
+            color: #FFFFFF;
+        }
+
+        .nav-link.sobre-nosotros {
+            color: #FFFFFF;
+        }
+
+        .nav-link.sobre-nosotros:hover {
+            color: #E5A74E;
+        }
+
+        .nav-link.contacto {
+            background-color: #E5A74E;
+            color: #FFFFFF;
+            border-radius: 9999px;
+        }
+
+        .nav-link.contacto:hover {
+            background-color: #FFFFFF;
+            color: #E5A74E;
+        }
+
+        .main-content {
+            padding: 50px 0 0 50px;
+            max-width: 600px;
+        }
+
+        .main-title {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: #E5A74E;
+        }
+
         .subtitle {
-            font-size: 24px;
-            font-weight: 700;
-            color: #E5A74E;
-            margin-bottom: 1rem;
-        }
-
-        p {
             font-size: 18px;
-            line-height: 1.4;
-            margin-bottom: 0.5rem;
+            margin-bottom: 15px;
         }
 
-        .contact-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: inline-block;
-            background-color: #E5A74E;
-            border-radius: 9999px;
-            padding: 10px 30px;
-            font-weight: bold;
+        .description {
             font-size: 16px;
-            color: #FFFFFF;
-            text-align: center;
-            text-decoration: none;
-            transition: background-color 0.2s ease, color 0.2s ease;
-        }
-        .contact-button:hover {
-            background-color: #FFFFFF;
-            color: #E5A74E;
+            line-height: 1.5;
+            margin-bottom: 30px;
         }
 
-        .about-button {
-            position: absolute;
-            top: 20px;
-            right: 180px;
-            display: inline-block;
-            background-color: transparent;
-            border-radius: 9999px;
-            padding: 10px 30px;
-            font-weight: bold;
-            font-size: 16px;
-            color: #E5A74E;
-            text-align: center;
-            text-decoration: none;
-            transition: background-color 0.2s ease, color 0.2s ease;
-        }
-        .about-button:hover {
-            color: #FFFFFF;
+        .description p {
+            margin: 5px 0;
         }
 
-        .inicio-button {
-            position: absolute;
-            top: 20px;
-            right: 370px;
-            display: inline-block;
-            background-color: transparent;
-            border-radius: 9999px;
-            padding: 10px 30px;
-            font-weight: bold;
-            font-size: 16px;
-            color: #E5A74E;
-            text-align: center;
-            text-decoration: none;
-            transition: background-color 0.2s ease, color 0.2s ease;
-        }
-        .inicio-button:hover {
-            color: #FFFFFF;
-        }
-
-        .card-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #E5A74E;
-        }
-        .card-text {
-            font-size: 16px;
-            color: #FFFFFF;
-        }
-
-        .btn-primary {
-            background-color: #E5A74E;
-            border-color: #E5A74E;
-            font-weight: 700;
-        }
-        .btn-primary:hover {
-            background-color: #FFFFFF;
-            border-color: #FFFFFF;
-            color: #E5A74E;
-        }
-        .btn-secondary {
-            background-color: #FFFFFF;
-            border-color: #FFFFFF;
-            font-weight: 700;
-            color: #E5A74E;
-        }
-        .btn-secondary:hover {
-            background-color: #E5A74E;
-            border-color: #E5A74E;
-            color: #FFFFFF;
-        }
-
-        .my-button {
-            background-color: #EA633F;
+        .register-button {
+            background-color: #FF3B30;
             color: #FFFFFF;
             border: none;
             border-radius: 9999px;
             font-family: 'Montserrat', sans-serif;
             font-size: 16px;
             font-weight: 700;
-            padding: 12px 24px;
+            padding: 15px 30px;
             cursor: pointer;
             text-decoration: none;
+            display: inline-block;
             transition: background-color 0.2s ease;
         }
-        .my-button:hover {
+
+        .register-button:hover {
             background-color: #E22D26;
         }
+
+        .institutional-image {
+            text-align: center;
+            margin-top: 100px;
+            padding-bottom: 50px;
+        }
+
+        .institutional-image img {
+            max-width: 50%;
+            height: auto;
+        }
     </style>
+{% endblock %}
 
-    <a href="{{ path('auth_login') }}" class="inicio-button" style="right: 600px;">INICIO</a>
-    <a href="{{ path('home_about') }}" class="about-button" style="right: 400px;">SOBRE NOSOTROS</a>
-    <a href="{{ path('home_contact') }}" class="contact-button" style="right: 240px;">CONTACTO</a>
-
-    <div style="display: flex; align-items: center;">
-        <div style="position: relative; left: 20%; top: 20%;">
-            <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon" style="height: 40px; width: auto; margin-left: 10px; transform: translateY(10%);"/>
-            <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="float-left mt-2" style="height: 50px; width: auto; transform: translateY(20%);"/>
+{% block body %}
+    <div class="header">
+        <div class="logo-container">
+            <img src="{{ asset('images/favicon.png') }}" alt="SACI Logo" class="logo" style="height: 40px; margin-right: 10px;">
+            <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="logo">
+        </div>
+        
+        <div class="nav-menu">
+            <a href="{{ path('auth_login') }}" class="nav-link inicio">INICIO</a>
+            <a href="{{ path('home_about') }}" class="nav-link sobre-nosotros">SOBRE NOSOTROS</a>
+            <a href="{{ path('home_contact') }}" class="nav-link contacto">CONTACTO</a>
         </div>
     </div>
-    <div class="container-fluid mt-4" style="margin-left: 20%;">
-        <h1 style="display: block; margin-bottom: 1.5rem; position: relative; left: 0%; font-size: 56px;">
-            BIENVENIDO<br>AL SISTEMA<br><span style="color: #E5A74E;">SACI</span>
+
+    <div class="main-content">
+        <h1 class="main-title">
+            BIENVENIDO<br>
+            AL SISTEMA<br>
+            <span class="highlight">SACI</span>
         </h1>
-        <p style="font-family: 'Montserrat', sans-serif; line-height: 2.5;">SISTEMA DE ALERTA CIUDADANA INTEGRADA</p>
-        <p style="font-family: 'Montserrat', sans-serif; line-height: 0.5;">Reporta incidentes de manera <strong>rápida y eficiente.</strong></p>
-        <p style="font-family: 'Montserrat', sans-serif; line-height: 0.5;">
-            <strong>SACI</strong> conecta a ciudadanos y autoridades en toda
-        </p>
-        <p style="font-family: 'Montserrat', sans-serif; line-height: 0.5;">la provincia de <i>Misiones</i>.</p>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body text-center">
-                    <a href="{{ path('emergency_create') }}" class="my-button" style="position: relative; top: 60px; left: 120px;">
-                        Registrar incidente
-                    </a>
-                </div>
-            </div>
+        
+        <div class="subtitle">
+            Sistema de Alerta Ciudadana Integrada
         </div>
+        
+        <div class="description">
+            <p>Reporta incidentes de manera <strong>rápida y eficiente.</strong></p>
+            <p><strong>SACI</strong> conecta a ciudadanos y autoridades en toda</p>
+            <p>la provincia de <em>Misiones</em>.</p>
+        </div>
+        
+        <a href="{{ path('emergency_create') }}" class="register-button">
+            Registrar Incidente
+        </a>
     </div>
 
-    {# Imagen institucional al final del contenido #}
-    <div style="text-align: center; margin-top: 20rem;">
-        <img src="{{ asset('images/institucionales.png') }}" alt="Imagen institucionales" style="max-width: 50%; height: auto;">
+    <div class="institutional-image">
+        <img src="{{ asset('images/institucionales.png') }}" alt="Imagen institucionales">
     </div>
 {% endblock %}

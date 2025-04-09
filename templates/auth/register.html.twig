@@ -1,4 +1,3 @@
-{# templates/register.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Registro de Usuario{% endblock %}
@@ -6,135 +5,140 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
+        /* Fuente base */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #191D33;
             color: #FFFFFF;
             margin: 0;
             padding: 0;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
+            min-height: 100vh;
         }
         
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 0;
+            padding: 20px 50px;
         }
         
-        .logo img {
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-container img.favicon {
             height: 40px;
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .logo-container img.logo-text {
+            height: 40px;
+            width: auto;
         }
         
         nav {
             display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-        
-        nav a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        
-        nav a:hover {
-            color: white;
+            gap: 20px;
         }
         
         .about-button {
             display: inline-block;
             background-color: transparent;
             border-radius: 9999px;
-            padding: 10px 20px;
-            font-weight: bold;
-            font-size: 14px;
+            padding: 10px 30px;
+            font-weight: 700;
+            font-size: 16px;
             color: #FFFFFF;
             text-align: center;
             text-decoration: none;
             transition: color 0.2s ease;
         }
-
+        
         .about-button:hover {
             color: #ECB13A;
         }
-
+        
         .contact-button {
             display: inline-block;
             background-color: #ECB13A;
             border-radius: 9999px;
-            padding: 10px 20px;
-            font-weight: bold;
-            font-size: 14px;
+            padding: 10px 30px;
+            font-weight: 700;
+            font-size: 16px;
             color: #FFFFFF;
             text-align: center;
             text-decoration: none;
             transition: background-color 0.2s ease;
         }
-
+        
         .contact-button:hover {
-            background-color: #ECB13A;
+            background-color: #d9a035;
         }
         
         .registration-container {
             max-width: 500px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            margin: 40px auto 0;
+            padding: 0 20px;
         }
         
         h1 {
-            font-size: 1.75rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
         }
         
         .description {
+            font-size: 16px;
             color: rgba(255, 255, 255, 0.8);
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 30px;
+            line-height: 1.5;
         }
         
         .form-row {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            gap: 20px;
+            margin-bottom: 20px;
         }
         
         .form-col {
             flex: 1;
         }
         
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
         label {
             display: block;
-            font-size: 0.875rem;
-            margin-bottom: 0.25rem;
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: 500;
         }
         
         .form-control {
             width: 100%;
-            padding: 0.5rem 0.75rem;
-            background-color: #191D33;
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            border-radius: 0.5rem;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid transparent;
+            border-radius: 5px;
             color: white;
             box-sizing: border-box;
-            height: 40px;
             font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            transition: border-color 0.2s ease;
         }
         
         .form-control:focus {
             outline: none;
-            border: 2px solid #ECB13A;
+            border-color: #ECB13A;
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
         
         /* Estilos para el contenedor de contraseña */
@@ -144,55 +148,75 @@
         
         .password-toggle {
             position: absolute;
-            right: 0.75rem;
+            right: 15px;
             top: 50%;
             transform: translateY(-50%);
             background: none;
             border: none;
             color: rgba(255, 255, 255, 0.7);
             cursor: pointer;
+            padding: 0;
+        }
+        
+        .password-toggle:hover {
+            color: #ECB13A;
         }
         
         /* Estilos específicos para el selector de teléfono */
         .phone-container {
             display: flex;
             align-items: center;
-            background-color: #191D33;
-            border-radius: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            border: 1px solid transparent;
             overflow: hidden;
-            height: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.7);
+            transition: border-color 0.2s ease;
+        }
+        
+        .phone-container:focus-within {
+            border-color: #ECB13A;
         }
         
         .country-selector {
-            position: relative;
-            background-color: white;
-            border-radius: 0.5rem 0 0 0.5rem;
-            margin: 3px;
-            padding: 0 10px;
             display: flex;
             align-items: center;
-            min-width: 90px;
-            height: calc(100% - 6px);
+            padding: 0 15px;
+            background-color: transparent;
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            height: 48px;
             cursor: pointer;
         }
         
-        .country-selector.active {
-            border: 1px solid #ECB13A;
+        .selected-flag {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+        
+        .selected-code {
+            color: white;
+            font-weight: 500;
+        }
+        
+        .dropdown-arrow {
+            margin-left: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 10px;
         }
         
         .country-selector-dropdown {
             position: absolute;
             top: 100%;
             left: 0;
-            width: 200px;
+            width: 250px;
             max-height: 200px;
             overflow-y: auto;
-            background-color: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #191D33;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             z-index: 10;
             display: none;
+            margin-top: 5px;
         }
         
         .country-selector-dropdown.show {
@@ -202,28 +226,29 @@
         .country-option {
             display: flex;
             align-items: center;
-            padding: 8px 12px;
+            padding: 10px 15px;
             cursor: pointer;
-            color: #333;
+            color: white;
+            transition: background-color 0.2s ease;
         }
         
         .country-option:hover {
-            background-color: #f5f5f5;
+            background-color: rgba(255, 255, 255, 0.1);
         }
         
-        .selected-flag {
-            margin-right: 8px;
-            font-size: 16px;
+        .country-option .flag {
+            margin-right: 10px;
+            font-size: 18px;
         }
         
-        .selected-code {
-            color: #333;
+        .country-option .code {
+            margin-right: 10px;
             font-weight: 500;
         }
         
-        .dropdown-arrow {
-            margin-left: 8px;
-            color: #333;
+        .country-option .name {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
         }
         
         .phone-input {
@@ -231,8 +256,9 @@
             background: transparent;
             border: none;
             color: white;
-            padding: 0 15px;
-            height: 100%;
+            padding: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
         }
         
         .phone-input:focus {
@@ -241,30 +267,39 @@
         
         /* Estilos para el botón de registro */
         .register-button {
-            background-color: white;
-            color: #1a1a36;
-            border: none;
-            padding: 0.75rem 2rem;
+            background-color: #FFFFFF;
+            color: #191D33;
+            border: 2px solid transparent;
+            padding: 12px 40px;
             border-radius: 9999px;
-            font-weight: 600;
-            font-size: 1rem;
+            font-weight: 700;
+            font-size: 18px;
+            font-family: 'Montserrat', sans-serif;
             cursor: pointer;
             display: block;
-            margin: 2rem auto 1rem;
-            transition: background-color 0.2s;
+            margin: 40px auto 20px;
+            transition: all 0.2s ease;
         }
         
         .register-button:hover {
-            background-color: #f0f0f0;
+            border-color: #ECB13A;
+        }
+        
+        .register-button:active {
+            background-color: #ECB13A;
+            color: #FFFFFF;
+            border-color: #ECB13A;
         }
         
         .login-link {
             text-align: center;
-            margin-top: 1rem;
+            margin-top: 20px;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
         }
         
         .login-link a {
-            color: white;
+            color: #ECB13A;
             text-decoration: none;
             font-weight: 600;
         }
@@ -272,25 +307,39 @@
         .login-link a:hover {
             text-decoration: underline;
         }
+        
+        .alert {
+            background-color: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .alert-success {
+            background-color: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4CAF50;
+        }
     </style>
 {% endblock %}
 
 {% block body %}
-<div class="container">
     <header>
-        <div style="position: relative; left: 20%; top: 20%; cursor: pointer;" onclick="window.location.href='{{ path('home_index') }}'">
-            <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon" style="height: 40px; width: auto; margin-left: 10px; transform: translateY(10%);"/>
-            <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="float-left mt-2" style="height: 50px; width: auto; transform: translateY(20%);"/>
+        <div class="logo-container">
+            <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon">
+            <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="logo-text">
         </div>
         <nav>
-            <a href="{{ path('home_about') }}" class="about-button" style="text-decoration: none;">SOBRE NOSOTROS</a>
-            <a href="{{ path('home_contact') }}" class="contact-button" style="text-decoration: none;">CONTACTO</a>
+            <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
+            <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
         </nav>
     </header>
     
     <div class="registration-container">
         <h1>Registro de Usuario</h1>
-        <p class="description">Completá con tus datos para crear una cuenta</p>
+        <p class="description">Completá con tus datos para crear una cuenta.</p>
         
         {% for message in app.flashes('success') %}
             <div class="alert alert-success">
@@ -299,7 +348,7 @@
         {% endfor %}
 
         {% for message in app.flashes('error') %}
-            <div class="alert alert-danger">
+            <div class="alert">
                 {{ message }}
             </div>
         {% endfor %}
@@ -372,20 +421,19 @@
                 </div>
                 {{ form_widget(registrationForm.telefono, {
                     'attr': {
-                        'class': 'form-control phone-input',
+                        'class': 'phone-input',
                         'placeholder': ''
                     }
                 }) }}
-                
-                <div id="countrySelectorDropdown" class="country-selector-dropdown">
-                    {% for country in phoneCodes %}
-                        <div class="country-option" data-code="{{ country.phoneCode }}" data-flag="{{ country.flagEmoji }}">
-                            <span class="flag">{{ country.flagEmoji }}</span>
-                            <span class="code">{{ country.phoneCode }}</span>
-                            <span class="name">{{ country.name }}</span>
-                        </div>
-                    {% endfor %}
-                </div>
+            </div>
+            <div id="countrySelectorDropdown" class="country-selector-dropdown">
+                {% for country in phoneCodes %}
+                    <div class="country-option" data-code="{{ country.phoneCode }}" data-flag="{{ country.flagEmoji }}">
+                        <span class="flag">{{ country.flagEmoji }}</span>
+                        <span class="code">{{ country.phoneCode }}</span>
+                        <span class="name">{{ country.name }}</span>
+                    </div>
+                {% endfor %}
             </div>
         </div>
         
@@ -399,8 +447,11 @@
                         'placeholder': '••••••'
                     }
                 }) }}
-                <button type="button" class="password-toggle" onclick="togglePassword()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <button type="button" class="password-toggle" id="togglePassword">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
                 </button>
             </div>
         </div>
@@ -416,64 +467,70 @@
             <p>¿Ya tenés una cuenta? <a href="{{ path('auth_login') }}">Inicia sesión</a></p>
         </div>
     </div>
-</div>
 
-<script>
-    // Función para alternar la visibilidad de la contraseña
-    function togglePassword() {
-        const passwordInput = document.getElementById('{{ registrationForm.Password.vars.id }}');
-        const passwordToggle = document.querySelector('.password-toggle svg');
-        
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            passwordToggle.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
-        } else {
-            passwordInput.type = 'password';
-            passwordToggle.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
-        }
-    }
-    
-    // Funcionalidad para el selector de país
-    document.addEventListener('DOMContentLoaded', function() {
-        const countrySelector = document.getElementById('countrySelector');
-        const dropdown = document.getElementById('countrySelectorDropdown');
-        const selectedFlag = document.getElementById('selectedFlag');
-        const selectedCode = document.getElementById('selectedCode');
-        const countryCodeInput = document.getElementById('countryCodeInput');
-        const countryOptions = document.querySelectorAll('.country-option');
-        
-        // Mostrar/ocultar el dropdown al hacer clic en el selector
-        countrySelector.addEventListener('click', function(e) {
-            e.stopPropagation();
-            dropdown.classList.toggle('show');
-            countrySelector.classList.toggle('active');
-        });
-        
-        // Cerrar el dropdown al hacer clic fuera de él
-        document.addEventListener('click', function() {
-            dropdown.classList.remove('show');
-            countrySelector.classList.remove('active');
-        });
-        
-        // Evitar que el dropdown se cierre al hacer clic dentro de él
-        dropdown.addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-        
-        // Seleccionar un país
-        countryOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                const code = this.getAttribute('data-code');
-                const flag = this.getAttribute('data-flag');
-                
-                selectedFlag.textContent = flag;
-                selectedCode.textContent = code;
-                countryCodeInput.value = code;
-                
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Función para alternar la visibilidad de la contraseña
+            const passwordInput = document.getElementById('{{ registrationForm.Password.vars.id }}');
+            const toggleButton = document.getElementById('togglePassword');
+            
+            toggleButton.addEventListener('click', function() {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    toggleButton.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    `;
+                } else {
+                    passwordInput.type = 'password';
+                    toggleButton.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    `;
+                }
+            });
+            
+            // Funcionalidad para el selector de país
+            const countrySelector = document.getElementById('countrySelector');
+            const dropdown = document.getElementById('countrySelectorDropdown');
+            const selectedFlag = document.getElementById('selectedFlag');
+            const selectedCode = document.getElementById('selectedCode');
+            const countryCodeInput = document.getElementById('countryCodeInput');
+            const countryOptions = document.querySelectorAll('.country-option');
+            
+            // Mostrar/ocultar el dropdown al hacer clic en el selector
+            countrySelector.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdown.classList.toggle('show');
+            });
+            
+            // Cerrar el dropdown al hacer clic fuera de él
+            document.addEventListener('click', function() {
                 dropdown.classList.remove('show');
-                countrySelector.classList.remove('active');
+            });
+            
+            // Evitar que el dropdown se cierre al hacer clic dentro de él
+            dropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+            
+            // Seleccionar un país
+            countryOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const code = this.getAttribute('data-code');
+                    const flag = this.getAttribute('data-flag');
+                    
+                    selectedFlag.textContent = flag;
+                    selectedCode.textContent = code;
+                    countryCodeInput.value = code;
+                    
+                    dropdown.classList.remove('show');
+                });
             });
         });
-    });
-</script>
+    </script>
 {% endblock %}
