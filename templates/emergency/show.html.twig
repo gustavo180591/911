@@ -3,10 +3,506 @@
 {% block title %}{{ title|default('Detalle de Emergencia') }}{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h1 class="mb-4">{{ title }}</h1>
+<style>
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: #191D33;
+        color: #FFFFFF;
+        margin: 0;
+        padding: 0;
+    }
 
-    <table class="table table-bordered">
+    /* ================== HEADER ================== */
+    header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 24px;
+        background-color: #191D33;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .logo-container img.favicon {
+        height: 40px;
+        width: auto;
+        margin-right: 12px;
+    }
+
+    .saci-logo {
+        height: 48px;
+        width: auto;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+    }
+
+    nav.main-nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .inicio-button {
+        background-color: transparent;
+        border-radius: 9999px;
+        padding: 10px 24px;
+        font-weight: 700;
+        font-size: 15px;
+        color: #E5A74E;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .inicio-button:hover {
+        color: #FFFFFF;
+        transform: translateY(-1px);
+    }
+
+    .about-button {
+        background-color: transparent;
+        border-radius: 9999px;
+        padding: 10px 20px;
+        font-weight: 700;
+        font-size: 15px;
+        color: #FFFFFF;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .about-button:hover {
+        color: #ECB13A;
+        transform: translateY(-1px);
+    }
+
+    .contact-button {
+        background-color: #ECB13A;
+        border-radius: 9999px;
+        padding: 10px 20px;
+        font-weight: 700;
+        font-size: 15px;
+        color: #FFFFFF;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 5px rgba(236, 177, 58, 0.3);
+    }
+
+    .contact-button:hover {
+        background-color: #dca02a;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(236, 177, 58, 0.4);
+    }
+
+    .user-profile {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .profile-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: border-color 0.2s ease;
+    }
+
+    .profile-button:hover .profile-image {
+        border-color: rgba(236, 177, 58, 0.5);
+    }
+
+    .profile-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: #1E2240;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        width: 180px;
+        z-index: 10;
+        display: none;
+        margin-top: 8px;
+        padding: 8px 0;
+        border: 1px solid #2e325a;
+    }
+
+    .profile-dropdown.show {
+        display: block;
+        animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dropdown-item {
+        display: block;
+        padding: 12px 16px;
+        color: white;
+        text-decoration: none;
+        transition: background-color 0.2s;
+        font-size: 14px;
+    }
+
+    .dropdown-item:hover {
+        background-color: #2e325a;
+    }
+
+    .profile-button {
+        display: flex;
+        align-items: center;
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 0;
+        gap: 8px;
+    }
+
+    .profile-button .arrow {
+        margin-left: 5px;
+        font-size: 12px;
+        transition: transform 0.2s ease;
+    }
+
+    .profile-button:hover .arrow {
+        transform: translateY(2px);
+    }
+
+    /* ================== MAIN CONTENT ================== */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 32px 24px;
+    }
+
+    h1 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 24px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #2e325a;
+    }
+
+    h3 {
+        font-size: 20px;
+        font-weight: 600;
+        margin-top: 24px;
+        margin-bottom: 16px;
+        color: #ECB13A;
+    }
+
+    /* Detail table styling */
+    .detail-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background-color: #1E2240;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 24px;
+    }
+
+    .detail-table th {
+        background-color: #232644;
+        text-align: left;
+        padding: 16px 20px;
+        font-weight: 600;
+        font-size: 15px;
+        width: 200px;
+        vertical-align: top;
+        border-bottom: 1px solid #2e325a;
+    }
+
+    .detail-table td {
+        padding: 16px 20px;
+        border-bottom: 1px solid #2e325a;
+    }
+
+    .detail-table tr:last-child th,
+    .detail-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .text-muted {
+        color: #9ca3af;
+    }
+
+    /* Evidence gallery styling */
+    .evidence-gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 8px;
+    }
+
+    .evidence-card {
+        width: 180px;
+        background-color: #232644;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .evidence-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .evidence-image {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        border-bottom: 1px solid #2e325a;
+    }
+
+    .evidence-card-body {
+        padding: 12px;
+        text-align: center;
+    }
+
+    /* Button styling */
+    .btn {
+        display: inline-block;
+        font-weight: 500;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: 10px 16px;
+        font-size: 14px;
+        line-height: 1.5;
+        border-radius: 6px;
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-sm {
+        padding: 6px 12px;
+        font-size: 13px;
+        border-radius: 4px;
+    }
+
+    .btn-primary {
+        background-color: #ECB13A;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba(236, 177, 58, 0.2);
+    }
+
+    .btn-primary:hover {
+        background-color: #dca02a;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(236, 177, 58, 0.3);
+    }
+
+    .btn-secondary {
+        background-color: #2e325a;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-secondary:hover {
+        background-color: #373b6d;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-success {
+        background-color: #48bb78;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba(72, 187, 120, 0.2);
+    }
+
+    .btn-success:hover {
+        background-color: #38a169;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(72, 187, 120, 0.3);
+    }
+
+    .btn-danger {
+        background-color: #e53e3e;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba(229, 62, 62, 0.2);
+    }
+
+    .btn-danger:hover {
+        background-color: #c53030;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(229, 62, 62, 0.3);
+    }
+
+    /* Form styling */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #ECB13A;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 15px;
+        line-height: 1.5;
+        color: white;
+        background-color: #232644;
+        border: 1px solid #2e325a;
+        border-radius: 6px;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-control:focus {
+        border-color: #ECB13A;
+        outline: 0;
+        box-shadow: 0 0 0 3px rgba(236, 177, 58, 0.2);
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    /* Status badge */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 9999px;
+        font-size: 13px;
+        font-weight: 500;
+        background-color: rgba(236, 177, 58, 0.15);
+        color: #ECB13A;
+    }
+
+    /* Action buttons container */
+    .action-buttons {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    .action-buttons form {
+        display: inline-block;
+    }
+
+    /* Divider */
+    hr {
+        border: 0;
+        height: 1px;
+        background-color: #2e325a;
+        margin: 32px 0;
+    }
+
+    /* Margin utilities */
+    .mt-2 {
+        margin-top: 8px;
+    }
+
+    .mt-3 {
+        margin-top: 16px;
+    }
+
+    .mt-4 {
+        margin-top: 24px;
+    }
+
+    .mb-3 {
+        margin-bottom: 16px;
+    }
+
+    .mb-4 {
+        margin-bottom: 24px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        header {
+            padding: 16px;
+        }
+
+        .header-right {
+            gap: 16px;
+        }
+
+        nav.main-nav {
+            display: none;
+        }
+
+        .container {
+            padding: 24px 16px;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        .detail-table th {
+            width: 120px;
+            padding: 12px 16px;
+        }
+
+        .detail-table td {
+            padding: 12px 16px;
+        }
+
+        .evidence-gallery {
+            justify-content: center;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            gap: 8px;
+        }
+    }
+</style>
+
+<header>
+    <div class="logo-container" onclick="window.location.href='{{ path('home_index') }}'">
+        <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon"/>
+        <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="saci-logo"/>
+    </div>
+    <div class="header-right">
+        <nav class="main-nav">
+            <a href="{{ path('auth_login') }}" class="inicio-button">INICIO</a>
+            <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
+            <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
+        </nav>
+        <div class="user-profile">
+            <button class="profile-button" id="profileButton">
+                <img src="{{ asset('images/logo-perfil.png') }}" alt="Perfil" class="profile-image"/>
+                <span class="arrow">▼</span>
+            </button>
+            <div class="profile-dropdown" id="profileDropdown">
+                <a href="{{ path('profile_view') }}" class="dropdown-item">Mi perfil</a>
+                <a href="{{ path('auth_logout') }}" class="dropdown-item">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <h1>{{ title }}</h1>
+
+    <table class="detail-table">
         <tr>
             <th>Descripción</th>
             <td>{{ emergency.descripcion }}</td>
@@ -29,28 +525,25 @@
             <th>Evidencias</th>
             <td>
                 {% if emergency.evidencias|length > 0 %}
-                    <div class="d-flex flex-wrap">
+                    <div class="evidence-gallery">
                         {% for evidencia in emergency.evidencias %}
-                            <div class="me-3 mb-3" style="width: 150px;">
-                                <div class="card">
-                                    {% if evidencia.rutaArchivo %}
-                                        <img src="{{ asset('uploads/denuncias/' ~ evidencia.rutaArchivo) }}"
-                                             alt="Evidencia"
-                                             class="card-img-top img-thumbnail"
-                                             style="width: 100%; height: 150px; object-fit: cover;">
-                                        <div class="card-body text-center">
-                                            <a href="{{ asset('uploads/denuncias/' ~ evidencia.rutaArchivo) }}"
-                                               target="_blank"
-                                               class="btn btn-sm btn-primary">
-                                                Ver archivo
-                                            </a>
-                                        </div>
-                                    {% else %}
-                                        <div class="card-body text-center text-muted">
-                                            Sin imagen
-                                        </div>
-                                    {% endif %}
-                                </div>
+                            <div class="evidence-card">
+                                {% if evidencia.rutaArchivo %}
+                                    <img src="{{ asset('uploads/denuncias/' ~ evidencia.rutaArchivo) }}"
+                                         alt="Evidencia"
+                                         class="evidence-image">
+                                    <div class="evidence-card-body">
+                                        <a href="{{ asset('uploads/denuncias/' ~ evidencia.rutaArchivo) }}"
+                                           target="_blank"
+                                           class="btn btn-sm btn-primary">
+                                            Ver archivo
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <div class="evidence-card-body text-muted">
+                                        Sin imagen
+                                    </div>
+                                {% endif %}
                             </div>
                         {% endfor %}
                     </div>
@@ -61,23 +554,31 @@
         </tr>
         <tr>
             <th>Estado</th>
-            <td>{{ emergency.estado.nombre }}</td>
+            <td>
+                <span class="status-badge">{{ emergency.estado.nombre }}</span>
+            </td>
         </tr>
     </table>
 
-    <div class="mt-3">
-        {# Botones de aceptar/rechazar, si aplica la lógica #}
+    <div class="action-buttons">
         <form method="post" action="{{ path('emergency_accept', { id: emergency.id }) }}">
             <input type="hidden" name="_token" value="{{ csrf_token('accept_emergency_' ~ emergency.id) }}">
-            <button type="submit" class="btn btn-success">Aceptar</button>
+            <button type="submit" class="btn btn-success">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check" style="margin-right: 6px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Aceptar
+            </button>
         </form>
 
-        <form method="post" action="{{ path('emergency_reject', { id: emergency.id }) }}" class="mt-2">
+        <form method="post" action="{{ path('emergency_reject', { id: emergency.id }) }}">
             <input type="hidden" name="_token" value="{{ csrf_token('reject_emergency_' ~ emergency.id) }}">
-            <button type="submit" class="btn btn-danger">Rechazar</button>
+            <button type="submit" class="btn btn-danger">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x" style="margin-right: 6px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                Rechazar
+            </button>
         </form>
 
-        <a href="{{ path('emergency_index') }}" class="btn btn-secondary mt-3">
+        <a href="{{ path('emergency_index') }}" class="btn btn-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list" style="margin-right: 6px;"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
             Volver al Listado
         </a>
     </div>
@@ -86,9 +587,39 @@
         <hr>
         <h3>Agregar Comentario</h3>
         {{ form_start(commentForm, {'action': path('report_create_from_emergency', {'id': emergency.id})}) }}
-            {{ form_row(commentForm.descripcion, {'label': 'Comentario'}) }}
-            <button type="submit" class="btn btn-primary">Enviar Comentario</button>
+            <div class="form-group">
+                {{ form_label(commentForm.descripcion, 'Comentario', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(commentForm.descripcion, {'attr': {'class': 'form-control', 'placeholder': 'Escribe tu comentario aquí...'}}) }}
+                {{ form_errors(commentForm.descripcion) }}
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send" style="margin-right: 6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                Enviar Comentario
+            </button>
         {{ form_end(commentForm) }}
     {% endif %}
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileButton = document.getElementById('profileButton');
+        const profileDropdown = document.getElementById('profileDropdown');
+        
+        if (profileButton && profileDropdown) {
+            profileButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+            
+            document.addEventListener('click', function() {
+                profileDropdown.classList.remove('show');
+            });
+            
+            // Prevent dropdown from closing when clicking inside it
+            profileDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+    });
+</script> 
 {% endblock %}
