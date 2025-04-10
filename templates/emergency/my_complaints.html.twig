@@ -3,46 +3,415 @@
 {% block title %}Mis denuncias{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h1 class="mb-4">Mis denuncias</h1>
+<style>
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: #191D33;
+        color: #FFFFFF;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* ================== HEADER ================== */
+    header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 24px;
+        background-color: #191D33;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .logo-container img.favicon {
+        height: 40px;
+        width: auto;
+        margin-right: 12px;
+    }
+
+    .saci-logo {
+        height: 48px;
+        width: auto;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+    }
+
+    nav.main-nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .inicio-button {
+        background-color: transparent;
+        border-radius: 9999px;
+        padding: 10px 24px;
+        font-weight: 700;
+        font-size: 15px;
+        color: #E5A74E;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .inicio-button:hover {
+        color: #FFFFFF;
+        transform: translateY(-1px);
+    }
+
+    .about-button {
+        background-color: transparent;
+        border-radius: 9999px;
+        padding: 10px 20px;
+        font-weight: 700;
+        font-size: 15px;
+        color: #FFFFFF;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .about-button:hover {
+        color: #ECB13A;
+        transform: translateY(-1px);
+    }
+
+    .contact-button {
+        background-color: #ECB13A;
+        border-radius: 9999px;
+        padding: 10px 20px;
+        font-weight: 700;
+        font-size: 15px;
+        color: #FFFFFF;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 5px rgba(236, 177, 58, 0.3);
+    }
+
+    .contact-button:hover {
+        background-color: #dca02a;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(236, 177, 58, 0.4);
+    }
+
+    .user-profile {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .profile-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: border-color 0.2s ease;
+    }
+
+    .profile-button:hover .profile-image {
+        border-color: rgba(236, 177, 58, 0.5);
+    }
+
+    .profile-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: #1E2240;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        width: 180px;
+        z-index: 10;
+        display: none;
+        margin-top: 8px;
+        padding: 8px 0;
+        border: 1px solid #2e325a;
+    }
+
+    .profile-dropdown.show {
+        display: block;
+        animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dropdown-item {
+        display: block;
+        padding: 12px 16px;
+        color: white;
+        text-decoration: none;
+        transition: background-color 0.2s;
+        font-size: 14px;
+    }
+
+    .dropdown-item:hover {
+        background-color: #2e325a;
+    }
+
+    .profile-button {
+        display: flex;
+        align-items: center;
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 0;
+        gap: 8px;
+    }
+
+    .profile-button .arrow {
+        margin-left: 5px;
+        font-size: 12px;
+        transition: transform 0.2s ease;
+    }
+
+    .profile-button:hover .arrow {
+        transform: translateY(2px);
+    }
+
+    /* ================== MAIN CONTENT ================== */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 32px 24px;
+    }
+
+    h1 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 24px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #2e325a;
+    }
+
+    .table-container {
+        background-color: #1E2240;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background-color: #232644;
+    }
+
+    th {
+        text-align: left;
+        padding: 16px;
+        font-weight: 600;
+        font-size: 15px;
+    }
+
+    td {
+        padding: 16px;
+        border-top: 1px solid #2e325a;
+        vertical-align: middle;
+    }
+
+    tbody tr {
+        transition: background-color 0.2s;
+    }
+
+    tbody tr:hover {
+        background-color: #252849;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 9999px;
+        font-size: 13px;
+        font-weight: 500;
+        background-color: rgba(236, 177, 58, 0.15);
+        color: #ECB13A;
+    }
+
+    .btn {
+        display: inline-block;
+        font-weight: 500;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: 8px 16px;
+        font-size: 14px;
+        line-height: 1.5;
+        border-radius: 6px;
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background-color: #ECB13A;
+        color: white;
+        box-shadow: 0 2px 4px rgba(236, 177, 58, 0.2);
+    }
+
+    .btn-primary:hover {
+        background-color: #dca02a;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(236, 177, 58, 0.3);
+    }
+
+    .alert {
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .alert-info {
+        background-color: #1E2240;
+        color: white;
+        border-left: 4px solid #ECB13A;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        header {
+            padding: 16px;
+        }
+
+        .header-right {
+            gap: 16px;
+        }
+
+        nav.main-nav {
+            display: none;
+        }
+
+        .container {
+            padding: 24px 16px;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        th, td {
+            padding: 12px;
+        }
+    }
+
+    /* For mobile scrolling on table */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+</style>
+
+<header>
+    <div class="logo-container" onclick="window.location.href='{{ path('home_index') }}'">
+        <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon"/>
+        <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="saci-logo"/>
+    </div>
+    <div class="header-right">
+        <nav class="main-nav">
+            <a href="{{ path('auth_login') }}" class="inicio-button">INICIO</a>
+            <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
+            <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
+        </nav>
+        <div class="user-profile">
+            <button class="profile-button" id="profileButton">
+                <img src="{{ asset('images/logo-perfil.png') }}" alt="Perfil" class="profile-image"/>
+                <span class="arrow">▼</span>
+            </button>
+            <div class="profile-dropdown" id="profileDropdown">
+                <a href="{{ path('profile_view') }}" class="dropdown-item">Mi perfil</a>
+                <a href="{{ path('auth_logout') }}" class="dropdown-item">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <h1>Mis denuncias</h1>
 
     {% if app.user.denuncias|length > 0 %}
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Descripción</th>
-                    <th>Fecha y Hora</th>
-                    <th>Ubicación</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for denuncia in app.user.denuncias %}
-                    {% if denuncia.usuario.id == app.user.id %}
+        <div class="table-container">
+            <div class="table-responsive">
+                <table>
+                    <thead>
                         <tr>
-                            <td>{{ denuncia.id }}</td>
-                            <td>{{ denuncia.descripcion }}</td>
-                            <td>{{ denuncia.fechaHora|date('d-m-Y H:i:s') }}</td>
-                            <td>
-                                {% if denuncia.ubicacion %}
-                                    {{ denuncia.ubicacion.calle ~ ', ' ~ denuncia.ubicacion.numero }}
-                                {% else %}
-                                    <span class="text-muted">Sin ubicación</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a href="{{ path('emergency_show', {id: denuncia.id}) }}" class="btn btn-primary" style="color: white; font-weight: bold; text-decoration: none;">Ver</a>
-                            </td>
+                            <th>ID</th>
+                            <th>Descripción</th>
+                            <th>Fecha y Hora</th>
+                            <th>Ubicación</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
                         </tr>
-                    {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
+                    </thead>
+                    <tbody>
+                        {% for denuncia in app.user.denuncias %}
+                            {% if denuncia.usuario.id == app.user.id %}
+                                <tr>
+                                    <td>{{ denuncia.id }}</td>
+                                    <td>{{ denuncia.descripcion }}</td>
+                                    <td>{{ denuncia.fechaHora|date('d-m-Y H:i:s') }}</td>
+                                    <td>
+                                        {% if denuncia.ubicacion %}
+                                            {{ denuncia.ubicacion.calle ~ ', ' ~ denuncia.ubicacion.numero }}
+                                        {% else %}
+                                            <span style="color: #9ca3af;">Sin ubicación</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="status-badge">{{ denuncia.estado.nombre }}</span>
+                                    </td>                            
+                                    <td>
+                                        <a href="{{ path('emergency_show', {id: denuncia.id}) }}" class="btn btn-primary">Ver</a>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     {% else %}
         <div class="alert alert-info">
-            No has registrado ninguna denuncia.
+            <p style="font-size: 16px; margin: 0;">No has registrado ninguna denuncia.</p>
         </div>
     {% endif %}
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileButton = document.getElementById('profileButton');
+        const profileDropdown = document.getElementById('profileDropdown');
+        
+        if (profileButton && profileDropdown) {
+            profileButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+            
+            document.addEventListener('click', function() {
+                profileDropdown.classList.remove('show');
+            });
+            
+            // Prevent dropdown from closing when clicking inside it
+            profileDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+    });
+</script> 
 {% endblock %}

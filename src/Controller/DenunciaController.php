@@ -33,16 +33,9 @@ class DenunciaController extends AbstractController
      * Listado de emergencias (index).
      */
     #[Route('/', name: 'emergency_index', methods: ['GET'])]
-    public function index(Request $request): Response
+    public function index(): Response
     {
-        $estado = $request->query->get('estado');
-        $criteria = ['usuario' => $this->getUser()];
-
-        if ($estado) {
-            $criteria['estado'] = $estado;
-        }
-
-        $emergencies = $this->repository->findBy($criteria, ['fechaHora' => 'DESC']);
+        $emergencies = $this->repository->findBy([], ['fechaHora' => 'DESC']);
 
         return $this->render('emergency/index.html.twig', [
             'title'       => 'Listado de Emergencias',
