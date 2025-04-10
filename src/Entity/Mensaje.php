@@ -27,6 +27,10 @@ class Mensaje
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $fechaEnvio;
 
+    #[ORM\ManyToOne(targetEntity: Denuncia::class, inversedBy: 'mensajes')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Denuncia $denuncia = null;
+
     // Getters y Setters
 
     public function getId(): ?int
@@ -81,4 +85,17 @@ class Mensaje
 
         return $this;
     }
+
+    public function getDenuncia(): ?Denuncia
+    {
+        return $this->denuncia;
+    }
+
+    public function setDenuncia(?Denuncia $denuncia): self
+    {
+        $this->denuncia = $denuncia;
+
+        return $this;
+    }
 }
+

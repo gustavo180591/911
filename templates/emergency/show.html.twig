@@ -413,24 +413,28 @@
     }
 
     /* Margin utilities */
-    .mt-2 {
-        margin-top: 8px;
+    .mt-2 { margin-top: 8px; }
+    .mt-3 { margin-top: 16px; }
+    .mt-4 { margin-top: 24px; }
+    .mb-3 { margin-bottom: 16px; }
+    .mb-4 { margin-bottom: 24px; }
+
+    /* ================== COMMENT SECTION (NUEVA) ================== */
+    .comment-section {
+        margin-top: 32px;
+        padding: 16px;
+        background-color: #232644;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
-    .mt-3 {
-        margin-top: 16px;
+    .comment-textarea {
+        min-height: 60px;
+        max-height: 120px;
     }
 
-    .mt-4 {
-        margin-top: 24px;
-    }
-
-    .mb-3 {
-        margin-bottom: 16px;
-    }
-
-    .mb-4 {
-        margin-bottom: 24px;
+    .comment-label {
+        color: #ECB13A;
     }
 
     /* Responsive adjustments */
@@ -448,11 +452,12 @@
         }
 
         .container {
-            padding: 24px 16px;
+            padding: 30px 16px;
         }
 
         h1 {
-            font-size: 24px;
+            font-size: 26px;
+            margin-bottom: 30px;
         }
 
         .detail-table th {
@@ -564,7 +569,9 @@
         <form method="post" action="{{ path('emergency_accept', { id: emergency.id }) }}">
             <input type="hidden" name="_token" value="{{ csrf_token('accept_emergency_' ~ emergency.id) }}">
             <button type="submit" class="btn btn-success">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check" style="margin-right: 6px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check" style="margin-right: 6px;">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
                 Aceptar
             </button>
         </form>
@@ -572,32 +579,48 @@
         <form method="post" action="{{ path('emergency_reject', { id: emergency.id }) }}">
             <input type="hidden" name="_token" value="{{ csrf_token('reject_emergency_' ~ emergency.id) }}">
             <button type="submit" class="btn btn-danger">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x" style="margin-right: 6px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x" style="margin-right: 6px;">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
                 Rechazar
             </button>
         </form>
 
         <a href="{{ path('emergency_index') }}" class="btn btn-secondary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list" style="margin-right: 6px;"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list" style="margin-right: 6px;">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
             Volver al Listado
         </a>
     </div>
-
+    {# Sección para agregar comentario solo si la emergencia está aceptada #}
     {% if emergency.estado.nombre == 'Aceptado' %}
         <hr>
-        <h3>Agregar Comentario</h3>
-        {{ form_start(commentForm, {'action': path('report_create_from_emergency', {'id': emergency.id})}) }}
-            <div class="form-group">
-                {{ form_label(commentForm.descripcion, 'Comentario', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(commentForm.descripcion, {'attr': {'class': 'form-control', 'placeholder': 'Escribe tu comentario aquí...'}}) }}
-                {{ form_errors(commentForm.descripcion) }}
-            </div>
-            <button type="submit" class="btn btn-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send" style="margin-right: 6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                Enviar Comentario
-            </button>
-        {{ form_end(commentForm) }}
+        <div class="comment-section">
+            <h3>Agregar Comentario</h3>
+            {{ form_start(commentForm, {'action': path('report_create_from_emergency', {'id': emergency.id})}) }}
+                <div class="form-group">
+                    {{ form_label(commentForm.descripcion, 'Comentario', {'label_attr': {'class': 'form-label comment-label'}}) }}
+                    {{ form_widget(commentForm.descripcion, {'attr': {'class': 'form-control comment-textarea', 'placeholder': 'Escribe tu comentario aquí...', 'rows': 3}}) }}
+                    {{ form_errors(commentForm.descripcion) }}
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send" style="margin-right: 6px;">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                    Enviar Comentario
+                </button>
+            {{ form_end(commentForm) }}
+        </div>
     {% endif %}
+
 </div>
 
 <script>
@@ -615,7 +638,6 @@
                 profileDropdown.classList.remove('show');
             });
             
-            // Prevent dropdown from closing when clicking inside it
             profileDropdown.addEventListener('click', function(e) {
                 e.stopPropagation();
             });
