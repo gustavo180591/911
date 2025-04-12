@@ -10,7 +10,8 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
+        <link rel="manifest" href="/manifest.json">
+        <meta name="theme-color" content="#0d6efd">
         {# Aquí se pueden añadir más CSS propios o de librerías #}
         {% block stylesheets %}
             <style>
@@ -34,5 +35,12 @@
             {% include 'partials/_footer.html.twig' %}
         #}
     </body>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+            .then(() => console.log('Service Worker registrado'))
+            .catch(error => console.error('Error al registrar Service Worker:', error));
+        }
+        </script>
 </html>
 
