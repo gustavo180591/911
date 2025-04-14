@@ -1,8 +1,5 @@
-self.addEventListener("install", (event) => {
-    console.log("Service Worker instalado");
-  });
-  
-  self.addEventListener("fetch", (event) => {
-    event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
-  });
-  
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+    .then(() => console.log('Service Worker registrado con éxito'))
+    .catch((error) => console.error('Error registrando el Service Worker:', error));
+}

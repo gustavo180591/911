@@ -3,16 +3,21 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> {# ✅ OPTIMIZACIÓN MÓVIL #}
         <title>{% block title %}SACI{% endblock %}</title>
-        <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
 
-        {# Ejemplo de fuente o iconos #}
+        <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+        
+        {# Iconos y librerías externas #}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+        {# PWA: Manifest y tema #}
         <link rel="manifest" href="/manifest.json">
         <meta name="theme-color" content="#0d6efd">
-        {# Aquí se pueden añadir más CSS propios o de librerías #}
+
+        {# Estilos personalizados #}
         {% block stylesheets %}
             <style>
                 body {
@@ -21,26 +26,24 @@
             </style>
         {% endblock %}
 
-        {# Scripts de JavaScript, si los necesitas #}
+        {# JavaScript e importmap #}
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
 
     <body>
-        {# Bloque para el contenido principal de la página #}
         {% block body %}{% endblock %}
 
-        {# Si tuvieras un footer, podrías incluirlo así:
-            {% include 'partials/_footer.html.twig' %}
-        #}
-    </body>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js')
-            .then(() => console.log('Service Worker registrado'))
-            .catch(error => console.error('Error al registrar Service Worker:', error));
-        }
+        {# PWA: Registro del Service Worker #}
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/service-worker.js')
+                        .then(reg => console.log('✅ Service Worker registrado:', reg.scope))
+                        .catch(err => console.error('❌ Error al registrar el Service Worker:', err));
+                });
+            }
         </script>
+    </body>
 </html>
-
