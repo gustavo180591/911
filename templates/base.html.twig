@@ -14,7 +14,7 @@
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
         {# PWA: Manifest y tema #}
-        <link rel="manifest" href="/manifest.json">
+        <link rel="manifest" href="{{ asset('manifest.json')}}">
         <meta name="theme-color" content="#0d6efd">
 
         {# Estilos personalizados #}
@@ -34,16 +34,12 @@
 
     <body>
         {% block body %}{% endblock %}
-
         {# PWA: Registro del Service Worker #}
         <script>
             if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/service-worker.js')
-                        .then(reg => console.log('✅ Service Worker registrado:', reg.scope))
-                        .catch(err => console.error('❌ Error al registrar el Service Worker:', err));
-                });
-            }
+    navigator.serviceWorker.register('/service-worker.js')
+    .then(() => console.log('Service Worker registrado con éxito'))
+    .catch((error) => console.error('Error registrando el Service Worker:', error));
         </script>
     </body>
 </html>
