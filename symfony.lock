@@ -40,6 +40,9 @@
             "tests/bootstrap.php"
         ]
     },
+    "spomky-labs/pwa-bundle": {
+        "version": "1.2.5"
+    },
     "symfony/asset-mapper": {
         "version": "7.2",
         "recipe": {
