@@ -2,11 +2,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-    {{pwa()}}
+     {{ pwa() }}
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1"> {# ✅ OPTIMIZACIÓN MÓVIL #}
+        <meta name="viewport" content="width=device-width, initial-scale=1"> {# OPTIMIZACIÓN MÓVIL #}
         <title>{% block title %}SACI{% endblock %}</title>
-
         <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
         
         {# Iconos y librerías externas #}
@@ -15,7 +14,6 @@
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
         {# PWA: Manifest y tema #}
-        <link rel="manifest" href="{{ asset('manifest.json')}}">
         <meta name="theme-color" content="#0d6efd">
 
         {# Estilos personalizados #}
@@ -44,3 +42,4 @@
         </script>
     </body>
 </html>
+

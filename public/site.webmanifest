@@ -1,0 +1,49 @@
+{
+    "categories": [],
+    "name": "Mi Súper‑App",
+    "short_name": "Super",
+    "start_url": "/",
+    "enabled": true,
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "display_override": [],
+    "theme_color": "#0d6efd",
+    "scope_extensions": [],
+    "icons": [
+        {
+            "src": "/assets/icon-192x192-4Lo7b5N.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/assets/icon-512x512-NLxhnMS.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "home-mobile.png",
+            "sizes": "540x960",
+            "form_factor": "narrow",
+            "label": "Pantalla principal"
+        },
+        {
+            "src": "home-desktop.png",
+            "sizes": "1280x720",
+            "form_factor": "wide",
+            "label": "Vista escritorio"
+        }
+    ],
+    "file_handlers": [],
+    "protocol_handlers": [],
+    "related_applications": [],
+    "prefer_related_applications": false,
+    "shortcuts": [],
+    "widgets": [],
+    "serviceworker": {
+        "src": "/sw.js",
+        "scope": "/",
+        "use_cache": true
+    }
+}

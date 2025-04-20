@@ -1,34 +1,20 @@
 {
     "name": "SISTEMA DE ALERTA CIUDADANA INTEGRADA",
     "short_name": "SACI",
-    "start_url": "/",
-    "display": "standalone",
-    "icons": [
-      {
-        "src": "/assets/icon-512x512.png",
-        "sizes": "512x512",
-        "type": "image/png"
-      },
-      {
-        "src": "/assets/icon-192x192.png",
-        "sizes": "192x192",
-        "type": "image/png"
-      }
-    ], "screenshots": [
+    "start_url": "/index.php",
+  "display": "standalone",
+  "icons": [
     {
-      "src": "/assets/icon-192x192.png",
-      "sizes": "375x667",
+      "src": "/icon-192x192.png",
       "type": "image/png",
-      "label": "Vista Móvil",
-      "form_factor": "narrow"  
+      "sizes": "192x192"
     },
     {
-      "src": "/assets/icon-192x192.png",
-      "sizes": "1280x720",
+      "src": "/icon-512x512.png",
       "type": "image/png",
-      "label": "Vista de Escritorio",
-      "form_factor": "wide"
+      "sizes": "512x512"
     }
-  ]
-  }
+  ],
+  "prefer_related_applications": false
+}
   

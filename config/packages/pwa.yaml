@@ -1,0 +1,32 @@
+# config/packages/pwa.yaml
+pwa:
+  manifest:
+    enabled: true            # ← “The manifest must be enabled”
+    name: "Mi Súper‑App"
+    short_name: "Super"      # ← nombre corto
+    start_url: "/"           # ← URL de arranque
+    display: "standalone"    # ← modo de visualización
+    background_color: "#ffffff"
+    screenshots:
+      - src: "home-mobile.png"
+        format: "image/png"
+        width: 540
+        height: 960
+        form_factor: narrow          # móvil
+        label: "Pantalla principal"
+      - src: "home-desktop.png"
+        format: "image/png"
+        width: 1280
+        height: 720
+        form_factor: wide            # desktop
+        label: "Vista escritorio"       # desktop
+    theme_color: "#0d6efd"
+    icons:                   # ← al menos un icono
+      - src: "icon-192x192.png"
+        sizes: [192]
+      - src: "icon-512x512.png"
+        sizes: [512]
+    
+  serviceworker:           # ← ACTIVA esta sección
+    enabled: true
+    src: "sw.js"           # archivo que colocarás en /assets/sw.js
