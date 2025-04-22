@@ -329,19 +329,20 @@
             }
 
             .nav-menu {
-                display: none;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                background-color: rgba(0, 0, 0, 0.95);
-                z-index: 1000;
-                padding: 30px;
-                transition: all 0.3s ease-in-out;
+            display: none;
+            flex-direction: column;
+            justify-content: center;   /* centra verticalmente */
+            align-items: center;       /* centra horizontalmente */
+            text-align: center;        /* asegura que el texto quede centrado */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            padding: 0;                /* elimina padding extra */
+            transition: all 0.3s ease-in-out;
             }
 
             .nav-menu.active {
@@ -349,20 +350,18 @@
             }
 
             .nav-link {
-                font-size: 20px;
-                padding: 15px 0;
-                color: #FFFFFF;
-                width: 100%;
-                text-align: center;
-                margin: 8px 0;
+            width: 100%;               /* ocupa todo el ancho */
+            padding: 15px 0;           /* un poco más de espacio vertical */
+            margin: 8px 0;             /* separa cada ítem */
+            font-size: 20px;
+            text-align: center;
             }
 
             .nav-link.contacto {
-                background-color: transparent;
-                border: 2px solid #E5A74E;
-                border-radius: 9999px;
-                padding: 12px 30px;
-                margin-top: 20px;
+            border: 2px solid #E5A74E;
+            padding: 12px 30px;
+            margin-top: 20px;
+            width: auto;               /* para que no se estire demasiado */
             }
 
             .nav-link.contacto:hover {
