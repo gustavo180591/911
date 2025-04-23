@@ -252,6 +252,103 @@
         border-radius: 8px;
         margin-bottom: 1rem;
     }
+     /* Botón hamburguesa */
+        .nav-toggle {
+            display: none;
+            font-size: 24px;
+            color: #FFFFFF;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 1002;
+            transition: all 0.3s ease;
+        }
+
+        /* Menú de navegación */
+        nav#nav-menu {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        nav#nav-menu.active {
+            display: flex;
+        }
+
+        .about-button,
+        .contact-button {
+            display: inline-block;
+            padding: 10px 30px;
+            font-weight: 700;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .about-button {
+            background-color: transparent;
+            color: #FFFFFF;
+            border-radius: 9999px;
+        }
+        .about-button:hover {
+            color: #ECB13A;
+        }
+        .contact-button {
+            background-color: #ECB13A;
+            color: #FFFFFF;
+            border-radius: 9999px;
+        }
+        .contact-button:hover {
+            background-color: #d9a035;
+        }
+
+        /* Responsive: mobile */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+            .nav-toggle {
+                display: block;
+            }
+            nav#nav-menu {
+                display: none;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background-color: rgba(0, 0, 0, 0.95);
+                z-index: 1000;
+                padding: 0;
+                transition: all 0.3s ease-in-out;
+            }
+            nav#nav-menu.active {
+                display: flex;
+            }
+            .about-button,
+            .contact-button {
+                width: 100%;
+                padding: 15px 0;
+                margin: 8px 0;
+                font-size: 20px;
+            }
+            .contact-button {
+                border: 2px solid #ECB13A;
+                margin-top: 20px;
+                width: auto;
+            }
+            .inicio-button{
+            color: #E5A74E;
+        }
+
+            .inicio-button:hover {
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+        }
 </style>
 
 <header>
@@ -260,7 +357,8 @@
         <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="saci-logo"/>
     </div>
     <div class="header-right">
-        <nav class="main-nav">
+        <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú">☰</button>
+        <nav id="nav-menu">
             <a href="{{ path('auth_login') }}" class="inicio-button">INICIO</a>
             <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
             <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
@@ -505,6 +603,49 @@
       if (calleField)  calleField.addEventListener('change', onAddressChange);
       if (numeroField) numeroField.addEventListener('change', onAddressChange);
     }
-  }
+  };
+  document.addEventListener('DOMContentLoaded', () => {
+            // Toggle del menú hamburguesa
+            const navToggle = document.getElementById('nav-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            
+            navToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                navToggle.innerHTML = navMenu.classList.contains('active') ? '✕' : '☰';
+            });
+            
+            // Cerrar menú al hacer clic en un enlace
+            const links = document.querySelectorAll('#nav-menu a');
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    navToggle.innerHTML = '☰';
+                });
+            });
+            
+            // Efecto de scroll en el header
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Toggle de visibilidad de contraseña
+            const passwordField = document.getElementById('password');
+            const togglePasswordIcon = document.getElementById('togglePassword');
+            togglePasswordIcon.addEventListener('click', () => {
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    togglePasswordIcon.classList.replace('fa-eye', 'fa-eye-slash');
+                } else {
+                    passwordField.type = 'password';
+                    togglePasswordIcon.classList.replace('fa-eye-slash', 'fa-eye');
+                }
+            });
+        });
+  
 </script>
 {% endblock %}
