@@ -21,6 +21,8 @@ security:
                 check_path: auth_login
                 default_target_path: home_index # Ruta donde redirigir tras login exitoso
                 enable_csrf: true
+                csrf_parameter: _csrf_token        # nombre del campo
+                csrf_token_id: authenticate  
 
             logout:
                 path: auth_logout

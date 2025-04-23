@@ -385,144 +385,126 @@
 </div>
 
 <script>
-    // Manejo del dropdown del perfil
-    document.addEventListener('DOMContentLoaded', function() {
-        const profileButton = document.getElementById('profileButton');
-        const profileDropdown = document.getElementById('profileDropdown');
-        
-        if (profileButton && profileDropdown) {
-            profileButton.addEventListener('click', function(e) {
-                e.stopPropagation();
-                profileDropdown.classList.toggle('show');
-            });
-            document.addEventListener('click', function() {
-                profileDropdown.classList.remove('show');
-            });
-        }
-        
-        // Manejo de evidencia
-        const evidenceUploadContainer = document.getElementById('evidence-upload-container');
-        const addEvidenciaBtn = document.getElementById('add-evidencia-btn');
-        const evidenciasList = document.getElementById('evidencias-list');
-        
-        if (evidenceUploadContainer && evidenciasList) {
-            evidenceUploadContainer.addEventListener('click', function() {
-                if (addEvidenciaBtn) {
-                    addEvidenciaBtn.click();
-                } else {
-                    const prototype = evidenciasList.dataset.prototype;
-                    const index = evidenciasList.children.length;
-                    const newForm = prototype.replace(/_name_/g, index);
-                    const newFormLi = document.createElement('li');
-                    newFormLi.innerHTML = newForm;
-                    evidenciasList.appendChild(newFormLi);
-                    const fileInput = newFormLi.querySelector('input[type="file"]');
-                    if (fileInput) {
-                        fileInput.click();
-                    }
-                }
-            });
-        }
-    });
+  document.addEventListener('turbo:load', initPage);
+  document.addEventListener('DOMContentLoaded', initPage);
 
-    // Mapa y geocodificación
-    document.addEventListener('turbo:load', function() {
-        const mapElement = document.getElementById('map');
-        if (!mapElement) return;
-        if (mapElement._leaflet_id) {
-            mapElement._leaflet_id = null;
+  function initPage() {
+    // ——— Dropdown de perfil ———
+    const profileButton   = document.getElementById('profileButton');
+    const profileDropdown = document.getElementById('profileDropdown');
+    if (profileButton && profileDropdown) {
+      profileButton.addEventListener('click', e => {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('show');
+      });
+      document.addEventListener('click', () => {
+        profileDropdown.classList.remove('show');
+      });
+    }
+
+    // ——— Upload de evidencia ———
+    const uploadContainer  = document.getElementById('evidence-upload-container');
+    const evidenciasList   = document.getElementById('evidencias-list');
+    if (uploadContainer && evidenciasList) {
+      uploadContainer.addEventListener('click', () => {
+        const prototype = evidenciasList.dataset.prototype;
+        const index     = evidenciasList.children.length;
+        const newForm   = prototype.replace(/_name_/g, index);
+        const li        = document.createElement('li');
+        li.innerHTML    = newForm;
+        evidenciasList.appendChild(li);
+        const fileInput = li.querySelector('input[type="file"]');
+        if (fileInput) fileInput.click();
+      });
+    }
+
+    // ——— Mapa y geocodificación ———
+    const mapEl = document.getElementById('map');
+    if (mapEl) {
+      // Reset Leaflet cuando Turbo vuelve a montar la sección
+      if (mapEl._leaflet_id) mapEl._leaflet_id = null;
+
+      const initialCoords = [-27.362778, -55.900555];
+      window.map = L.map(mapEl).setView(initialCoords, 10);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: 'OpenStreetMap contributors'
+      }).addTo(window.map);
+
+      const redIcon = L.icon({
+        iconUrl: '/images/marker-icon.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34]
+      });
+      let marker = L.marker(initialCoords, { draggable: true, icon: redIcon }).addTo(window.map);
+
+      // Actualiza el campo coords
+      function updateCoords(lat, lng) {
+        const field = document.getElementById('{{ form.ubicacion.coordenadas.vars.id }}');
+        if (field) field.value = lat + ',' + lng;
+      }
+
+      // Reverse geocode para calle y número
+      async function reverseGeocode(lat, lng) {
+        try {
+          const res  = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
+          const data = await res.json();
+          if (data.address) {
+            const road  = data.address.road || '';
+            const number = data.address.house_number || '';
+            const calleField   = document.getElementById('{{ form.ubicacion.calle.vars.id }}');
+            const numeroField  = document.getElementById('{{ form.ubicacion.numero.vars.id }}');
+            if (calleField)  calleField.value  = road;
+            if (numeroField) numeroField.value = number;
+          }
+        } catch (err) {
+          console.error('Error en geocodificación inversa:', err);
         }
-        const initialCoords = [-27.362778, -55.900555];
-        window.map = L.map(mapElement).setView(initialCoords, 10);
-        L.tileLayer(`https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`, {
-            maxZoom: 19,
-            attribution: '  OpenStreetMap contributors'
-        }).addTo(window.map);
-        const redIcon = L.icon({
-            iconUrl: '/images/marker-icon.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34]
-        });
-        const marker = L.marker(initialCoords, {
-            draggable: true,
-            icon: redIcon
-        }).addTo(window.map);
-        window.map.on('click', (e) => {
-            const { lat, lng } = e.latlng;
-            placeMarker(marker, lat, lng);
-            reverseGeocode(lat, lng);
-        });
-        marker.on('moveend', (e) => {
-            const { lat, lng } = e.target.getLatLng();
-            updateCoords(lat, lng);
-            reverseGeocode(lat, lng);
-        });
-        function placeMarker(marker, lat, lng) {
-            marker.setLatLng([lat, lng]).openPopup();
-            updateCoords(lat, lng);
-        }
-        function updateCoords(lat, lng) {
-            const coordsField = document.getElementById('{{ form.ubicacion.coordenadas.vars.id }}');
-            if (coordsField) {
-                coordsField.value = `${lat},${lng}`;
-            }
-        }
-        async function reverseGeocode(lat, lng) {
-            try {
-                const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`;
-                const response = await fetch(url);
-                const data = await response.json();
-                if (data.address) {
-                    const road = data.address.road || '';
-                    const houseNumber = data.address.house_number || '';
-                    const calleField = document.getElementById('{{ form.ubicacion.calle.vars.id }}');
-                    const numeroField = document.getElementById('{{ form.ubicacion.numero.vars.id }}');
-                    if (calleField) calleField.value = road;
-                    if (numeroField) numeroField.value = houseNumber;
-                }
-            } catch (error) {
-                console.error('Error en geocodificación inversa:', error);
-            }
-        }
-        async function onAddressChange() {
-            const calleField = document.getElementById('{{ form.ubicacion.calle.vars.id }}');
-            const numeroField = document.getElementById('{{ form.ubicacion.numero.vars.id }}');
-            if (!calleField || !numeroField) return;
-            const calle = calleField.value;
-            const numero = numeroField.value;
-            if (!calle && !numero) return;
-            const address = `${calle} ${numero}, Misiones`;
-            try {
-                const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(address)}`;
-                const response = await fetch(url);
-                const data = await response.json();
-                if (data.length > 0) {
-                    const { lat, lon } = data[0];
-                    placeMarker(marker, lat, lon);
-                    window.map.setView([lat, lon], 15);
-                }
-            } catch (error) {
-                console.error('Error en geocodificación directa:', error);
-            }
-        }
-        const calleField = document.getElementById('{{ form.ubicacion.calle.vars.id }}');
+      }
+
+      // Geocoding directo al cambiar input
+      async function onAddressChange() {
+        const calleField  = document.getElementById('{{ form.ubicacion.calle.vars.id }}');
         const numeroField = document.getElementById('{{ form.ubicacion.numero.vars.id }}');
-        if (calleField) calleField.addEventListener('change', onAddressChange);
-        if (numeroField) numeroField.addEventListener('change', onAddressChange);
-        const evidenciasList = document.getElementById('evidencias-list');
-        const addEvidenciaBtn = document.getElementById('add-evidencia-btn');
-        if (evidenciasList && addEvidenciaBtn) {
-            const prototype = evidenciasList.dataset.prototype;
-            let index = evidenciasList.children.length;
-            addEvidenciaBtn.addEventListener('click', function() {
-                const newForm = prototype.replace(/_name_/g, index);
-                const newFormLi = document.createElement('li');
-                newFormLi.innerHTML = newForm;
-                evidenciasList.appendChild(newFormLi);
-                index++;
-            });
+        if (!calleField || !numeroField) return;
+        const calle  = calleField.value;
+        const numero = numeroField.value;
+        if (!calle && !numero) return;
+        const address = `${calle} ${numero}, Misiones`;
+        try {
+          const res  = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(address)}`);
+          const data = await res.json();
+          if (data.length > 0) {
+            const { lat, lon } = data[0];
+            marker.setLatLng([lat, lon]).openPopup();
+            updateCoords(lat, lon);
+            window.map.setView([lat, lon], 15);
+          }
+        } catch (err) {
+          console.error('Error en geocodificación directa:', err);
         }
-    });
+      }
+
+      // Eventos del mapa
+      window.map.on('click', e => {
+        const { lat, lng } = e.latlng;
+        marker.setLatLng([lat, lng]).openPopup();
+        updateCoords(lat, lng);
+        reverseGeocode(lat, lng);
+      });
+      marker.on('moveend', () => {
+        const { lat, lng } = marker.getLatLng();
+        updateCoords(lat, lng);
+        reverseGeocode(lat, lng);
+      });
+
+      // Atacha listeners a los inputs de dirección
+      const calleField  = document.getElementById('{{ form.ubicacion.calle.vars.id }}');
+      const numeroField = document.getElementById('{{ form.ubicacion.numero.vars.id }}');
+      if (calleField)  calleField.addEventListener('change', onAddressChange);
+      if (numeroField) numeroField.addEventListener('change', onAddressChange);
+    }
+  }
 </script>
 {% endblock %}
