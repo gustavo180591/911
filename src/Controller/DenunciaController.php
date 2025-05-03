@@ -310,4 +310,42 @@ class DenunciaController extends AbstractController
         }
     }
 
+    /**
+     * Verificar si existe un usuario por su número de teléfono.
+     */
+    #[Route('/api/check-user/{telefono}', name: 'emergency_api_check_user', methods: ['GET'])]
+    public function checkUser(string $telefono, EntityManagerInterface $entityManager): Response
+    {
+        try {
+            $userRepository = $entityManager->getRepository(User::class);
+            $usuario = $userRepository->findOneBy(['telefono' => $telefono]);
+
+            if (!$usuario) {
+                return $this->json([
+                    'status' => 'error',
+                    'message' => 'Usuario no encontrado',
+                    'exists' => false
+                ], Response::HTTP_NOT_FOUND);
+            }
+
+            return $this->json([
+                'status' => 'success',
+                'message' => 'Usuario encontrado',
+                'exists' => true,
+                'user' => [
+                    'id' => $usuario->getId(),
+                    'nombre' => $usuario->getNombre(),
+                    'apellido' => $usuario->getApellido(),
+                    'email' => $usuario->getEmail()
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return $this->json([
+                'status' => 'error',
+                'message' => 'Error al buscar el usuario: ' . $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

@@ -568,13 +568,13 @@
     <div class="button-group">
         {% if is_granted('ROLE_ADMIN') %}
             <form action="{{ path('emergency_accept', {'id': emergency.id}) }}" method="post" style="display: inline;">
-                <input type="hidden" name="_token" value="{{ csrf_token('accept_emergency_' ~ emergency.id) }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('accept_emergency_' ~ emergency.id) }}">
                 <button type="submit" class="btn btn-success">Aceptar</button>
-            </form>
+        </form>
             <form action="{{ path('emergency_reject', {'id': emergency.id}) }}" method="post" style="display: inline;">
-                <input type="hidden" name="_token" value="{{ csrf_token('reject_emergency_' ~ emergency.id) }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('reject_emergency_' ~ emergency.id) }}">
                 <button type="submit" class="btn btn-danger">Rechazar</button>
-            </form>
+        </form>
         {% endif %}
         <a href="{{ path('emergency_index') }}" class="btn btn-primary">Volver al listado</a>
     </div>
