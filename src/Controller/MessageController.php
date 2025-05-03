@@ -26,8 +26,13 @@ class MessageController extends AbstractController
     #[Route('/', name: 'message_index', methods: ['GET'])]
     public function index(): Response
     {
-        // Obtener los mensajes enviados o recibidos por el usuario autenticado
-        $messages = $this->repository->findByUser($this->getUser());
+        // Si es admin, mostrar todos los mensajes
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $messages = $this->repository->findAll();
+        } else {
+            // Si es usuario normal, mostrar solo sus mensajes
+            $messages = $this->repository->findByUser($this->getUser());
+        }
 
         return $this->render('message/index.html.twig', [
             'title' => 'Mis Mensajes',
@@ -63,15 +68,20 @@ class MessageController extends AbstractController
     #[Route('/view/{id}', name: 'message_view', methods: ['GET'])]
     public function view(int $id): Response
     {
-        // Obtener un mensaje específico relacionado con el usuario autenticado
-        $message = $this->repository->findOneByIdAndUser($id, $this->getUser());
+        // Si es admin, puede ver cualquier mensaje
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $message = $this->repository->find($id);
+        } else {
+            // Si es usuario normal, solo puede ver sus mensajes
+            $message = $this->repository->findOneByUser($id, $this->getUser());
+        }
 
         if (!$message) {
             throw $this->createNotFoundException('El mensaje solicitado no existe.');
         }
 
         return $this->render('message/view.html.twig', [
-            'title' => 'Detalle del Mensaje',
+            'title' => 'Detalle de Mensaje',
             'message' => $message,
         ]);
     }
@@ -79,7 +89,13 @@ class MessageController extends AbstractController
     #[Route('/delete/{id}', name: 'message_delete', methods: ['POST'])]
     public function delete(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $message = $this->repository->findOneByIdAndUser($id, $this->getUser());
+        // Si es admin, puede eliminar cualquier mensaje
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $message = $this->repository->find($id);
+        } else {
+            // Si es usuario normal, solo puede eliminar sus mensajes
+            $message = $this->repository->findOneByUser($id, $this->getUser());
+        }
 
         if (!$message) {
             throw $this->createNotFoundException('El mensaje solicitado no existe.');

@@ -36,7 +36,13 @@ class DenunciaController extends AbstractController
     #[Route('/', name: 'emergency_index', methods: ['GET'])]
     public function index(): Response
     {
-        $emergencies = $this->repository->findBy([], ['fechaHora' => 'DESC']);
+        // Si es admin, mostrar todas las emergencias
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $emergencies = $this->repository->findBy([], ['fechaHora' => 'DESC']);
+        } else {
+            // Si es usuario normal, mostrar solo sus emergencias
+            $emergencies = $this->repository->findBy(['usuario' => $this->getUser()], ['fechaHora' => 'DESC']);
+        }
 
         return $this->render('emergency/index.html.twig', [
             'title'       => 'Listado de Emergencias',
@@ -55,97 +61,79 @@ class DenunciaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Estado por defecto = "Pendiente"
-            $estadoPendiente = $entityManager->getRepository(EstadoDenuncia::class)
-                ->findOneBy(['nombre' => 'Pendiente']);
-            if (!$estadoPendiente) {
-                throw new \Exception('El estado "Pendiente" no existe en la base de datos.');
-            }
-            $denuncia->setEstado($estadoPendiente);
-
-            // Categoría por defecto = "General"
-            $categoriaPorDefecto = $entityManager->getRepository(CategoriaDenuncia::class)
-                ->findOneBy(['nombre' => 'General']);
-            if (!$categoriaPorDefecto) {
-                throw new \Exception('La categoría "General" no existe en la base de datos.');
-            }
-            $denuncia->setCategoria($categoriaPorDefecto);
-
-            // Usuario actual
             $denuncia->setUsuario($this->getUser());
+            $denuncia->setFechaHora(new \DateTime());
 
-            // Fecha y hora actuales
-            $fechaHora = new \DateTimeImmutable('now', new \DateTimeZone('America/Argentina/Buenos_Aires'));
-            $denuncia->setFechaHora($fechaHora);
-
-            // Persistir ubicación (si la hay) y la denuncia
-            if ($denuncia->getUbicacion()) {
-                $entityManager->persist($denuncia->getUbicacion());
-            }
             $entityManager->persist($denuncia);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Emergencia creada exitosamente.');
+            $this->addFlash('success', 'Emergencia registrada exitosamente.');
 
             return $this->redirectToRoute('emergency_index');
         }
 
         return $this->render('emergency/create.html.twig', [
             'title' => 'Registrar Emergencia',
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
     /**
-     * Ver detalle de una emergencia.
+     * Ver detalles de una emergencia.
      */
     #[Route('/{id}', name: 'emergency_show', methods: ['GET'])]
-    public function show(Denuncia $denuncia, Request $request): Response
+    public function show(Denuncia $denuncia): Response
     {
-        $commentForm = null;
-        if ($denuncia->getEstado() && $denuncia->getEstado()->getNombre() === 'Aceptado') {
-            $report = new Reporte();
-            $report->setDenuncia($denuncia);
-            $commentForm = $this->createForm(ReporteType::class, $report);
-            // No se hace handleRequest aquí, ya que el envío se procesará en ReportController
+        // Verificar si el usuario tiene permiso para ver esta denuncia
+        if (!$this->isGranted('ROLE_ADMIN') && $denuncia->getUsuario() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('No tienes permiso para ver esta emergencia.');
         }
+
         return $this->render('emergency/show.html.twig', [
-            'title'       => 'Detalle de Emergencia',
-            'emergency'   => $denuncia,
-            'commentForm' => $commentForm ? $commentForm->createView() : null,
+            'title' => 'Detalle de Emergencia',
+            'emergency' => $denuncia,
         ]);
     }
 
     /**
-     * Editar emergencia existente.
+     * Editar una emergencia.
      */
-    #[Route('/edit/{id}', name: 'emergency_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'emergency_edit', methods: ['GET', 'POST'])]
     public function edit(Denuncia $denuncia, Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Si quieres restringir que solo el dueño la edite, puedes comprobarlo aquí:
-        // if ($denuncia->getUsuario() !== $this->getUser()) { ... }
+        // Verificar si el usuario tiene permiso para editar esta denuncia
+        if (!$this->isGranted('ROLE_ADMIN') && $denuncia->getUsuario() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('No tienes permiso para editar esta emergencia.');
+        }
 
         $form = $this->createForm(DenunciaType::class, $denuncia);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-            $this->addFlash('success', 'Cambios guardados exitosamente.');
+
+            $this->addFlash('success', 'Emergencia actualizada exitosamente.');
+
             return $this->redirectToRoute('emergency_index');
         }
 
         return $this->render('emergency/edit.html.twig', [
             'title' => 'Editar Emergencia',
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
     /**
      * Eliminar una emergencia.
      */
-    #[Route('/delete/{id}', name: 'emergency_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'emergency_delete', methods: ['POST'])]
     public function delete(Denuncia $denuncia, Request $request, EntityManagerInterface $entityManager): Response
     {
+        // Verificar si el usuario tiene permiso para eliminar esta denuncia
+        if (!$this->isGranted('ROLE_ADMIN') && $denuncia->getUsuario() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('No tienes permiso para eliminar esta emergencia.');
+        }
+
         if ($this->isCsrfTokenValid(
             'delete_emergency' . $denuncia->getId(),
             $request->request->get('token')
@@ -168,7 +156,8 @@ class DenunciaController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         MailerInterface $mailer
-    ): Response {
+    ): Response
+    {
         if (!$this->isCsrfTokenValid(
             'accept_emergency_' . $denuncia->getId(),
             $request->request->get('_token')
@@ -209,7 +198,8 @@ class DenunciaController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         MailerInterface $mailer
-    ): Response {
+    ): Response
+    {
         if (!$this->isCsrfTokenValid(
             'reject_emergency_' . $denuncia->getId(),
             $request->request->get('_token')
@@ -232,7 +222,7 @@ class DenunciaController extends AbstractController
             ->from('notificaciones@tuweb.com')
             ->to($denuncia->getUsuario()->getEmail())
             ->subject('Denuncia Rechazada')
-            ->text('Su denuncia ha sido rechazada. Puede comunicarse con soporte para más detalles.');
+            ->text('Su denuncia ha sido rechazada. Por favor, contacte con soporte para más información.');
         $mailer->send($email);
 
         $this->addFlash('success', 'Emergencia rechazada exitosamente.');
@@ -241,79 +231,9 @@ class DenunciaController extends AbstractController
     }
 
     /**
-     * Crear una denuncia desde un endpoint externo.
+     * Endpoint para verificar si un usuario existe por número de teléfono.
      */
-    #[Route('/api/create', name: 'emergency_api_create', methods: ['POST'])]
-    public function apiCreate(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        try {
-            $data = json_decode($request->getContent(), true);
-            
-            if (!isset($data['descripcion']) || !isset($data['telefono'])) {
-                return $this->json([
-                    'status' => 'error',
-                    'message' => 'Se requieren descripción y teléfono'
-                ], Response::HTTP_BAD_REQUEST);
-            }
-
-            // Buscar usuario por teléfono
-            $userRepository = $entityManager->getRepository(User::class);
-            $usuario = $userRepository->findOneBy(['telefono' => $data['telefono']]);
-
-            if (!$usuario) {
-                return $this->json([
-                    'status' => 'error',
-                    'message' => 'Usuario no encontrado'
-                ], Response::HTTP_NOT_FOUND);
-            }
-
-            // Crear nueva denuncia
-            $denuncia = new Denuncia();
-            $denuncia->setDescripcion($data['descripcion']);
-            $denuncia->setUsuario($usuario);
-            
-            // Estado por defecto = "Pendiente"
-            $estadoPendiente = $entityManager->getRepository(EstadoDenuncia::class)
-                ->findOneBy(['nombre' => 'Pendiente']);
-            if (!$estadoPendiente) {
-                throw new \Exception('El estado "Pendiente" no existe en la base de datos.');
-            }
-            $denuncia->setEstado($estadoPendiente);
-
-            // Categoría por defecto = "General"
-            $categoriaPorDefecto = $entityManager->getRepository(CategoriaDenuncia::class)
-                ->findOneBy(['nombre' => 'General']);
-            if (!$categoriaPorDefecto) {
-                throw new \Exception('La categoría "General" no existe en la base de datos.');
-            }
-            $denuncia->setCategoria($categoriaPorDefecto);
-
-            // Fecha y hora actuales
-            $fechaHora = new \DateTimeImmutable('now', new \DateTimeZone('America/Argentina/Buenos_Aires'));
-            $denuncia->setFechaHora($fechaHora);
-
-            // Persistir la denuncia
-            $entityManager->persist($denuncia);
-            $entityManager->flush();
-
-            return $this->json([
-                'status' => 'success',
-                'message' => 'Denuncia creada exitosamente',
-                'denuncia_id' => $denuncia->getId()
-            ], Response::HTTP_CREATED);
-
-        } catch (\Exception $e) {
-            return $this->json([
-                'status' => 'error',
-                'message' => 'Error al crear la denuncia: ' . $e->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    /**
-     * Verificar si existe un usuario por su número de teléfono.
-     */
-    #[Route('/api/check-user/{telefono}', name: 'emergency_api_check_user', methods: ['GET'])]
+    #[Route('/check-user/{telefono}', name: 'emergency_check_user', methods: ['GET'])]
     public function checkUser(string $telefono, EntityManagerInterface $entityManager): Response
     {
         try {
@@ -347,5 +267,4 @@ class DenunciaController extends AbstractController
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
 }

@@ -26,8 +26,13 @@ class EvidenceController extends AbstractController
     #[Route('/', name: 'evidence_index', methods: ['GET'])]
     public function index(): Response
     {
-        // Obtener todas las evidencias del usuario autenticado
-        $evidences = $this->repository->findBy(['usuario' => $this->getUser()], ['fechaSubida' => 'DESC']);
+        // Si es admin, mostrar todas las evidencias
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $evidences = $this->repository->findBy([], ['fechaSubida' => 'DESC']);
+        } else {
+            // Si es usuario normal, mostrar solo sus evidencias
+            $evidences = $this->repository->findBy(['usuario' => $this->getUser()], ['fechaSubida' => 'DESC']);
+        }
 
         return $this->render('evidence/index.html.twig', [
             'title' => 'Mis Evidencias',
@@ -63,7 +68,13 @@ class EvidenceController extends AbstractController
     #[Route('/view/{id}', name: 'evidence_view', methods: ['GET'])]
     public function view(int $id): Response
     {
-        $evidence = $this->repository->findOneBy(['id' => $id, 'usuario' => $this->getUser()]);
+        // Si es admin, puede ver cualquier evidencia
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $evidence = $this->repository->find($id);
+        } else {
+            // Si es usuario normal, solo puede ver sus evidencias
+            $evidence = $this->repository->findOneBy(['id' => $id, 'usuario' => $this->getUser()]);
+        }
 
         if (!$evidence) {
             throw $this->createNotFoundException('La evidencia solicitada no existe.');
@@ -78,7 +89,13 @@ class EvidenceController extends AbstractController
     #[Route('/delete/{id}', name: 'evidence_delete', methods: ['POST'])]
     public function delete(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $evidence = $this->repository->findOneBy(['id' => $id, 'usuario' => $this->getUser()]);
+        // Si es admin, puede eliminar cualquier evidencia
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $evidence = $this->repository->find($id);
+        } else {
+            // Si es usuario normal, solo puede eliminar sus evidencias
+            $evidence = $this->repository->findOneBy(['id' => $id, 'usuario' => $this->getUser()]);
+        }
 
         if (!$evidence) {
             throw $this->createNotFoundException('La evidencia solicitada no existe.');

@@ -25,8 +25,13 @@ class NotificationController extends AbstractController
     #[Route('/', name: 'notification_index', methods: ['GET'])]
     public function index(): Response
     {
-        // Obtener todas las notificaciones del usuario autenticado
-        $notifications = $this->repository->findBy(['usuario' => $this->getUser()], ['fechaEnvio' => 'DESC']);
+        // Si es admin, mostrar todas las notificaciones
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $notifications = $this->repository->findBy([], ['fechaEnvio' => 'DESC']);
+        } else {
+            // Si es usuario normal, mostrar solo sus notificaciones
+            $notifications = $this->repository->findBy(['usuario' => $this->getUser()], ['fechaEnvio' => 'DESC']);
+        }
 
         return $this->render('notification/index.html.twig', [
             'title' => 'Mis Notificaciones',
@@ -37,7 +42,13 @@ class NotificationController extends AbstractController
     #[Route('/view/{id}', name: 'notification_view', methods: ['GET'])]
     public function view(int $id): Response
     {
-        $notification = $this->repository->findOneBy(['id' => $id, 'usuario' => $this->getUser()]);
+        // Si es admin, puede ver cualquier notificación
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $notification = $this->repository->find($id);
+        } else {
+            // Si es usuario normal, solo puede ver sus notificaciones
+            $notification = $this->repository->findOneBy(['id' => $id, 'usuario' => $this->getUser()]);
+        }
 
         if (!$notification) {
             throw $this->createNotFoundException('La notificación solicitada no existe.');
@@ -52,7 +63,13 @@ class NotificationController extends AbstractController
     #[Route('/delete/{id}', name: 'notification_delete', methods: ['POST'])]
     public function delete(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $notification = $this->repository->findOneBy(['id' => $id, 'usuario' => $this->getUser()]);
+        // Si es admin, puede eliminar cualquier notificación
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $notification = $this->repository->find($id);
+        } else {
+            // Si es usuario normal, solo puede eliminar sus notificaciones
+            $notification = $this->repository->findOneBy(['id' => $id, 'usuario' => $this->getUser()]);
+        }
 
         if (!$notification) {
             throw $this->createNotFoundException('La notificación solicitada no existe.');

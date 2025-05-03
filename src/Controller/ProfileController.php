@@ -63,7 +63,8 @@ class ProfileController extends AbstractController
         Request $request,
         UserPasswordHasherInterface $passwordHasher,
         EntityManagerInterface $entityManager
-    ): Response {
+    ): Response
+    {
         /** @var Usuario $user */
         $user = $this->getUser();
 
@@ -100,8 +101,13 @@ class ProfileController extends AbstractController
     #[Route('/mis-denuncias', name: 'complaint_show', methods: ['GET'])]
     public function showMyComplaints(DenunciaRepository $denunciaRepository): Response
     {
-        // Obtener las denuncias del usuario actual
-        $denuncias = $denunciaRepository->findBy(['usuario' => $this->getUser()]);
+        // Si es admin, mostrar todas las denuncias
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $denuncias = $denunciaRepository->findAll();
+        } else {
+            // Si es usuario normal, mostrar solo sus denuncias
+            $denuncias = $denunciaRepository->findBy(['usuario' => $this->getUser()]);
+        }
 
         return $this->render('emergency/my_complaints.html.twig', [
             'denuncias' => $denuncias,
