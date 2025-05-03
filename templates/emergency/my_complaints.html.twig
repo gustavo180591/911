@@ -2,103 +2,85 @@
 
 {% block title %}Mis denuncias{% endblock %}
 
-{% block body %}
+{% block stylesheets %}
+{{ parent() }}
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+
     body {
         font-family: 'Montserrat', sans-serif;
         background-color: #191D33;
         color: #FFFFFF;
         margin: 0;
         padding: 0;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
     }
 
-    /* ================== HEADER ================== */
     header {
         display: flex;
-        align-items: center;
         justify-content: space-between;
-        padding: 16px 24px;
-        background-color: #191D33;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        align-items: center;
+        padding: 20px 40px;
+        flex-wrap: wrap;
     }
 
-    .logo-container {
+    .logo-header {
         display: flex;
         align-items: center;
         cursor: pointer;
     }
 
-    .logo-container img.favicon {
+    .logo-header img {
         height: 40px;
         width: auto;
-        margin-right: 12px;
+        margin-right: 10px;
     }
 
-    .saci-logo {
-        height: 48px;
-        width: auto;
+    .nav-toggle {
+        display: none;
+        font-size: 28px;
+        color: #FFFFFF;
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 1002;
     }
 
-    .header-right {
-        display: flex;
-        align-items: center;
-        gap: 32px;
-    }
-
-    nav.main-nav {
+    nav.nav-menu {
         display: flex;
         align-items: center;
         gap: 20px;
     }
 
-    .inicio-button {
+    .nav-link {
         background-color: transparent;
+        color: #E5A74E;
         border-radius: 9999px;
         padding: 10px 24px;
-        font-weight: 700;
+        font-weight: bold;
         font-size: 15px;
-        color: #E5A74E;
         text-decoration: none;
-        transition: all 0.2s ease;
+        transition: color 0.2s ease;
     }
 
-    .inicio-button:hover {
+    .nav-link:hover {
         color: #FFFFFF;
-        transform: translateY(-1px);
-    }
-
-    .about-button {
-        background-color: transparent;
-        border-radius: 9999px;
-        padding: 10px 20px;
-        font-weight: 700;
-        font-size: 15px;
-        color: #FFFFFF;
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
-
-    .about-button:hover {
-        color: #ECB13A;
-        transform: translateY(-1px);
     }
 
     .contact-button {
         background-color: #ECB13A;
         border-radius: 9999px;
-        padding: 10px 20px;
-        font-weight: 700;
+        padding: 10px 24px;
+        font-weight: bold;
         font-size: 15px;
         color: #FFFFFF;
         text-decoration: none;
-        transition: all 0.2s ease;
-        box-shadow: 0 2px 5px rgba(236, 177, 58, 0.3);
+        transition: background-color 0.2s ease;
     }
 
     .contact-button:hover {
-        background-color: #dca02a;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(236, 177, 58, 0.4);
+        background-color: #d9a235;
     }
 
     .user-profile {
@@ -112,12 +94,6 @@
         height: 40px;
         border-radius: 50%;
         cursor: pointer;
-        border: 2px solid transparent;
-        transition: border-color 0.2s ease;
-    }
-
-    .profile-button:hover .profile-image {
-        border-color: rgba(236, 177, 58, 0.5);
     }
 
     .profile-dropdown {
@@ -126,79 +102,46 @@
         right: 0;
         background-color: #1E2240;
         border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        width: 180px;
-        z-index: 10;
-        display: none;
         margin-top: 8px;
-        padding: 8px 0;
-        border: 1px solid #2e325a;
+        display: none;
+        width: 160px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
     .profile-dropdown.show {
         display: block;
-        animation: fadeIn 0.2s ease;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
     }
 
     .dropdown-item {
-        display: block;
         padding: 12px 16px;
         color: white;
         text-decoration: none;
+        display: block;
         transition: background-color 0.2s;
-        font-size: 14px;
     }
 
     .dropdown-item:hover {
         background-color: #2e325a;
     }
 
-    .profile-button {
-        display: flex;
-        align-items: center;
-        background: none;
-        border: none;
-        color: white;
-        cursor: pointer;
-        padding: 0;
-        gap: 8px;
-    }
-
-    .profile-button .arrow {
-        margin-left: 5px;
-        font-size: 12px;
-        transition: transform 0.2s ease;
-    }
-
-    .profile-button:hover .arrow {
-        transform: translateY(2px);
-    }
-
-    /* ================== MAIN CONTENT ================== */
     .container {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 32px 24px;
+        padding: 40px 20px;
     }
 
     h1 {
         font-size: 28px;
-        font-weight: 700;
-        margin-bottom: 24px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid #2e325a;
+        font-weight: bold;
+        margin-bottom: 30px;
+        text-align: center;
     }
 
     .table-container {
         background-color: #1E2240;
         border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        overflow-x: auto;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
     table {
@@ -210,21 +153,10 @@
         background-color: #232644;
     }
 
-    th {
+    th, td {
+        padding: 16px;
         text-align: left;
-        padding: 16px;
-        font-weight: 600;
-        font-size: 15px;
-    }
-
-    td {
-        padding: 16px;
-        border-top: 1px solid #2e325a;
-        vertical-align: middle;
-    }
-
-    tbody tr {
-        transition: background-color 0.2s;
+        border-bottom: 1px solid #2e325a;
     }
 
     tbody tr:hover {
@@ -232,113 +164,120 @@
     }
 
     .status-badge {
-        display: inline-flex;
-        align-items: center;
+        display: inline-block;
+        background-color: rgba(236, 177, 58, 0.2);
+        color: #ECB13A;
         padding: 6px 12px;
         border-radius: 9999px;
+        font-weight: bold;
         font-size: 13px;
-        font-weight: 500;
-        background-color: rgba(236, 177, 58, 0.15);
-        color: #ECB13A;
-    }
-
-    .btn {
-        display: inline-block;
-        font-weight: 500;
-        text-align: center;
-        white-space: nowrap;
-        vertical-align: middle;
-        user-select: none;
-        border: 1px solid transparent;
-        padding: 8px 16px;
-        font-size: 14px;
-        line-height: 1.5;
-        border-radius: 6px;
-        transition: all 0.2s ease-in-out;
-        cursor: pointer;
     }
 
     .btn-primary {
         background-color: #ECB13A;
-        color: white;
-        box-shadow: 0 2px 4px rgba(236, 177, 58, 0.2);
+        color: #FFFFFF;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        text-decoration: none;
+        transition: background-color 0.2s;
     }
 
     .btn-primary:hover {
-        background-color: #dca02a;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px rgba(236, 177, 58, 0.3);
-    }
-
-    .alert {
-        padding: 20px;
-        border-radius: 8px;
-        margin-bottom: 20px;
+        background-color: #d9a235;
     }
 
     .alert-info {
         background-color: #1E2240;
+        padding: 20px;
+        border-left: 5px solid #ECB13A;
+        border-radius: 8px;
         color: white;
-        border-left: 4px solid #ECB13A;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
     }
 
-    /* Responsive adjustments */
     @media (max-width: 768px) {
         header {
-            padding: 16px;
+            padding: 15px 20px;
         }
 
-        .header-right {
-            gap: 16px;
+        .nav-toggle {
+            display: block;
         }
 
-        nav.main-nav {
+        nav.nav-menu {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.95);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            padding-top: 60px;
+            z-index: 1000;
+        }
+
+        nav.nav-menu.active {
+            display: flex;
+        }
+
+        .nav-link, .contact-button {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        table, thead, tbody, th, td, tr {
+            display: block;
+        }
+
+        thead tr {
             display: none;
         }
 
-        .container {
-            padding: 24px 16px;
+        td {
+            padding: 10px;
+            position: relative;
+            text-align: right;
+            border: none;
         }
 
-        h1 {
-            font-size: 24px;
+        td::before {
+            content: attr(data-label);
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            font-weight: bold;
+            text-align: left;
         }
-
-        th, td {
-            padding: 12px;
-        }
-    }
-
-    /* For mobile scrolling on table */
-    .table-responsive {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
     }
 </style>
+{% endblock %}
 
+{% block body %}
 <header>
-    <div class="logo-container" onclick="window.location.href='{{ path('home_index') }}'">
-        <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon"/>
-        <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="saci-logo"/>
+    <div class="logo-header" onclick="window.location.href='{{ path('home_index') }}'">
+        <img src="{{ asset('images/favicon.png') }}" alt="SACI Logo">
+        <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI Texto" style="height: 50px;">
     </div>
-    <div class="header-right">
-        <nav class="main-nav">
-            <a href="{{ path('auth_login') }}" class="inicio-button">INICIO</a>
-            <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
-            <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
-        </nav>
+    <button class="nav-toggle" id="nav-toggle">☰</button>
+    <nav id="nav-menu" class="nav-menu">
+        <a href="{{ path('auth_login') }}" class="nav-link">INICIO</a>
+        <a href="{{ path('home_about') }}" class="nav-link">SOBRE NOSOTROS</a>
+        <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
         <div class="user-profile">
             <button class="profile-button" id="profileButton">
-                <img src="{{ asset('images/logo-perfil.png') }}" alt="Perfil" class="profile-image"/>
-                <span class="arrow">▼</span>
+                <img src="{{ asset('images/logo-perfil.png') }}" alt="Perfil" class="profile-image">
             </button>
             <div class="profile-dropdown" id="profileDropdown">
                 <a href="{{ path('profile_view') }}" class="dropdown-item">Mi perfil</a>
                 <a href="{{ path('auth_logout') }}" class="dropdown-item">Cerrar sesión</a>
             </div>
         </div>
-    </div>
+    </nav>
 </header>
 
 <div class="container">
@@ -346,72 +285,66 @@
 
     {% if app.user.denuncias|length > 0 %}
         <div class="table-container">
-            <div class="table-responsive">
-                <table>
-                    <thead>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Descripción</th>
+                        <th>Fecha y Hora</th>
+                        <th>Ubicación</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for denuncia in app.user.denuncias %}
                         <tr>
-                            <th>ID</th>
-                            <th>Descripción</th>
-                            <th>Fecha y Hora</th>
-                            <th>Ubicación</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
+                            <td data-label="ID">{{ denuncia.id }}</td>
+                            <td data-label="Descripción">{{ denuncia.descripcion }}</td>
+                            <td data-label="Fecha y Hora">{{ denuncia.fechaHora|date('d-m-Y H:i') }}</td>
+                            <td data-label="Ubicación">
+                                {% if denuncia.ubicacion %}
+                                    {{ denuncia.ubicacion.calle ~ ', ' ~ denuncia.ubicacion.numero }}
+                                {% else %}
+                                    <span style="color: #9ca3af;">Sin ubicación</span>
+                                {% endif %}
+                            </td>
+                            <td data-label="Estado"><span class="status-badge">{{ denuncia.estado.nombre }}</span></td>
+                            <td data-label="Acciones">
+                                <a href="{{ path('emergency_show', {id: denuncia.id}) }}" class="btn-primary">Ver</a>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for denuncia in app.user.denuncias %}
-                            {% if denuncia.usuario.id == app.user.id %}
-                                <tr>
-                                    <td>{{ denuncia.id }}</td>
-                                    <td>{{ denuncia.descripcion }}</td>
-                                    <td>{{ denuncia.fechaHora|date('d-m-Y H:i:s') }}</td>
-                                    <td>
-                                        {% if denuncia.ubicacion %}
-                                            {{ denuncia.ubicacion.calle ~ ', ' ~ denuncia.ubicacion.numero }}
-                                        {% else %}
-                                            <span style="color: #9ca3af;">Sin ubicación</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        <span class="status-badge">{{ denuncia.estado.nombre }}</span>
-                                    </td>                            
-                                    <td>
-                                        <a href="{{ path('emergency_show', {id: denuncia.id}) }}" class="btn btn-primary">Ver</a>
-                                    </td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     {% else %}
-        <div class="alert alert-info">
-            <p style="font-size: 16px; margin: 0;">No has registrado ninguna denuncia.</p>
+        <div class="alert-info">
+            No has registrado ninguna denuncia aún.
         </div>
     {% endif %}
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const navToggle = document.getElementById('nav-toggle');
+        const navMenu = document.getElementById('nav-menu');
         const profileButton = document.getElementById('profileButton');
         const profileDropdown = document.getElementById('profileDropdown');
-        
-        if (profileButton && profileDropdown) {
-            profileButton.addEventListener('click', function(e) {
-                e.stopPropagation();
-                profileDropdown.classList.toggle('show');
-            });
-            
-            document.addEventListener('click', function() {
-                profileDropdown.classList.remove('show');
-            });
-            
-            // Prevent dropdown from closing when clicking inside it
-            profileDropdown.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-        }
+
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            navToggle.innerHTML = navMenu.classList.contains('active') ? '✕' : '☰';
+        });
+
+        profileButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('show');
+        });
+
+        document.addEventListener('click', function() {
+            profileDropdown.classList.remove('show');
+        });
     });
-</script> 
+</script>
 {% endblock %}

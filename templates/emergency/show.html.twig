@@ -565,39 +565,18 @@
         </tr>
     </table>
 
-    <div class="action-buttons">
-        <form method="post" action="{{ path('emergency_accept', { id: emergency.id }) }}">
-            <input type="hidden" name="_token" value="{{ csrf_token('accept_emergency_' ~ emergency.id) }}">
-            <button type="submit" class="btn btn-success">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check" style="margin-right: 6px;">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                Aceptar
-            </button>
-        </form>
-
-        <form method="post" action="{{ path('emergency_reject', { id: emergency.id }) }}">
-            <input type="hidden" name="_token" value="{{ csrf_token('reject_emergency_' ~ emergency.id) }}">
-            <button type="submit" class="btn btn-danger">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x" style="margin-right: 6px;">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-                Rechazar
-            </button>
-        </form>
-
-        <a href="{{ path('emergency_index') }}" class="btn btn-secondary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list" style="margin-right: 6px;">
-                <line x1="8" y1="6" x2="21" y2="6"></line>
-                <line x1="8" y1="12" x2="21" y2="12"></line>
-                <line x1="8" y1="18" x2="21" y2="18"></line>
-                <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                <line x1="3" y1="18" x2="3.01" y2="18"></line>
-            </svg>
-            Volver al Listado
-        </a>
+    <div class="button-group">
+        {% if is_granted('ROLE_ADMIN') %}
+            <form action="{{ path('emergency_accept', {'id': emergency.id}) }}" method="post" style="display: inline;">
+                <input type="hidden" name="_token" value="{{ csrf_token('accept_emergency_' ~ emergency.id) }}">
+                <button type="submit" class="btn btn-success">Aceptar</button>
+            </form>
+            <form action="{{ path('emergency_reject', {'id': emergency.id}) }}" method="post" style="display: inline;">
+                <input type="hidden" name="_token" value="{{ csrf_token('reject_emergency_' ~ emergency.id) }}">
+                <button type="submit" class="btn btn-danger">Rechazar</button>
+            </form>
+        {% endif %}
+        <a href="{{ path('emergency_index') }}" class="btn btn-primary">Volver al listado</a>
     </div>
     {# Sección para agregar comentario solo si la emergencia está aceptada #}
     {% if emergency.estado.nombre == 'Aceptado' %}

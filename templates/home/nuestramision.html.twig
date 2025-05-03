@@ -3,221 +3,290 @@
 {% block title %}SACI - NUESTRA MISIÓN{% endblock %}
 
 {% block stylesheets %}
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
-        
-        body {
-            background-image: url("{{ asset('images/mision.png') }}");
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-color: #151c33;
-            font-family: 'Montserrat', sans-serif;
-            color: #FFFFFF;
-            margin: 0;
-            padding: 0;
-        }
-        
-         nav {
-            display: flex;
-            gap: 20px;
-        }
-         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 40px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+    body {
+        background-color: #151c33;
+        font-family: 'Montserrat', sans-serif;
+        color: #FFFFFF;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 40px;
+        position: static;
+        transition: all 0.3s ease;
+    }
+
+    .logo-header {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .logo-header img {
+        height: 40px;
+        width: auto;
+        margin-right: 10px;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 28px;
+        color: #FFFFFF;
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 1002;
+    }
+
+    nav.nav-menu {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .nav-link {
+        background-color: #ECB13A;
+        border-radius: 9999px;
+        padding: 10px 20px;
+        font-weight: bold;
+        font-size: 14px;
+        color: #FFFFFF;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+    }
+
+    .nav-link:hover {
+        background-color: #d99c2c;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    .mission-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+        margin-top: 60px;
+    }
+
+    .logo-container {
+        flex: 0 0 40%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .text-container {
+        flex: 0 0 55%;
+    }
+
+    .mission-title {
+        font-size: 18px;
+        font-weight: 500;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+    }
+
+    .mission-subtitle {
+        font-size: 42px;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: 20px;
+        line-height: 1.2;
+    }
+
+    .highlight {
+        color: #E5A74E;
+    }
+
+    .mission-description {
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .mission-description strong {
+        font-weight: 600;
+        color: #FFFFFF;
+    }
+
+    .mission-list {
+        margin-top: 30px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .mission-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 15px;
+        line-height: 1.4;
+    }
+
+    .mission-item img {
+        width: 20px;
+        height: 20px;
+        margin-top: 2px;
+    }
+
+    .mission-item p {
+        margin: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
         .mission-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 40px;
-            margin-top: 60px;
-        }
-        
-        .logo-container {
-            flex: 0 0 40%;
-            display: flex;
-            justify-content: center;
-        }
-        
-        .text-container {
-            flex: 0 0 55%;
-        }
-        
-        .mission-title {
-            font-size: 18px;
-            font-weight: 500;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-            color: #FFFFFF;
-            text-transform: uppercase;
-        }
-        
-        .mission-subtitle {
-            font-size: 42px;
-            font-weight: 700;
-            margin-top: 0;
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
-        
-        .highlight {
-            color: #E5A74E;
-        }
-        
-        .mission-description {
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .mission-description strong {
-            font-weight: 600;
-            color: #FFFFFF;
-        }
-        
-        .mission-list {
-            margin-top: 30px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        
-        .mission-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            font-size: 15px;
-            line-height: 1.4;
-        }
-        
-        .mission-item img {
-            width: 20px;
-            height: 20px;
-            margin-top: 2px;
-        }
-        
-        .mission-item p {
-            margin: 0;
-        }
-        
-        header {
-            padding: 20px 0;
-        }
-        
-        .contact-button {
-            display: inline-block;
-            background-color: #ECB13A;
-            border-radius: 9999px;
-            padding: 10px 20px;
-            font-weight: bold;
-            font-size: 14px;
-            color: #FFFFFF;
+            flex-direction: column;
             text-align: center;
-            text-decoration: none;
-            transition: background-color 0.2s ease;
-            margin-right: 80px; /* Adjusted to move button to the right */
         }
 
-        .contact-button:hover {
-            background-color: #ECB13A;
+        .logo-container, .text-container {
+            flex: 1 1 100%;
         }
-        
-        @media (max-width: 992px) {
-            .mission-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .mission-list {
-                grid-template-columns: 1fr;
-            }
-            
-            .mission-item {
-                justify-content: center;
-            }
+
+        .mission-list {
+            grid-template-columns: 1fr;
         }
-    </style>
+
+        header {
+            flex-wrap: wrap;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .nav-toggle {
+            display: block;
+        }
+
+        nav.nav-menu {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            padding: 0;
+            transition: all 0.3s ease-in-out;
+        }
+
+        nav.nav-menu.active {
+            display: flex;
+        }
+
+        .nav-link {
+            width: 100%;
+            font-size: 20px;
+            padding: 15px 0;
+            margin: 8px 0;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .mission-subtitle {
+            font-size: 32px;
+        }
+
+        .mission-title {
+            font-size: 16px;
+        }
+    }
+</style>
 {% endblock %}
 
 {% block body %}
-    <header>
-        <div style="position: relative; left: 20%; top: 20%; cursor: pointer;" onclick="window.location.href='{{ path('home_index') }}'">
-            <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon" style="height: 40px; width: auto; margin-left: 10px; transform: translateY(10%);" />
-            <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="float-left mt-2" style="height: 50px; width: auto; transform: translateY(20%);" />
-        </div>
-        <nav>           
-            <a href="{{ path('home_contact') }}" class="contact-button" style="text-decoration: none;">CONTACTO</a>
-        </nav>
-    </header>
+<header>
+    <div class="logo-header" onclick="window.location.href='{{ path('home_index') }}'">
+        <img src="{{ asset('images/favicon.png') }}" alt="SACI Logo">
+        <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI Texto" style="height: 50px;">
+    </div>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú">☰</button>
+    <nav id="nav-menu" class="nav-menu">
+        <a href="{{ path('home_contact') }}" class="nav-link">CONTACTO</a>
+    </nav>
+</header>
 
-    <div class="container">
-        <div class="mission-content">
-            <div class="logo-container">
-                <!-- Aquí puedes agregar el logo de escudo si lo tienes -->
-                <!-- <img src="{{ asset('images/escudo.png') }}" alt="Escudo SACI" style="max-width: 100%; height: auto; display: none;"> -->
-            </div>
-            
-            <div class="text-container">
-                <h1 class="mission-title">NUESTRA MISIÓN</h1>
-                <h2 class="mission-subtitle">Una nueva forma <br>de <span class="highlight">cuidarte</span></h2>
-                
-                <p class="mission-description">
-                    <strong>SACI</strong> es una iniciativa conjunta entre <strong>ADEMI</strong>, la Subsecretaría de Seguridad y el Concejo
-                    Deliberante de Posadas.
-                </p>
-                
-                <p class="mission-description">
-                    Su creación responde a la necesidad de contar con una herramienta eficiente que permita a
-                    los ciudadanos <strong>denunciar incidentes de seguridad de manera rápida
-                    y confiable</strong>.
-                </p>
-                
-                <p class="mission-description">
-                    A través de esta plataforma, buscamos:
-                </p>
-                
-                <div class="mission-list">
-                    <div class="mission-item">
-                        <img src="{{ asset('images/mision2.png') }}" alt="Check">
-                        <p>Fortalecer la seguridad en los barrios.</p>
-                    </div>
-                    
-                    <div class="mission-item">
-                        <img src="{{ asset('images/mision2.png') }}" alt="Check">
-                        <p>Incentivar la colaboración para evitar delitos.</p>
-                    </div>
-                    
-                    <div class="mission-item">
-                        <img src="{{ asset('images/mision2.png') }}" alt="Check">
-                        <p>Mejorar la capacidad de respuesta de las fuerzas de seguridad.</p>
-                    </div>
-                    
-                    <div class="mission-item">
-                        <img src="{{ asset('images/mision2.png') }}" alt="Check">
-                        <p>Prevenir situaciones de riesgo y actuar con mayor rapidez.</p>
-                    </div>
-                    
-                    <div class="mission-item">
-                        <img src="{{ asset('images/mision2.png') }}" alt="Check">
-                        <p>Ofrecer una herramienta accesible y fácil de usar.</p>
-                    </div>
-                    
-                    <div class="mission-item">
-                        <img src="{{ asset('images/mision2.png') }}" alt="Check">
-                        <p>Crear una red de colaboración entre vecinos y autoridades.</p>
-                    </div>
+<div class="container">
+    <div class="mission-content">
+        <div class="logo-container">
+            <!-- Logo institucional opcional -->
+        </div>
+
+        <div class="text-container">
+            <h1 class="mission-title">NUESTRA MISIÓN</h1>
+            <h2 class="mission-subtitle">Una nueva forma <br>de <span class="highlight">cuidarte</span></h2>
+
+            <p class="mission-description">
+                <strong>SACI</strong> es una iniciativa conjunta entre <strong>ADEMI</strong>, la Subsecretaría de Seguridad y el Concejo Deliberante de Posadas.
+            </p>
+
+            <p class="mission-description">
+                Su creación responde a la necesidad de contar con una herramienta eficiente que permita a
+                los ciudadanos <strong>denunciar incidentes de seguridad de manera rápida
+                y confiable</strong>.
+            </p>
+
+            <p class="mission-description">
+                A través de esta plataforma, buscamos:
+            </p>
+
+            <div class="mission-list">
+                {% for item in [
+                    'Fortalecer la seguridad en los barrios.',
+                    'Incentivar la colaboración para evitar delitos.',
+                    'Mejorar la capacidad de respuesta de las fuerzas de seguridad.',
+                    'Prevenir situaciones de riesgo y actuar con mayor rapidez.',
+                    'Ofrecer una herramienta accesible y fácil de usar.',
+                    'Crear una red de colaboración entre vecinos y autoridades.'
+                ] %}
+                <div class="mission-item">
+                    <img src="{{ asset('images/mision2.png') }}" alt="Check">
+                    <p>{{ item }}</p>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const navToggle = document.getElementById('nav-toggle');
+        const navMenu = document.getElementById('nav-menu');
+
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            navToggle.innerHTML = navMenu.classList.contains('active') ? '✕' : '☰';
+        });
+
+        const links = document.querySelectorAll('#nav-menu a');
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                navToggle.innerHTML = '☰';
+            });
+        });
+    });
+</script>
 {% endblock %}
