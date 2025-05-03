@@ -23,6 +23,8 @@
         align-items: center;
         padding: 20px 40px;
         flex-wrap: wrap;
+        background-color: #191D33;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
     .logo-header {
@@ -35,6 +37,12 @@
         height: 40px;
         width: auto;
         margin-right: 10px;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 32px;
     }
 
     .nav-toggle {
@@ -53,34 +61,54 @@
         gap: 20px;
     }
 
-    .nav-link, .contact-button {
-        background-color: #ECB13A;
+    .inicio-button {
+        background-color: transparent;
         border-radius: 9999px;
-        padding: 10px 20px;
-        font-weight: bold;
-        font-size: 14px;
-        color: #FFFFFF;
+        padding: 10px 24px;
+        font-weight: 700;
+        font-size: 15px;
+        color: #E5A74E;
         text-decoration: none;
-        transition: background-color 0.2s ease;
+        transition: all 0.2s ease;
     }
 
-    .nav-link:hover, .contact-button:hover {
-        background-color: #d9a235;
+    .inicio-button:hover {
+        color: #FFFFFF;
+        transform: translateY(-1px);
     }
 
     .about-button {
-        background: transparent;
-        color: #FFFFFF;
+        background-color: transparent;
         border-radius: 9999px;
         padding: 10px 20px;
-        font-weight: bold;
-        font-size: 14px;
+        font-weight: 700;
+        font-size: 15px;
+        color: #FFFFFF;
         text-decoration: none;
-        transition: color 0.2s;
+        transition: all 0.2s ease;
     }
 
     .about-button:hover {
         color: #ECB13A;
+        transform: translateY(-1px);
+    }
+
+    .contact-button {
+        background-color: #ECB13A;
+        border-radius: 9999px;
+        padding: 10px 20px;
+        font-weight: 700;
+        font-size: 15px;
+        color: #FFFFFF;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 5px rgba(236, 177, 58, 0.3);
+    }
+
+    .contact-button:hover {
+        background-color: #dca02a;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(236, 177, 58, 0.4);
     }
 
     .user-profile {
@@ -94,6 +122,12 @@
         height: 40px;
         border-radius: 50%;
         cursor: pointer;
+        border: 2px solid transparent;
+        transition: border-color 0.2s ease;
+    }
+
+    .profile-button:hover .profile-image {
+        border-color: rgba(236, 177, 58, 0.5);
     }
 
     .profile-dropdown {
@@ -101,22 +135,29 @@
         top: 100%;
         right: 0;
         background-color: #1E2240;
-        border-radius: 0.25rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        width: 150px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        width: 180px;
         z-index: 10;
         display: none;
-        margin-top: 5px;
+        margin-top: 8px;
         padding: 8px 0;
+        border: 1px solid #2e325a;
     }
 
     .profile-dropdown.show {
         display: block;
+        animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .dropdown-item {
         display: block;
-        padding: 10px 15px;
+        padding: 12px 16px;
         color: white;
         text-decoration: none;
         transition: background-color 0.2s;
@@ -128,18 +169,24 @@
     }
 
     .profile-button {
-        background: none;
-        border: none;
         display: flex;
         align-items: center;
+        background: none;
+        border: none;
         color: white;
         cursor: pointer;
         padding: 0;
+        gap: 8px;
     }
 
     .profile-button .arrow {
         margin-left: 5px;
         font-size: 12px;
+        transition: transform 0.2s ease;
+    }
+
+    .profile-button:hover .arrow {
+        transform: translateY(2px);
     }
 
     .container {
@@ -151,11 +198,16 @@
     .profile-container {
         max-width: 800px;
         margin: 40px auto;
+        background-color: #1E2240;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
         font-size: 28px;
         margin-bottom: 30px;
+        color: #ECB13A;
     }
 
     .form-group, .form-row {
@@ -175,43 +227,140 @@
         display: block;
         margin-bottom: 8px;
         font-size: 14px;
+        color: #ECB13A;
     }
 
     .form-control, .phone-input {
         width: 100%;
         padding: 12px 15px;
         border-radius: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.7);
-        background-color: transparent;
+        border: 1px solid #2e325a;
+        background-color: #232644;
         color: white;
         box-sizing: border-box;
         font-family: 'Montserrat', sans-serif;
+        transition: all 0.2s ease;
     }
 
     .form-control:focus {
         outline: none;
         border-color: #ECB13A;
+        box-shadow: 0 0 0 3px rgba(236, 177, 58, 0.2);
     }
 
     .phone-container {
         display: flex;
         align-items: center;
-        background-color: transparent;
-        border: 1px solid rgba(255, 255, 255, 0.7);
+        background-color: #232644;
+        border: 1px solid #2e325a;
         border-radius: 8px;
         overflow: hidden;
     }
 
     .country-selector {
+        position: relative;
         display: flex;
         align-items: center;
         padding: 0 10px;
-        background-color: rgba(255, 255, 255, 0.1);
-        border-right: 1px solid rgba(255, 255, 255, 0.3);
+        background-color: #1E2240;
+        border-right: 1px solid #2e325a;
+        cursor: pointer;
+        min-width: 80px;
+    }
+
+    .country-selector:hover {
+        background-color: #2e325a;
+    }
+
+    .country-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #1E2240;
+        border: 1px solid #2e325a;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        width: 200px;
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 1000;
+        display: none;
+        margin-top: 5px;
+    }
+
+    .country-dropdown.show {
+        display: block;
+        animation: fadeIn 0.2s ease;
+    }
+
+    .country-option {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .country-option:hover {
+        background-color: #2e325a;
+    }
+
+    .country-flag {
+        margin-right: 8px;
+        font-size: 16px;
+    }
+
+    .country-name {
+        flex: 1;
+        font-size: 14px;
+        color: white;
+    }
+
+    .country-code {
+        font-size: 14px;
+        color: #ECB13A;
+        margin-left: 8px;
     }
 
     .selected-flag {
-        margin-right: 5px;
+        margin-right: 8px;
+        font-size: 16px;
+    }
+
+    .selected-code {
+        font-size: 14px;
+        color: #ECB13A;
+    }
+
+    .phone-input {
+        flex: 1;
+        padding: 12px 15px;
+        background-color: transparent;
+        border: none;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .phone-input:focus {
+        outline: none;
+    }
+
+    /* Scrollbar personalizado para el dropdown */
+    .country-dropdown::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .country-dropdown::-webkit-scrollbar-track {
+        background: #1E2240;
+    }
+
+    .country-dropdown::-webkit-scrollbar-thumb {
+        background: #2e325a;
+        border-radius: 4px;
+    }
+
+    .country-dropdown::-webkit-scrollbar-thumb:hover {
+        background: #3a3f6d;
     }
 
     .action-links {
@@ -223,6 +372,7 @@
         color: white;
         margin-bottom: 10px;
         text-decoration: none;
+        transition: color 0.2s ease;
     }
 
     .action-link:hover {
@@ -254,15 +404,14 @@
         nav.nav-menu {
             display: none;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            text-align: center;
+            background: rgba(0, 0, 0, 0.95);
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
             height: 100vh;
-            background-color: rgba(0, 0, 0, 0.95);
+            width: 100vw;
+            padding-top: 60px;
             z-index: 1000;
         }
 
@@ -270,32 +419,49 @@
             display: flex;
         }
 
-        .nav-link, .about-button, .contact-button {
-            width: 100%;
-            font-size: 18px;
-            padding: 15px 0;
-            margin: 8px 0;
+        .inicio-button, .about-button, .contact-button {
+            font-size: 20px;
+            margin: 10px 0;
+            width: auto;
+        }
+
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .profile-container {
+            padding: 20px;
+            margin: 20px auto;
         }
     }
 </style>
 {% endblock %}
 
 {% block body %}
-<div class="container">
-    <header>
-        <div class="logo-header" onclick="window.location.href='{{ path('home_index') }}'">
-            <img src="{{ asset('images/favicon.png') }}" alt="SACI Logo">
-            <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI Texto" style="height: 50px;">
-        </div>
-        <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú">☰</button>
-        <nav id="nav-menu" class="nav-menu">
+<header>
+    <div class="logo-header" onclick="window.location.href='{{ path('home_index') }}'">
+        <img src="{{ asset('images/favicon.png') }}" alt="SACI Logo">
+        <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI Texto" style="height: 50px;">
+    </div>
+    <button class="nav-toggle" id="nav-toggle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+    <div class="header-right">
+        <nav class="nav-menu" id="nav-menu">
             <a href="{{ path('auth_login') }}" class="inicio-button">INICIO</a>
             <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
             <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
         </nav>
         {% include 'fragments/profile-menu.html.twig' %}
-    </header>
+    </div>
+</header>
 
+<div class="container">
     <div class="profile-container">
         <h1>Mi perfil</h1>
 
@@ -338,10 +504,53 @@
             <div class="form-group">
                 <label for="{{ profileForm.telefono.vars.id }}">Número de Teléfono</label>
                 <div class="phone-container">
-                    <div class="country-selector">
-                        <span class="selected-flag">🇦🇷</span> +54
+                    <div class="country-selector" id="countrySelector">
+                        <span class="selected-flag">🇦🇷</span>
+                        <span class="selected-code">+54</span>
                     </div>
-                    {{ form_widget(profileForm.telefono, {'attr': {'class': 'phone-input'}}) }}
+                    <div class="country-dropdown" id="countryDropdown">
+                        <div class="country-option" data-code="+54" data-flag="🇦🇷">
+                            <span class="country-flag">🇦🇷</span>
+                            <span class="country-name">Argentina</span>
+                            <span class="country-code">+54</span>
+                        </div>
+                        <div class="country-option" data-code="+55" data-flag="🇧🇷">
+                            <span class="country-flag">🇧🇷</span>
+                            <span class="country-name">Brasil</span>
+                            <span class="country-code">+55</span>
+                        </div>
+                        <div class="country-option" data-code="+56" data-flag="🇨🇱">
+                            <span class="country-flag">🇨🇱</span>
+                            <span class="country-name">Chile</span>
+                            <span class="country-code">+56</span>
+                        </div>
+                        <div class="country-option" data-code="+57" data-flag="🇨🇴">
+                            <span class="country-flag">🇨🇴</span>
+                            <span class="country-name">Colombia</span>
+                            <span class="country-code">+57</span>
+                        </div>
+                        <div class="country-option" data-code="+58" data-flag="🇻🇪">
+                            <span class="country-flag">🇻🇪</span>
+                            <span class="country-name">Venezuela</span>
+                            <span class="country-code">+58</span>
+                        </div>
+                        <div class="country-option" data-code="+52" data-flag="🇲🇽">
+                            <span class="country-flag">🇲🇽</span>
+                            <span class="country-name">México</span>
+                            <span class="country-code">+52</span>
+                        </div>
+                        <div class="country-option" data-code="+51" data-flag="🇵🇪">
+                            <span class="country-flag">🇵🇪</span>
+                            <span class="country-name">Perú</span>
+                            <span class="country-code">+51</span>
+                        </div>
+                        <div class="country-option" data-code="+593" data-flag="🇪🇨">
+                            <span class="country-flag">🇪🇨</span>
+                            <span class="country-name">Ecuador</span>
+                            <span class="country-code">+593</span>
+                        </div>
+                    </div>
+                    {{ form_widget(profileForm.telefono, {'attr': {'class': 'phone-input', 'placeholder': 'Ingrese su número de teléfono'}}) }}
                 </div>
             </div>
 
@@ -369,7 +578,14 @@
 
         navToggle.addEventListener('click', () => {
             navMenu.classList.toggle('active');
-            navToggle.innerHTML = navMenu.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Cerrar el menú al hacer clic en un enlace
+        const navLinks = navMenu.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                navMenu.classList.remove('active');
+            });
         });
 
         profileButton.addEventListener('click', function(e) {
@@ -379,6 +595,62 @@
 
         document.addEventListener('click', function() {
             profileDropdown.classList.remove('show');
+        });
+
+        // Selector de país
+        const countrySelector = document.getElementById('countrySelector');
+        const countryDropdown = document.getElementById('countryDropdown');
+        const selectedFlag = countrySelector.querySelector('.selected-flag');
+        const selectedCode = countrySelector.querySelector('.selected-code');
+        const phoneInput = document.querySelector('.phone-input');
+
+        // Toggle del dropdown
+        countrySelector.addEventListener('click', function(e) {
+            e.stopPropagation();
+            countryDropdown.classList.toggle('show');
+        });
+
+        // Cerrar dropdown al hacer clic fuera
+        document.addEventListener('click', function() {
+            countryDropdown.classList.remove('show');
+        });
+
+        // Seleccionar país
+        const countryOptions = countryDropdown.querySelectorAll('.country-option');
+        countryOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const flag = this.dataset.flag;
+                const code = this.dataset.code;
+                
+                selectedFlag.textContent = flag;
+                selectedCode.textContent = code;
+                
+                // Actualizar el valor del input con el código de país
+                const currentValue = phoneInput.value;
+                if (currentValue.startsWith('+')) {
+                    const number = currentValue.split(' ')[1] || '';
+                    phoneInput.value = `${code} ${number}`;
+                } else {
+                    phoneInput.value = `${code} ${currentValue}`;
+                }
+                
+                countryDropdown.classList.remove('show');
+            });
+        });
+
+        // Validar y formatear el número de teléfono
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value;
+            
+            // Si el valor no comienza con el código de país, agregarlo
+            if (!value.startsWith(selectedCode.textContent)) {
+                const number = value.replace(/[^\d]/g, '');
+                value = `${selectedCode.textContent} ${number}`;
+            }
+            
+            // Formatear el número
+            value = value.replace(/[^\d+ ]/g, '');
+            e.target.value = value;
         });
     });
 
