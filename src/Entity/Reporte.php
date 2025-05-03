@@ -3,31 +3,38 @@
 namespace App\Entity;
 
 use App\Repository\ReporteRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Denuncia; // Asegúrate de que esta entidad exista y esté correctamente definida
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReporteRepository::class)]
 class Reporte
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'text')]
-    private string $descripcion;
+    #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'La descripción no puede estar vacía')]
+    #[Assert\Length(
+        min: 10,
+        max: 1000,
+        minMessage: 'La descripción debe tener al menos {{ limit }} caracteres',
+        maxMessage: 'La descripción no puede tener más de {{ limit }} caracteres'
+    )]
+    private ?string $descripcion = null;
 
-    #[ORM\ManyToOne(targetEntity: Usuario::class)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $fechaHora = null;
+
+    #[ORM\ManyToOne(targetEntity: Denuncia::class, inversedBy: 'reportes')]
     #[ORM\JoinColumn(nullable: false)]
-    private Usuario $autor;
+    private ?Denuncia $denuncia = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private \DateTimeInterface $fechaGeneracion;
-
-    // Nueva relación con la entidad Emergency (o Denuncia)
-    #[ORM\ManyToOne(targetEntity: Denuncia::class)]
+    #[ORM\ManyToOne(targetEntity: Usuario::class, inversedBy: 'reportes')]
     #[ORM\JoinColumn(nullable: false)]
-    private Denuncia $denuncia;
+    private ?Usuario $usuario = null;
 
     // Getters y Setters
 
@@ -36,47 +43,47 @@ class Reporte
         return $this->id;
     }
 
-    public function getDescripcion(): string
+    public function getDescripcion(): ?string
     {
         return $this->descripcion;
     }
 
-    public function setDescripcion(string $descripcion): self
+    public function setDescripcion(string $descripcion): static
     {
         $this->descripcion = $descripcion;
         return $this;
     }
 
-    public function getAutor(): Usuario
+    public function getFechaHora(): ?\DateTimeInterface
     {
-        return $this->autor;
+        return $this->fechaHora;
     }
 
-    public function setAutor(Usuario $autor): self
+    public function setFechaHora(\DateTimeInterface $fechaHora): static
     {
-        $this->autor = $autor;
+        $this->fechaHora = $fechaHora;
         return $this;
     }
 
-    public function getFechaGeneracion(): \DateTimeInterface
-    {
-        return $this->fechaGeneracion;
-    }
-
-    public function setFechaGeneracion(\DateTimeInterface $fechaGeneracion): self
-    {
-        $this->fechaGeneracion = $fechaGeneracion;
-        return $this;
-    }
-
-    public function getDenuncia(): Denuncia
+    public function getDenuncia(): ?Denuncia
     {
         return $this->denuncia;
     }
 
-    public function setDenuncia(Denuncia $denuncia): self
+    public function setDenuncia(?Denuncia $denuncia): static
     {
         $this->denuncia = $denuncia;
+        return $this;
+    }
+
+    public function getUsuario(): ?Usuario
+    {
+        return $this->usuario;
+    }
+
+    public function setUsuario(?Usuario $usuario): static
+    {
+        $this->usuario = $usuario;
         return $this;
     }
 }

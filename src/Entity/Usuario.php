@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Denuncia; // Asegúrate de importar la entidad Denuncia
+use App\Entity\Reporte;
 
 #[ORM\Entity]
 class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
@@ -51,11 +52,14 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'usuario', targetEntity: Denuncia::class)]
     private Collection $denuncias;
 
+    #[ORM\OneToMany(mappedBy: 'usuario', targetEntity: Reporte::class)]
+    private Collection $reportes;
     
     public function __construct()
     {
         $this->fechaRegistro = new \DateTime();
         $this->denuncias = new ArrayCollection();
+        $this->reportes = new ArrayCollection();
     }
 
     // Métodos obligatorios de UserInterface / PasswordAuthenticatedUserInterface
@@ -210,5 +214,29 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function getEmergencies(): Collection
     {
         return $this->denuncias;
+    }
+
+    public function getReportes(): Collection
+    {
+        return $this->reportes;
+    }
+
+    public function addReporte(Reporte $reporte): self
+    {
+        if (!$this->reportes->contains($reporte)) {
+            $this->reportes->add($reporte);
+            $reporte->setUsuario($this);
+        }
+        return $this;
+    }
+
+    public function removeReporte(Reporte $reporte): self
+    {
+        if ($this->reportes->removeElement($reporte)) {
+            if ($reporte->getUsuario() === $this) {
+                $reporte->setUsuario(null);
+            }
+        }
+        return $this;
     }
 }

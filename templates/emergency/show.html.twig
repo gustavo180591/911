@@ -422,19 +422,54 @@
     /* ================== COMMENT SECTION (NUEVA) ================== */
     .comment-section {
         margin-top: 32px;
-        padding: 16px;
+        padding: 24px;
         background-color: #232644;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .comment-item {
+        max-width: 80%;
+        margin-bottom: 16px;
+    }
+
+    .comment-sent {
+        margin-left: auto;
+    }
+
+    .comment-received {
+        margin-right: auto;
+    }
+
+    .comment-sent .comment-content {
+        background-color: #E5A74E;
+        color: white;
+    }
+
+    .comment-received .comment-content {
+        background-color: #2e325a;
+        color: white;
+    }
+
+    .comment-header {
+        margin-bottom: 8px;
+    }
+
+    .comment-content {
+        padding: 12px 16px;
         border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        word-break: break-word;
+    }
+
+    .comment-form {
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid #2e325a;
     }
 
     .comment-textarea {
-        min-height: 60px;
-        max-height: 120px;
-    }
-
-    .comment-label {
-        color: #ECB13A;
+        min-height: 100px;
+        resize: vertical;
     }
 
     /* Responsive adjustments */
@@ -476,6 +511,14 @@
         .action-buttons {
             flex-direction: column;
             gap: 8px;
+        }
+
+        .comment-section {
+            padding: 16px;
+        }
+
+        .comment-item {
+            max-width: 100%;
         }
     }
 
@@ -817,25 +860,54 @@
         </div>
     </div>
 
-    {# Sección para agregar comentario solo si la emergencia está aceptada #}
+    {# Sección de comentarios #}
     {% if emergency.estado.nombre == 'Aceptado' %}
         <hr>
         <div class="comment-section">
-            <h3>Agregar Comentario</h3>
-            {{ form_start(commentForm, {'action': path('report_create_from_emergency', {'id': emergency.id})}) }}
-                <div class="form-group">
-                    {{ form_label(commentForm.descripcion, 'Comentario', {'label_attr': {'class': 'form-label comment-label'}}) }}
-                    {{ form_widget(commentForm.descripcion, {'attr': {'class': 'form-control comment-textarea', 'placeholder': 'Escribe tu comentario aquí...', 'rows': 3}}) }}
-                    {{ form_errors(commentForm.descripcion) }}
+            <h3>Comentarios</h3>
+            
+            {# Lista de comentarios existentes #}
+            {% if comentarios|length > 0 %}
+                <div class="comments-list space-y-4 mb-6">
+                    {% for comentario in comentarios %}
+                        <div class="comment-item {% if comentario.usuario == app.user %}comment-sent{% else %}comment-received{% endif %}">
+                            <div class="comment-header flex items-center mb-1">
+                                <span class="font-semibold">{{ comentario.usuario.nombre }} {{ comentario.usuario.apellido }}</span>
+                                <span class="text-sm text-gray-500 ml-2">{{ comentario.fechaHora|date('d/m/Y H:i') }}</span>
+                            </div>
+                            <div class="comment-content bg-gray-100 p-3 rounded-lg">
+                                {{ comentario.descripcion }}
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
-                <button type="submit" class="btn btn-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send" style="margin-right: 6px;">
-                        <line x1="22" y1="2" x2="11" y2="13"></line>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                    </svg>
-                    Enviar Comentario
-                </button>
-            {{ form_end(commentForm) }}
+            {% else %}
+                <p class="text-gray-500 text-center mb-6">No hay comentarios aún. Sé el primero en comentar.</p>
+            {% endif %}
+
+            {# Formulario de comentario #}
+            {% if commentForm %}
+                <div class="comment-form">
+                    {{ form_start(commentForm, {'action': path('emergency_comment', {'id': emergency.id})}) }}
+                        <div class="form-group">
+                            {{ form_label(commentForm.descripcion, 'Tu comentario', {'label_attr': {'class': 'form-label comment-label'}}) }}
+                            {{ form_widget(commentForm.descripcion, {'attr': {
+                                'class': 'form-control comment-textarea',
+                                'placeholder': 'Escribe tu comentario aquí...',
+                                'rows': 3
+                            }}) }}
+                            {{ form_errors(commentForm.descripcion) }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send" style="margin-right: 6px;">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                            Enviar Comentario
+                        </button>
+                    {{ form_end(commentForm) }}
+                </div>
+            {% endif %}
         </div>
     {% endif %}
 

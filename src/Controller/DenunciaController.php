@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Form\DenunciaType;
 use App\Form\ReporteType;
 use App\Repository\DenunciaRepository;
+use App\Repository\ReporteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,16 +19,22 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\Common\Collections\Collection;
 
 #[Route('/emergencies')]
 #[IsGranted('ROLE_USER')]
 class DenunciaController extends AbstractController
 {
     private DenunciaRepository $repository;
+    private ReporteRepository $reporteRepository;
 
-    public function __construct(DenunciaRepository $repository)
+    public function __construct(DenunciaRepository $repository, ReporteRepository $reporteRepository)
     {
         $this->repository = $repository;
+        $this->reporteRepository = $reporteRepository;
     }
 
     /**
@@ -82,16 +89,30 @@ class DenunciaController extends AbstractController
      * Ver detalles de una emergencia.
      */
     #[Route('/{id}', name: 'emergency_show', methods: ['GET'])]
-    public function show(Denuncia $denuncia): Response
+    public function show(Denuncia $denuncia, Request $request): Response
     {
         // Verificar si el usuario tiene permiso para ver esta denuncia
         if (!$this->isGranted('ROLE_ADMIN') && $denuncia->getUsuario() !== $this->getUser()) {
             throw $this->createAccessDeniedException('No tienes permiso para ver esta emergencia.');
         }
 
+        // Obtener todos los comentarios de la denuncia
+        $comentarios = $this->reporteRepository->findBy(['denuncia' => $denuncia], ['fechaHora' => 'ASC']);
+
+        // Crear el formulario de comentario solo si la emergencia está aceptada
+        $commentForm = null;
+        if ($denuncia->getEstado() && $denuncia->getEstado()->getNombre() === 'Aceptado') {
+            $reporte = new Reporte();
+            $reporte->setDenuncia($denuncia);
+            $reporte->setUsuario($this->getUser());
+            $commentForm = $this->createForm(ReporteType::class, $reporte);
+        }
+
         return $this->render('emergency/show.html.twig', [
             'title' => 'Detalle de Emergencia',
             'emergency' => $denuncia,
+            'commentForm' => $commentForm ? $commentForm->createView() : null,
+            'comentarios' => $comentarios,
         ]);
     }
 
@@ -266,5 +287,57 @@ class DenunciaController extends AbstractController
                 'message' => 'Error al buscar el usuario: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * Crear un nuevo comentario en la emergencia.
+     */
+    #[Route('/{id}/comment', name: 'emergency_comment', methods: ['POST'])]
+    public function addComment(
+        Denuncia $denuncia,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        MailerInterface $mailer
+    ): Response {
+        if (!$denuncia->getEstado() || $denuncia->getEstado()->getNombre() !== 'Aceptado') {
+            throw $this->createAccessDeniedException('No se pueden agregar comentarios en esta emergencia.');
+        }
+
+        $reporte = new Reporte();
+        $reporte->setDenuncia($denuncia);
+        $reporte->setUsuario($this->getUser());
+        $reporte->setFechaHora(new \DateTime());
+
+        $form = $this->createForm(ReporteType::class, $reporte);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($reporte);
+            $entityManager->flush();
+
+            // Enviar notificación por email al otro usuario
+            $destinatario = $this->getUser() === $denuncia->getUsuario() 
+                ? $denuncia->getUsuario() 
+                : $this->getUser();
+
+            $email = (new Email())
+                ->from('notificaciones@tuweb.com')
+                ->to($destinatario->getEmail())
+                ->subject('Nuevo comentario en tu emergencia')
+                ->html(sprintf(
+                    '<p>Has recibido un nuevo comentario en tu emergencia:</p>
+                    <p><strong>%s</strong></p>
+                    <p>Para ver el comentario, accede a: <a href="%s">%s</a></p>',
+                    $reporte->getDescripcion(),
+                    $this->generateUrl('emergency_show', ['id' => $denuncia->getId()]),
+                    $this->generateUrl('emergency_show', ['id' => $denuncia->getId()])
+                ));
+
+            $mailer->send($email);
+
+            $this->addFlash('success', 'Comentario agregado exitosamente.');
+        }
+
+        return $this->redirectToRoute('emergency_show', ['id' => $denuncia->getId()]);
     }
 }

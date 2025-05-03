@@ -27,7 +27,7 @@ class Mensaje
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $fechaEnvio;
 
-    #[ORM\ManyToOne(targetEntity: Denuncia::class, inversedBy: 'mensajes')]
+    #[ORM\ManyToOne(targetEntity: Denuncia::class)]
     #[ORM\JoinColumn(nullable: true)]
     private ?Denuncia $denuncia = null;
 

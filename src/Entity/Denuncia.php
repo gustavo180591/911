@@ -35,7 +35,7 @@ class Denuncia
     #[ORM\JoinColumn(nullable: false)]
     private ?CategoriaDenuncia $categoria = null;
 
-    #[ORM\ManyToOne(targetEntity: Usuario::class)]
+    #[ORM\ManyToOne(targetEntity: Usuario::class, inversedBy: 'denuncias')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Usuario $usuario = null;
 

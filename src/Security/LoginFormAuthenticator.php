@@ -20,6 +20,9 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
+    // Definir las rutas como constantes
+    public const LOGIN_ROUTE = 'app_login';
+    public const DEFAULT_SUCCESS_ROUTE = 'home_index';
 
     public function __construct(private UrlGeneratorInterface $urlGenerator)
     {
@@ -28,7 +31,6 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public function authenticate(Request $request): Passport
     {
         $email = $request->request->get('email', '');
-
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         return new Passport(
@@ -43,12 +45,13 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        // Si hay una URL objetivo guardada (por ejemplo, de una página protegida), redirigir allí
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
 
-        // ✅ Redirigir al dashboard o página principal después del login
-        return new RedirectResponse($this->urlGenerator->generate('auth/success.html.twig')); 
+        // Redirigir a la página principal después del login exitoso
+        return new RedirectResponse($this->urlGenerator->generate(self::DEFAULT_SUCCESS_ROUTE));
     }
 
     protected function getLoginUrl(Request $request): string
