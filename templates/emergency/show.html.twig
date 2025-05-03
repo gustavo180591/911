@@ -602,25 +602,4 @@
 
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const profileButton = document.getElementById('profileButton');
-        const profileDropdown = document.getElementById('profileDropdown');
-        
-        if (profileButton && profileDropdown) {
-            profileButton.addEventListener('click', function(e) {
-                e.stopPropagation();
-                profileDropdown.classList.toggle('show');
-            });
-            
-            document.addEventListener('click', function() {
-                profileDropdown.classList.remove('show');
-            });
-            
-            profileDropdown.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-        }
-    });
-</script> 
 {% endblock %}
