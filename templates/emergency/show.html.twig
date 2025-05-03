@@ -491,16 +491,7 @@
             <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
             <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
         </nav>
-        <div class="user-profile">
-            <button class="profile-button" id="profileButton">
-                <img src="{{ asset('images/logo-perfil.png') }}" alt="Perfil" class="profile-image"/>
-                <span class="arrow">▼</span>
-            </button>
-            <div class="profile-dropdown" id="profileDropdown">
-                <a href="{{ path('profile_view') }}" class="dropdown-item">Mi perfil</a>
-                <a href="{{ path('auth_logout') }}" class="dropdown-item">Cerrar sesión</a>
-            </div>
-        </div>
+        {% include 'fragments/profile-menu.html.twig' %}
     </div>
 </header>
 
