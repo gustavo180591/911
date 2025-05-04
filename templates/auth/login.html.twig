@@ -240,17 +240,19 @@
             position: relative;
         }
 
-        #togglePassword {
+        .password-toggle {
             position: absolute;
             right: 15px;
             top: 50%;
             transform: translateY(-50%);
-            cursor: pointer;
+            background: none;
+            border: none;
             color: rgba(255, 255, 255, 0.7);
-            font-size: 18px;
+            cursor: pointer;
+            padding: 0;
         }
 
-        #togglePassword:hover {
+        .password-toggle:hover {
             color: #ECB13A;
         }
 
@@ -355,12 +357,23 @@
                 }
             }) }}
             
-            {{ form_row(form._password, {
-                'label': 'Contraseña',
-                'attr': {
-                    'placeholder': '••••••'
-                }
-            }) }}
+            <div class="form-group">
+                <label for="{{ form._password.vars.id }}">Contraseña</label>
+                <div class="password-container">
+                    {{ form_widget(form._password, {
+                        'attr': {
+                            'placeholder': '••••••',
+                            'class': 'form-control'
+                        }
+                    }) }}
+                    <button type="button" class="password-toggle" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            {# Asegurarse de que el token CSRF se incluya #}
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
             <div>
                 <a href="{{ path('auth_forgot_password') }}" class="forgot-password">Olvidé mi contraseña</a>
@@ -412,6 +425,26 @@
                     togglePassword.classList.toggle('fa-eye-slash');
                 });
             }
+        });
+    </script>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.querySelector('#togglePassword');
+            const password = document.querySelector('#{{ form._password.vars.id }}');
+            
+            togglePassword.addEventListener('click', function() {
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                
+                // Cambiar el ícono
+                const icon = this.querySelector('i');
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
+            });
         });
     </script>
 {% endblock %}

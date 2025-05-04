@@ -48,7 +48,7 @@ class RegisterController extends AbstractController
             $user->setPassword(
                 $passwordHasher->hashPassword(
                     $user,
-                    $form->get('Password')->getData()
+                    $form->get('plainPassword')->getData()
                 )
             );
 
@@ -57,11 +57,14 @@ class RegisterController extends AbstractController
             $telefono = $countryCode . $form->get('telefono')->getData();
             $user->setTelefono($telefono);
 
+            // La fecha de registro se establece automáticamente en el constructor de User
+            // No es necesario establecerla manualmente
+
             $entityManager->persist($user);
             $entityManager->flush();
 
             $this->addFlash('success', '¡Registro exitoso! Ahora puedes iniciar sesión.');
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('auth_success');
         }
 
         return $this->render('auth/register.html.twig', [
