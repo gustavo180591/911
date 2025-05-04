@@ -456,6 +456,49 @@
             flex-direction: column;
         }
     }
+    @media (max-width: 768px) {
+        .container.mt-4 {
+            padding: 0 10px;
+            max-width: 100vw;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .register-button {
+            width: 100%;
+            font-size: 1.1rem;
+        }
+        .evidence-upload {
+            padding: 1rem 0.5rem;
+            font-size: 0.95rem;
+        }
+        #map {
+            height: 160px;
+        }
+    }
+    .selected-files-preview {
+        margin-top: 10px;
+        font-size: 13px;
+        color: #ccc;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .selected-files-preview .file-thumb {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: #232644;
+        border-radius: 6px;
+        padding: 3px 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .selected-files-preview img {
+        width: 28px;
+        height: 28px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
 </style>
 
 <header>
@@ -464,7 +507,8 @@
         <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="saci-logo"/>
     </div>
     <div class="header-right">
-        <nav class="main-nav">
+        <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú">☰</button>
+        <nav id="nav-menu">
             <a href="{{ path('app_login') }}" class="inicio-button">INICIO</a>
             <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
             <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
@@ -480,7 +524,7 @@
         <div class="alert alert-danger">{{ message }}</div>
     {% endfor %}
 
-    {{ form_start(form, { attr: { 'data-turbo': 'false', 'enctype': 'multipart/form-data' } }) }}
+    {{ form_start(form, { attr: { 'data-turbo': 'false' } }) }}
 
     <div class="form-group">
         {{ form_label(form.fechaHora, 'Fecha y hora del incidente') }}
@@ -549,72 +593,24 @@
     </div>
 
     <div class="form-group">
-        {{ form_label(form.evidencias.vars.prototype.imageFile, 'Evidencias') }}
-        
-        {# Mostrar evidencias existentes si las hay #}
-        {% if form.vars.data.evidencias is defined and form.vars.data.evidencias|length > 0 %}
-            <div class="existing-evidence">
-                <p style="margin-bottom: 12px; font-size: 14px; color: #9ca3af;">Evidencias actuales:</p>
-                <div class="evidence-gallery">
-                    {% for evidencia in form.vars.data.evidencias %}
-                        <div class="evidence-item">
-                            <img src="{{ asset('uploads/denuncias/' ~ evidencia.rutaArchivo) }}" alt="Evidencia" class="evidence-image">
-                            <div class="evidence-remove" data-id="{{ evidencia.id }}" title="Eliminar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-                <p style="margin: 16px 0 12px; font-size: 14px; color: #9ca3af;">Agregar nuevas evidencias:</p>
-            {% endif %}
-        
         <div class="evidence-upload" id="evidence-upload-container">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" 
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
                  viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="17 8 12 3 7 8"></polyline>
                 <line x1="12" y1="3" x2="12" y2="15"></line>
             </svg>
-            <span style="margin-bottom: 5px; font-size: 16px;">Subir archivos</span>
-            <span style="font-size: 13px;">Arrastra y suelta archivos aquí o haz clic para seleccionar</span>
+            <span>Upload a File</span>
+            <span style="font-size: 12px;">Drag and drop files here</span>
         </div>
-        
         {{ form_widget(form.ubicacion.coordenadas) }}
-
-        <ul id="evidencias-list" data-prototype="{{ form_widget(form.evidencias.vars.prototype)|e('html_attr') }}" style="list-style: none; padding: 0;">
-            {% for evidencia in form.evidencias %}
-                <li>{{ form_row(evidencia.imageFile, {'attr': {'class': 'file-input-hidden'}}) }}</li>
-            {% endfor %}
-        </ul>
-        
-        {# Campo oculto para almacenar IDs de evidencias a eliminar #}
-        <input type="hidden" name="evidencias_eliminar" id="evidencias_eliminar" value="">
-        
-        <div id="selected-files" style="margin-top: 12px; font-size: 14px; color: #9ca3af;"></div>
+        <ul id="evidencias-list" data-prototype="{{ form_widget(form.evidencias.vars.prototype)|e('html_attr') }}" style="list-style: none; padding: 0;"></ul>
+        <div id="selected-files-preview" class="selected-files-preview"></div>
     </div>
 
-    <div class="button-container">
-        <button type="submit" class="btn btn-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save">
-                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                <polyline points="7 3 7 8 15 8"></polyline>
-            </svg>
-            Guardar Cambios
-        </button>
-
-        <a href="{{ path('emergency_index') }}" class="btn btn-secondary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list">
-                <line x1="8" y1="6" x2="21" y2="6"></line>
-                <line x1="8" y1="12" x2="21" y2="12"></line>
-                <line x1="8" y1="18" x2="21" y2="18"></line>
-                <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                <line x1="3" y1="18" x2="3.01" y2="18"></line>
-            </svg>
-            Volver al Listado
-        </a>
+    <div class="form-group text-center">
+        <button type="submit" class="register-button">Actualizar</button>
     </div>
 
     {{ form_end(form) }}
@@ -872,5 +868,46 @@
             }
         }
     });
+
+    function initEvidenceUpload() {
+        const uploadContainer = document.getElementById('evidence-upload-container');
+        const evidenciasList = document.getElementById('evidencias-list');
+        const previewDiv = document.getElementById('selected-files-preview');
+        if (uploadContainer && evidenciasList) {
+            uploadContainer.replaceWith(uploadContainer.cloneNode(true));
+            const newUploadContainer = document.getElementById('evidence-upload-container');
+            newUploadContainer.addEventListener('click', () => {
+                const prototype = evidenciasList.dataset.prototype;
+                const index = evidenciasList.children.length;
+                const newForm = prototype.replace(/_name_/g, index);
+                const li = document.createElement('li');
+                li.innerHTML = newForm;
+                evidenciasList.appendChild(li);
+                const fileInput = li.querySelector('input[type="file"]');
+                if (fileInput) {
+                    fileInput.click();
+                    fileInput.addEventListener('change', function() {
+                        if (this.files.length > 0) {
+                            for (let i = 0; i < this.files.length; i++) {
+                                const file = this.files[i];
+                                const thumb = document.createElement('span');
+                                thumb.className = 'file-thumb';
+                                if (file.type.startsWith('image/')) {
+                                    const img = document.createElement('img');
+                                    img.src = URL.createObjectURL(file);
+                                    img.onload = () => URL.revokeObjectURL(img.src);
+                                    thumb.appendChild(img);
+                                }
+                                thumb.appendChild(document.createTextNode(file.name));
+                                previewDiv.appendChild(thumb);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    }
+    document.addEventListener('DOMContentLoaded', initEvidenceUpload);
+    document.addEventListener('turbo:load', initEvidenceUpload);
 </script>
 {% endblock %}

@@ -68,8 +68,18 @@ class DenunciaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Obtener el estado "Pendiente" o crearlo si no existe
+            $estado = $entityManager->getRepository(EstadoDenuncia::class)->findOneBy(['nombre' => 'Pendiente']);
+            if (!$estado) {
+                $estado = new EstadoDenuncia();
+                $estado->setNombre('Pendiente');
+                $estado->setDescripcion('Denuncia pendiente de revisión');
+                $entityManager->persist($estado);
+            }
+
             $denuncia->setUsuario($this->getUser());
             $denuncia->setFechaHora(new \DateTime());
+            $denuncia->setEstado($estado);
 
             $entityManager->persist($denuncia);
             $entityManager->flush();

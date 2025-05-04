@@ -20,9 +20,6 @@ class Denuncia
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $titulo = null;
-
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank(message: 'La descripción no puede estar vacía.')]
     #[Assert\Length(min: 10, minMessage: 'La descripción debe tener al menos 10 caracteres.')]
@@ -36,7 +33,7 @@ class Denuncia
     private ?EstadoDenuncia $estado = null;
 
     #[ORM\ManyToOne(targetEntity: CategoriaDenuncia::class, inversedBy: 'denuncias')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?CategoriaDenuncia $categoria = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'denuncias')]
@@ -46,7 +43,7 @@ class Denuncia
     #[ORM\OneToMany(mappedBy: 'denuncia', targetEntity: Evidencia::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $evidencias;
 
-    #[ORM\ManyToOne(targetEntity: Ubicacion::class)]
+    #[ORM\ManyToOne(targetEntity: Ubicacion::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Ubicacion $ubicacion = null;
 
@@ -63,17 +60,6 @@ class Denuncia
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getTitulo(): ?string
-    {
-        return $this->titulo;
-    }
-
-    public function setTitulo(?string $titulo): self
-    {
-        $this->titulo = $titulo;
-        return $this;
     }
 
     public function getDescripcion(): ?string
