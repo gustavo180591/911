@@ -2,54 +2,700 @@
 
 {% block title %}Editar Perfil{% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: #191D33;
+        color: #FFFFFF;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 40px;
+        flex-wrap: wrap;
+        background-color: #191D33;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo-header {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .logo-header img {
+        height: 40px;
+        width: auto;
+        margin-right: 10px;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+    }
+
+    .nav-toggle {
+        display: none;
+        font-size: 28px;
+        color: #FFFFFF;
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 1002;
+    }
+
+    nav.nav-menu {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .inicio-button {
+        background-color: transparent;
+        border-radius: 9999px;
+        padding: 10px 24px;
+        font-weight: 700;
+        font-size: 15px;
+        color: #E5A74E;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .inicio-button:hover {
+        color: #FFFFFF;
+        transform: translateY(-1px);
+    }
+
+    .about-button {
+        background-color: transparent;
+        border-radius: 9999px;
+        padding: 10px 20px;
+        font-weight: 700;
+        font-size: 15px;
+        color: #FFFFFF;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .about-button:hover {
+        color: #ECB13A;
+        transform: translateY(-1px);
+    }
+
+    .contact-button {
+        background-color: #ECB13A;
+        border-radius: 9999px;
+        padding: 10px 20px;
+        font-weight: 700;
+        font-size: 15px;
+        color: #FFFFFF;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 5px rgba(236, 177, 58, 0.3);
+    }
+
+    .contact-button:hover {
+        background-color: #dca02a;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(236, 177, 58, 0.4);
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .profile-container {
+        background-color: #1E2240;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        font-size: 28px;
+        margin-bottom: 30px;
+        color: #ECB13A;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 20px;
+    }
+
+    .form-col {
+        flex: 1;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: #ECB13A;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border-radius: 8px;
+        border: 1px solid #2e325a;
+        background-color: #232644;
+        color: white;
+        box-sizing: border-box;
+        font-family: 'Montserrat', sans-serif;
+        transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #ECB13A;
+        box-shadow: 0 0 0 3px rgba(236, 177, 58, 0.2);
+    }
+
+    .phone-container {
+        display: flex;
+        align-items: center;
+        background-color: #232644;
+        border: 1px solid #2e325a;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .country-selector {
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        background-color: #1E2240;
+        border-right: 1px solid #2e325a;
+        cursor: pointer;
+        min-width: 80px;
+    }
+
+    .country-selector:hover {
+        background-color: #2e325a;
+    }
+
+    .country-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #1E2240;
+        border: 1px solid #2e325a;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        width: 200px;
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 1000;
+        display: none;
+        margin-top: 5px;
+    }
+
+    .country-dropdown.show {
+        display: block;
+        animation: fadeIn 0.2s ease;
+    }
+
+    .country-option {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .country-option:hover {
+        background-color: #2e325a;
+    }
+
+    .country-flag {
+        margin-right: 8px;
+        font-size: 16px;
+    }
+
+    .country-name {
+        flex: 1;
+        font-size: 14px;
+        color: white;
+    }
+
+    .country-code {
+        font-size: 14px;
+        color: #ECB13A;
+        margin-left: 8px;
+    }
+
+    .selected-flag {
+        margin-right: 8px;
+        font-size: 16px;
+    }
+
+    .selected-code {
+        font-size: 14px;
+        color: #ECB13A;
+    }
+
+    .phone-input {
+        flex: 1;
+        padding: 12px 15px;
+        background-color: transparent;
+        border: none;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .phone-input:focus {
+        outline: none;
+    }
+
+    .password-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 10px;
+        background: none;
+        border: none;
+        color: #ECB13A;
+        cursor: pointer;
+        padding: 5px;
+        font-size: 16px;
+    }
+
+    .password-toggle:hover {
+        color: #dca02a;
+    }
+
+    /* Scrollbar personalizado para el dropdown */
+    .country-dropdown::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .country-dropdown::-webkit-scrollbar-track {
+        background: #1E2240;
+    }
+
+    .country-dropdown::-webkit-scrollbar-thumb {
+        background: #2e325a;
+        border-radius: 4px;
+    }
+
+    .country-dropdown::-webkit-scrollbar-thumb:hover {
+        background: #3a3f6d;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 16px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        border: none;
+    }
+
+    .btn-primary {
+        background-color: #ECB13A;
+        color: #FFFFFF;
+    }
+
+    .btn-primary:hover {
+        background-color: #dca02a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(236, 177, 58, 0.4);
+    }
+
+    .btn-secondary {
+        background-color: #2e325a;
+        color: #FFFFFF;
+    }
+
+    .btn-secondary:hover {
+        background-color: #373b6d;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .alert {
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    .alert-success {
+        background-color: rgba(46, 204, 113, 0.1);
+        color: #2ecc71;
+        border-left: 4px solid #2ecc71;
+    }
+
+    .alert-danger {
+        background-color: rgba(231, 76, 60, 0.1);
+        color: #e74c3c;
+        border-left: 4px solid #e74c3c;
+    }
+
+    @media (max-width: 768px) {
+        header {
+            padding: 15px 20px;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        nav.nav-menu {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.95);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            padding-top: 60px;
+            z-index: 1000;
+        }
+
+        nav.nav-menu.active {
+            display: flex;
+        }
+
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .button-container {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block body %}
-<div class="container mt-4">
-    <h1 class="mb-4">Editar Perfil</h1>
-
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">
-            {{ message }}
-        </div>
-    {% endfor %}
-
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
-        </div>
-    {% endfor %}
-
-    {{ form_start(form) }}
-
-    <div class="mb-3">
-        {{ form_label(form.nombre, 'Nombre') }}
-        {{ form_widget(form.nombre, { 'attr': {'class': 'form-control'} }) }}
-        {{ form_errors(form.nombre) }}
+<header>
+    <div class="logo-header" onclick="window.location.href='{{ path('home_index') }}'">
+        <img src="{{ asset('images/favicon.png') }}" alt="SACI Logo">
+        <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI Texto" style="height: 50px;">
     </div>
-
-    <div class="mb-3">
-        {{ form_label(form.apellido, 'Apellido') }}
-        {{ form_widget(form.apellido, { 'attr': {'class': 'form-control'} }) }}
-        {{ form_errors(form.apellido) }}
+    <button class="nav-toggle" id="nav-toggle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+    <div class="header-right">
+        <nav class="nav-menu" id="nav-menu">
+            <a href="{{ path('app_login') }}" class="inicio-button">INICIO</a>
+            <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
+            <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
+        </nav>
+        {% include 'fragments/profile-menu.html.twig' %}
     </div>
+</header>
 
-    <div class="mb-3">
-        {{ form_label(form.email, 'Correo Electrónico') }}
-        {{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}
-        {{ form_errors(form.email) }}
-    </div>
+<div class="container">
+    <div class="profile-container">
+        <h1>Editar Perfil</h1>
 
-    <div class="mb-3">
-        {{ form_label(form.telefono, 'Teléfono') }}
-        {{ form_widget(form.telefono, { 'attr': {'class': 'form-control'} }) }}
-        {{ form_errors(form.telefono) }}
-    </div>   
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
 
-    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
 
-    {{ form_end(form) }}
+        {{ form_start(profileForm) }}
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        {{ form_label(profileForm.nombre, 'Nombre', {
+                            'label_attr': {'class': 'form-label'}
+                        }) }}
+                        {{ form_widget(profileForm.nombre, {
+                            'attr': {
+                                'class': 'form-control',
+                                'id': 'nombre'
+                            }
+                        }) }}
+                        {{ form_errors(profileForm.nombre) }}
+                    </div>
+                </div>
+                <div class="form-col">
+                    <div class="form-group">
+                        {{ form_label(profileForm.apellido, 'Apellido', {
+                            'label_attr': {'class': 'form-label'}
+                        }) }}
+                        {{ form_widget(profileForm.apellido, {
+                            'attr': {
+                                'class': 'form-control',
+                                'id': 'apellido'
+                            }
+                        }) }}
+                        {{ form_errors(profileForm.apellido) }}
+                    </div>
+                </div>
+            </div>
 
-    <div class="mt-3">
-        <a href="{{ path('profile_index') }}" class="btn btn-secondary">Volver al Perfil</a>
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        {{ form_label(profileForm.dni, 'DNI', {
+                            'label_attr': {'class': 'form-label'}
+                        }) }}
+                        {{ form_widget(profileForm.dni, {
+                            'attr': {
+                                'class': 'form-control',
+                                'id': 'dni'
+                            }
+                        }) }}
+                        {{ form_errors(profileForm.dni) }}
+                    </div>
+                </div>
+                <div class="form-col">
+                    <div class="form-group">
+                        {{ form_label(profileForm.direccion, 'Dirección', {
+                            'label_attr': {'class': 'form-label'}
+                        }) }}
+                        {{ form_widget(profileForm.direccion, {
+                            'attr': {
+                                'class': 'form-control',
+                                'id': 'direccion'
+                            }
+                        }) }}
+                        {{ form_errors(profileForm.direccion) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(profileForm.email, 'Correo electrónico', {
+                    'label_attr': {'class': 'form-label'}
+                }) }}
+                {{ form_widget(profileForm.email, {
+                    'attr': {
+                        'class': 'form-control',
+                        'id': 'email'
+                    }
+                }) }}
+                {{ form_errors(profileForm.email) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(profileForm.telefono, 'Número de Teléfono', {
+                    'label_attr': {'class': 'form-label'}
+                }) }}
+                <div class="phone-container">
+                    <div class="country-selector" id="countrySelector">
+                        <span class="selected-flag">🇦🇷</span>
+                        <span class="selected-code">+54</span>
+                    </div>
+                    <div class="country-dropdown" id="countryDropdown">
+                        <div class="country-option" data-code="+54" data-flag="🇦🇷">
+                            <span class="country-flag">🇦🇷</span>
+                            <span class="country-name">Argentina</span>
+                            <span class="country-code">+54</span>
+                        </div>
+                        <div class="country-option" data-code="+55" data-flag="🇧🇷">
+                            <span class="country-flag">🇧🇷</span>
+                            <span class="country-name">Brasil</span>
+                            <span class="country-code">+55</span>
+                        </div>
+                        <div class="country-option" data-code="+56" data-flag="🇨🇱">
+                            <span class="country-flag">🇨🇱</span>
+                            <span class="country-name">Chile</span>
+                            <span class="country-code">+56</span>
+                        </div>
+                        <div class="country-option" data-code="+57" data-flag="🇨🇴">
+                            <span class="country-flag">🇨🇴</span>
+                            <span class="country-name">Colombia</span>
+                            <span class="country-code">+57</span>
+                        </div>
+                        <div class="country-option" data-code="+58" data-flag="🇻🇪">
+                            <span class="country-flag">🇻🇪</span>
+                            <span class="country-name">Venezuela</span>
+                            <span class="country-code">+58</span>
+                        </div>
+                        <div class="country-option" data-code="+52" data-flag="🇲🇽">
+                            <span class="country-flag">🇲🇽</span>
+                            <span class="country-name">México</span>
+                            <span class="country-code">+52</span>
+                        </div>
+                        <div class="country-option" data-code="+51" data-flag="🇵🇪">
+                            <span class="country-flag">🇵🇪</span>
+                            <span class="country-name">Perú</span>
+                            <span class="country-code">+51</span>
+                        </div>
+                        <div class="country-option" data-code="+593" data-flag="🇪🇨">
+                            <span class="country-flag">🇪🇨</span>
+                            <span class="country-name">Ecuador</span>
+                            <span class="country-code">+593</span>
+                        </div>
+                    </div>
+                    {{ form_widget(profileForm.telefono, {
+                        'attr': {
+                            'class': 'phone-input',
+                            'id': 'telefono',
+                            'placeholder': 'Ingrese su número de teléfono'
+                        }
+                    }) }}
+                </div>
+                {{ form_errors(profileForm.telefono) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(profileForm.password, 'Contraseña', {
+                    'label_attr': {'class': 'form-label'}
+                }) }}
+                <div class="password-container">
+                    {{ form_widget(profileForm.password, {
+                        'attr': {
+                            'class': 'form-control',
+                            'id': 'password',
+                            'type': 'password'
+                        }
+                    }) }}
+                    <button type="button" class="password-toggle" id="togglePassword" aria-label="Mostrar/ocultar contraseña">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                {{ form_errors(profileForm.password) }}
+            </div>
+
+            <div class="button-container">
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                <a href="{{ path('profile_view') }}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        {{ form_end(profileForm) }}
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Menú toggle
+        const navToggle = document.getElementById('nav-toggle');
+        const navMenu = document.getElementById('nav-menu');
+
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            navToggle.innerHTML = navMenu.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Cerrar menú al hacer clic en un enlace
+        const links = document.querySelectorAll('#nav-menu a');
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                navToggle.innerHTML = '☰';
+            });
+        });
+
+        // Selector de país
+        const countrySelector = document.getElementById('countrySelector');
+        const countryDropdown = document.getElementById('countryDropdown');
+        const selectedFlag = countrySelector.querySelector('.selected-flag');
+        const selectedCode = countrySelector.querySelector('.selected-code');
+        const phoneInput = document.querySelector('.phone-input');
+
+        // Toggle del dropdown
+        countrySelector.addEventListener('click', function(e) {
+            e.stopPropagation();
+            countryDropdown.classList.toggle('show');
+        });
+
+        // Cerrar dropdown al hacer clic fuera
+        document.addEventListener('click', function() {
+            countryDropdown.classList.remove('show');
+        });
+
+        // Seleccionar país
+        const countryOptions = countryDropdown.querySelectorAll('.country-option');
+        countryOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const flag = this.dataset.flag;
+                const code = this.dataset.code;
+                
+                selectedFlag.textContent = flag;
+                selectedCode.textContent = code;
+                
+                // Actualizar el valor del input con el código de país
+                const currentValue = phoneInput.value;
+                if (currentValue.startsWith('+')) {
+                    const number = currentValue.split(' ')[1] || '';
+                    phoneInput.value = `${code} ${number}`;
+                } else {
+                    phoneInput.value = `${code} ${currentValue}`;
+                }
+                
+                countryDropdown.classList.remove('show');
+            });
+        });
+
+        // Validar y formatear el número de teléfono
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value;
+            
+            // Si el valor no comienza con el código de país, agregarlo
+            if (!value.startsWith(selectedCode.textContent)) {
+                const number = value.replace(/[^\d]/g, '');
+                value = `${selectedCode.textContent} ${number}`;
+            }
+            
+            // Formatear el número
+            value = value.replace(/[^\d+ ]/g, '');
+            e.target.value = value;
+        });
+
+        // Toggle contraseña
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener('click', () => {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                togglePassword.querySelector('i').classList.toggle('fa-eye');
+                togglePassword.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        }
+    });
+</script>
 {% endblock %}

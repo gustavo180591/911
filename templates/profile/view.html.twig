@@ -453,7 +453,7 @@
     </button>
     <div class="header-right">
         <nav class="nav-menu" id="nav-menu">
-            <a href="{{ path('auth_login') }}" class="inicio-button">INICIO</a>
+            <a href="{{ path('app_login') }}" class="inicio-button">INICIO</a>
             <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
             <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
         </nav>
@@ -558,11 +558,15 @@
                 <label for="{{ profileForm.password.vars.id }}">Contraseña</label>
                 <div class="password-container">
                     {{ form_widget(profileForm.password, {'attr': {'class': 'form-control', 'type': 'password'}}) }}
+                    <button type="button" class="password-toggle" id="togglePassword" aria-label="Mostrar/ocultar contraseña">
+                        <i class="fas fa-eye"></i>
+                    </button>
                 </div>
             </div>
         {{ form_end(profileForm) }}
 
         <div class="action-links">
+            <a href="{{ path('profile_edit') }}" class="action-link">Editar Perfil</a>
             <a href="{{ path('complaint_show') }}" class="action-link">Mi historial de denuncias</a>
             <a href="#" class="action-link delete-account" onclick="confirmDelete()">Eliminar cuenta</a>
         </div>
@@ -652,6 +656,19 @@
             value = value.replace(/[^\d+ ]/g, '');
             e.target.value = value;
         });
+
+        // Toggle contraseña
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener('click', () => {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                togglePassword.querySelector('i').classList.toggle('fa-eye');
+                togglePassword.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        }
     });
 
     function confirmDelete() {

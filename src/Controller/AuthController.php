@@ -121,7 +121,7 @@ class AuthController extends AbstractController
             // 3. Enviar un correo de recuperación utilizando $mailer.
 
             $this->addFlash('success', 'Si el email existe en nuestro sistema, te enviaremos instrucciones para restablecer la contraseña.');
-            return $this->redirectToRoute('auth_login');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('auth/forgot_password.html.twig', [
@@ -141,6 +141,6 @@ class AuthController extends AbstractController
             return $this->redirectToRoute('home_index');
         }
 
-        return $this->redirectToRoute('auth_login');
+        return $this->redirectToRoute('app_login');
     }
 }
