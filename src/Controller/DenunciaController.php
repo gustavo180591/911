@@ -45,7 +45,7 @@ class DenunciaController extends AbstractController
     {
         // Si es admin, mostrar todas las emergencias
         if ($this->isGranted('ROLE_ADMIN')) {
-            $emergencies = $this->repository->findBy([], ['fechaHora' => 'DESC']);
+        $emergencies = $this->repository->findBy([], ['fechaHora' => 'DESC']);
         } else {
             // Si es usuario normal, mostrar solo sus emergencias
             $emergencies = $this->repository->findBy(['usuario' => $this->getUser()], ['fechaHora' => 'DESC']);
@@ -89,8 +89,8 @@ class DenunciaController extends AbstractController
      * Ver detalles de una emergencia.
      */
     #[Route('/{id}', name: 'emergency_show', methods: ['GET'])]
-    public function show(Denuncia $denuncia, Request $request): Response
-    {
+public function show(Denuncia $denuncia, Request $request): Response
+{
         // Verificar si el usuario tiene permiso para ver esta denuncia
         if (!$this->isGranted('ROLE_ADMIN') && $denuncia->getUsuario() !== $this->getUser()) {
             throw $this->createAccessDeniedException('No tienes permiso para ver esta emergencia.');
@@ -100,21 +100,21 @@ class DenunciaController extends AbstractController
         $comentarios = $this->reporteRepository->findBy(['denuncia' => $denuncia], ['fechaHora' => 'ASC']);
 
         // Crear el formulario de comentario solo si la emergencia está aceptada
-        $commentForm = null;
-        if ($denuncia->getEstado() && $denuncia->getEstado()->getNombre() === 'Aceptado') {
+    $commentForm = null;
+    if ($denuncia->getEstado() && $denuncia->getEstado()->getNombre() === 'Aceptado') {
             $reporte = new Reporte();
             $reporte->setDenuncia($denuncia);
             $reporte->setUsuario($this->getUser());
             $commentForm = $this->createForm(ReporteType::class, $reporte);
         }
 
-        return $this->render('emergency/show.html.twig', [
+    return $this->render('emergency/show.html.twig', [
             'title' => 'Detalle de Emergencia',
             'emergency' => $denuncia,
-            'commentForm' => $commentForm ? $commentForm->createView() : null,
+        'commentForm' => $commentForm ? $commentForm->createView() : null,
             'comentarios' => $comentarios,
-        ]);
-    }
+    ]);
+}
 
     /**
      * Editar una emergencia.

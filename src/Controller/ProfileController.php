@@ -106,7 +106,7 @@ class ProfileController extends AbstractController
             $denuncias = $denunciaRepository->findAll();
         } else {
             // Si es usuario normal, mostrar solo sus denuncias
-            $denuncias = $denunciaRepository->findBy(['usuario' => $this->getUser()]);
+        $denuncias = $denunciaRepository->findBy(['usuario' => $this->getUser()]);
         }
 
         return $this->render('emergency/my_complaints.html.twig', [

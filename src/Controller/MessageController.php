@@ -31,7 +31,7 @@ class MessageController extends AbstractController
             $messages = $this->repository->findAll();
         } else {
             // Si es usuario normal, mostrar solo sus mensajes
-            $messages = $this->repository->findByUser($this->getUser());
+        $messages = $this->repository->findByUser($this->getUser());
         }
 
         return $this->render('message/index.html.twig', [

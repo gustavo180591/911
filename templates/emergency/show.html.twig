@@ -770,93 +770,93 @@
     <h1>{{ title }}</h1>
 
     <div class="profile-container">
-        <table class="detail-table">
-            <tr>
-                <th>Descripción</th>
-                <td>{{ emergency.descripcion }}</td>
-            </tr>
-            <tr>
-                <th>Fecha y Hora</th>
-                <td>{{ emergency.fechaHora|date('d-m-Y H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Ubicación</th>
-                <td>
-                    {% if emergency.ubicacion %}
-                        {{ emergency.ubicacion.calle ~ ', ' ~ emergency.ubicacion.numero }}
-                    {% else %}
-                        <span class="text-muted">Sin ubicación</span>
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <th>Evidencias</th>
-                <td>
-                    {% if emergency.evidencias|length > 0 %}
-                        <div class="evidence-gallery">
-                            {% for evidencia in emergency.evidencias %}
-                                <div class="evidence-card">
-                                    {% if evidencia.rutaArchivo %}
-                                        <img src="{{ asset('uploads/denuncias/' ~ evidencia.rutaArchivo) }}"
-                                             alt="Evidencia"
-                                             class="evidence-image">
-                                        <div class="evidence-card-body">
-                                            <a href="{{ asset('uploads/denuncias/' ~ evidencia.rutaArchivo) }}"
-                                               target="_blank"
-                                               class="btn btn-sm btn-primary">
-                                                Ver archivo
-                                            </a>
-                                        </div>
-                                    {% else %}
-                                        <div class="evidence-card-body text-muted">
-                                            Sin imagen
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <span class="text-muted">No hay evidencias disponibles.</span>
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <th>Estado</th>
-                <td>
-                    <span class="status-badge">{{ emergency.estado.nombre }}</span>
-                </td>
-            </tr>
-        </table>
+    <table class="detail-table">
+        <tr>
+            <th>Descripción</th>
+            <td>{{ emergency.descripcion }}</td>
+        </tr>
+        <tr>
+            <th>Fecha y Hora</th>
+            <td>{{ emergency.fechaHora|date('d-m-Y H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Ubicación</th>
+            <td>
+                {% if emergency.ubicacion %}
+                    {{ emergency.ubicacion.calle ~ ', ' ~ emergency.ubicacion.numero }}
+                {% else %}
+                    <span class="text-muted">Sin ubicación</span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Evidencias</th>
+            <td>
+                {% if emergency.evidencias|length > 0 %}
+                    <div class="evidence-gallery">
+                        {% for evidencia in emergency.evidencias %}
+                            <div class="evidence-card">
+                                {% if evidencia.rutaArchivo %}
+                                    <img src="{{ asset('uploads/denuncias/' ~ evidencia.rutaArchivo) }}"
+                                         alt="Evidencia"
+                                         class="evidence-image">
+                                    <div class="evidence-card-body">
+                                        <a href="{{ asset('uploads/denuncias/' ~ evidencia.rutaArchivo) }}"
+                                           target="_blank"
+                                           class="btn btn-sm btn-primary">
+                                            Ver archivo
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <div class="evidence-card-body text-muted">
+                                        Sin imagen
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <span class="text-muted">No hay evidencias disponibles.</span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Estado</th>
+            <td>
+                <span class="status-badge">{{ emergency.estado.nombre }}</span>
+            </td>
+        </tr>
+    </table>
 
         <div class="button-group">
             {% if is_granted('ROLE_ADMIN') %}
                 <form action="{{ path('emergency_accept', {'id': emergency.id}) }}" method="post">
-                    <input type="hidden" name="_token" value="{{ csrf_token('accept_emergency_' ~ emergency.id) }}">
-                    <button type="submit" class="btn btn-success">
+            <input type="hidden" name="_token" value="{{ csrf_token('accept_emergency_' ~ emergency.id) }}">
+            <button type="submit" class="btn btn-success">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Aceptar
-                    </button>
-                </form>
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Aceptar
+            </button>
+        </form>
                 <form action="{{ path('emergency_reject', {'id': emergency.id}) }}" method="post">
-                    <input type="hidden" name="_token" value="{{ csrf_token('reject_emergency_' ~ emergency.id) }}">
-                    <button type="submit" class="btn btn-danger">
+            <input type="hidden" name="_token" value="{{ csrf_token('reject_emergency_' ~ emergency.id) }}">
+            <button type="submit" class="btn btn-danger">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                        Rechazar
-                    </button>
-                </form>
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+                Rechazar
+            </button>
+        </form>
             {% endif %}
             <a href="{{ path('emergency_index') }}" class="btn btn-primary">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left">
                     <line x1="19" y1="12" x2="5" y2="12"></line>
                     <polyline points="12 19 5 12 12 5"></polyline>
-                </svg>
+            </svg>
                 Volver al listado
-            </a>
+        </a>
         </div>
     </div>
 
@@ -889,23 +889,23 @@
             {% if commentForm %}
                 <div class="comment-form">
                     {{ form_start(commentForm, {'action': path('emergency_comment', {'id': emergency.id})}) }}
-                        <div class="form-group">
+                <div class="form-group">
                             {{ form_label(commentForm.descripcion, 'Tu comentario', {'label_attr': {'class': 'form-label comment-label'}}) }}
                             {{ form_widget(commentForm.descripcion, {'attr': {
                                 'class': 'form-control comment-textarea',
                                 'placeholder': 'Escribe tu comentario aquí...',
                                 'rows': 3
                             }}) }}
-                            {{ form_errors(commentForm.descripcion) }}
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send" style="margin-right: 6px;">
-                                <line x1="22" y1="2" x2="11" y2="13"></line>
-                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                            </svg>
-                            Enviar Comentario
-                        </button>
-                    {{ form_end(commentForm) }}
+                    {{ form_errors(commentForm.descripcion) }}
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send" style="margin-right: 6px;">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                    Enviar Comentario
+                </button>
+            {{ form_end(commentForm) }}
                 </div>
             {% endif %}
         </div>

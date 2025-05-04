@@ -40,11 +40,11 @@ class AuthController extends AbstractController
         $phoneCodes = json_decode($jsonData, true);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Comprobar si el usuario ya existe
+                // Comprobar si el usuario ya existe
             $existingUser = $entityManager->getRepository(User::class)
-                ->findOneBy(['email' => $user->getEmail()]);
+                    ->findOneBy(['email' => $user->getEmail()]);
 
-            if ($existingUser) {
+                if ($existingUser) {
                 $this->addFlash('error', 'Este correo electrónico ya está registrado.');
                 return $this->render('auth/register.html.twig', [
                     'registrationForm' => $form->createView(),
@@ -60,12 +60,12 @@ class AuthController extends AbstractController
             );
 
             // Asignar el rol ROLE_USER por defecto
-            $user->setRoles(['ROLE_USER']);
+                $user->setRoles(['ROLE_USER']);
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+                $entityManager->persist($user);
+                $entityManager->flush();
 
-            // Autenticar al usuario tras el registro
+                // Autenticar al usuario tras el registro
             return $this->redirectToRoute('app_login');
         }
 

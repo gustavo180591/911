@@ -30,7 +30,7 @@ class NotificationController extends AbstractController
             $notifications = $this->repository->findBy([], ['fechaEnvio' => 'DESC']);
         } else {
             // Si es usuario normal, mostrar solo sus notificaciones
-            $notifications = $this->repository->findBy(['usuario' => $this->getUser()], ['fechaEnvio' => 'DESC']);
+        $notifications = $this->repository->findBy(['usuario' => $this->getUser()], ['fechaEnvio' => 'DESC']);
         }
 
         return $this->render('notification/index.html.twig', [
@@ -47,7 +47,7 @@ class NotificationController extends AbstractController
             $notification = $this->repository->find($id);
         } else {
             // Si es usuario normal, solo puede ver sus notificaciones
-            $notification = $this->repository->findOneBy(['id' => $id, 'usuario' => $this->getUser()]);
+        $notification = $this->repository->findOneBy(['id' => $id, 'usuario' => $this->getUser()]);
         }
 
         if (!$notification) {
@@ -68,7 +68,7 @@ class NotificationController extends AbstractController
             $notification = $this->repository->find($id);
         } else {
             // Si es usuario normal, solo puede eliminar sus notificaciones
-            $notification = $this->repository->findOneBy(['id' => $id, 'usuario' => $this->getUser()]);
+        $notification = $this->repository->findOneBy(['id' => $id, 'usuario' => $this->getUser()]);
         }
 
         if (!$notification) {

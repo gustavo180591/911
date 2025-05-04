@@ -31,7 +31,7 @@ class EvidenceController extends AbstractController
             $evidences = $this->repository->findBy([], ['fechaSubida' => 'DESC']);
         } else {
             // Si es usuario normal, mostrar solo sus evidencias
-            $evidences = $this->repository->findBy(['usuario' => $this->getUser()], ['fechaSubida' => 'DESC']);
+        $evidences = $this->repository->findBy(['usuario' => $this->getUser()], ['fechaSubida' => 'DESC']);
         }
 
         return $this->render('evidence/index.html.twig', [
@@ -73,7 +73,7 @@ class EvidenceController extends AbstractController
             $evidence = $this->repository->find($id);
         } else {
             // Si es usuario normal, solo puede ver sus evidencias
-            $evidence = $this->repository->findOneBy(['id' => $id, 'usuario' => $this->getUser()]);
+        $evidence = $this->repository->findOneBy(['id' => $id, 'usuario' => $this->getUser()]);
         }
 
         if (!$evidence) {
@@ -94,7 +94,7 @@ class EvidenceController extends AbstractController
             $evidence = $this->repository->find($id);
         } else {
             // Si es usuario normal, solo puede eliminar sus evidencias
-            $evidence = $this->repository->findOneBy(['id' => $id, 'usuario' => $this->getUser()]);
+        $evidence = $this->repository->findOneBy(['id' => $id, 'usuario' => $this->getUser()]);
         }
 
         if (!$evidence) {
