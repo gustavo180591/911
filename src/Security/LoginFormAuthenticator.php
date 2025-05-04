@@ -41,12 +41,13 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
         return new Passport(
             new UserBadge($username, function($userIdentifier) {
-                // Buscar usuario por email, teléfono o username
+                // Buscar usuario por email, teléfono, username o DNI
                 $user = $this->entityManager->getRepository(User::class)
                     ->createQueryBuilder('u')
                     ->where('u.email = :identifier')
                     ->orWhere('u.telefono = :identifier')
                     ->orWhere('u.username = :identifier')
+                    ->orWhere('u.dni = :identifier')
                     ->setParameter('identifier', $userIdentifier)
                     ->getQuery()
                     ->getOneOrNullResult();

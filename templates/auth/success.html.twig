@@ -1,11 +1,288 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Registro Exitoso{% endblock %}
+{% block title %}
+    SACI - Registro Exitoso
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #191D33;
+            font-family: 'Montserrat', sans-serif;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Header y navegación */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            position: static;
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            background-color: rgba(26, 26, 36, 0.9);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            padding: 12px 50px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img.logo {
+            height: 40px;
+            width: auto;
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled .logo-container img.logo {
+            height: 32px;
+        }
+
+        .nav-toggle {
+            display: none;
+            font-size: 24px;
+            color: #FFFFFF;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 1002;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 10px 24px;
+            font-weight: 700;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link.inicio {
+            color: #E5A74E;
+        }
+
+        .nav-link.inicio:hover {
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+
+        .nav-link.sobre-nosotros {
+            color: #FFFFFF;
+        }
+
+        .nav-link.sobre-nosotros:hover {
+            color: #E5A74E;
+            transform: translateY(-2px);
+        }
+
+        .nav-link.contacto {
+            background-color: #E5A74E;
+            color: #FFFFFF;
+            border-radius: 9999px;
+        }
+
+        .nav-link.contacto:hover {
+            background-color: #FFFFFF;
+            color: #E5A74E;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(229, 167, 78, 0.3);
+        }
+
+        @media (max-width: 1024px) {
+            .header {
+                padding: 20px 30px;
+            }
+
+            .header.scrolled {
+                padding: 12px 30px;
+            }
+
+            .nav-menu {
+                gap: 16px;
+            }
+
+            .nav-link {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background-color: rgba(0, 0, 0, 0.95);
+                z-index: 1000;
+                padding: 0;
+                transition: all 0.3s ease-in-out;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-link {
+                width: 100%;
+                padding: 15px 0;
+                margin: 8px 0;
+                font-size: 20px;
+                text-align: center;
+            }
+
+            .nav-link.contacto {
+                border: 2px solid #E5A74E;
+                padding: 12px 30px;
+                margin-top: 20px;
+                width: auto;
+            }
+
+            .nav-link.contacto:hover {
+                background-color: #E5A74E;
+                color: #000;
+            }
+
+            .logo-container img.logo {
+                height: 30px;
+            }
+        }
+
+        /* Estilos del contenedor de éxito */
+        .container {
+            max-width: 600px;
+            margin: 60px auto 0;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 64px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        .login-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #E5A74E;
+            color: #FFFFFF;
+            text-decoration: none;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .login-button:hover {
+            background-color: #FFFFFF;
+            color: #E5A74E;
+            border-color: #E5A74E;
+            transform: translateY(-2px);
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h1 class="mb-4 text-success">¡Registro Exitoso!</h1>
-    <p>Tu cuenta ha sido creada correctamente.</p>
-    <p><a href="{{ path('home_index') }}" class="btn btn-primary">Ir al Inicio</a></p>
-</div>
+    <header class="header" id="header">
+        <div class="logo-container">
+            <img src="{{ asset('images/favicon.png') }}" alt="SACI Logo" class="logo" style="margin-right: 10px;">
+            <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="logo">
+        </div>
+
+        <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú">☰</button>
+
+        <nav id="nav-menu" class="nav-menu">
+            <a href="{{ path('app_login') }}" class="nav-link inicio">INICIO</a>
+            <a href="{{ path('home_about') }}" class="nav-link sobre-nosotros">SOBRE NOSOTROS</a>
+            <a href="{{ path('home_contact') }}" class="nav-link contacto">CONTACTO</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="success-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h1>¡Registro Exitoso!</h1>
+        <p>
+            Tu cuenta ha sido creada correctamente. Ahora puedes iniciar sesión para acceder a todas las funcionalidades de SACI.
+        </p>
+        <a href="{{ path('app_login') }}" class="login-button">Iniciar Sesión</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Menú toggle
+            const navToggle = document.getElementById('nav-toggle');
+            const navMenu = document.getElementById('nav-menu');
+
+            navToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                navToggle.innerHTML = navMenu.classList.contains('active') ? '✕' : '☰';
+            });
+
+            const links = document.querySelectorAll('#nav-menu .nav-link');
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    navToggle.innerHTML = '☰';
+                });
+            });
+
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+        });
+    </script>
 {% endblock %}
