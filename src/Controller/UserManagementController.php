@@ -2,9 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Usuario;
-use App\Form\UsuarioType;
-use App\Repository\UsuarioRepository;
+use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,91 +15,58 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class UserManagementController extends AbstractController
 {
-    private UsuarioRepository $repository;
+    private UserRepository $repository;
+    private EntityManagerInterface $entityManager;
 
-    public function __construct(UsuarioRepository $repository)
+    public function __construct(UserRepository $repository, EntityManagerInterface $entityManager)
     {
         $this->repository = $repository;
+        $this->entityManager = $entityManager;
     }
 
-    #[Route('/', name: 'user_management_index', methods: ['GET'])]
+    #[Route('/', name: 'admin_users_index', methods: ['GET'])]
     public function index(): Response
     {
-        $users = $this->repository->findAll();
-
-        return $this->render('user_management/index.html.twig', [
-            'title' => 'Gestión de Usuarios',
-            'users' => $users,
+        return $this->render('admin/users/index.html.twig', [
+            'users' => $this->repository->findAll(),
         ]);
     }
 
-    #[Route('/create', name: 'user_management_create', methods: ['GET', 'POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}', name: 'admin_users_show', methods: ['GET'])]
+    public function show(User $user): Response
     {
-        $user = new Usuario();
-        $form = $this->createForm(UsuarioType::class, $user);
+        return $this->render('admin/users/show.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'admin_users_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, User $user): Response
+    {
+        $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT));
-            $user->setFechaRegistro(new \DateTime());
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Usuario creado exitosamente.');
-
-            return $this->redirectToRoute('user_management_index');
+            $this->entityManager->flush();
+            $this->addFlash('success', 'Usuario actualizado correctamente.');
+            return $this->redirectToRoute('admin_users_index');
         }
 
-        return $this->render('user_management/create.html.twig', [
-            'title' => 'Crear Usuario',
+        return $this->render('admin/users/edit.html.twig', [
+            'user' => $user,
             'form' => $form->createView(),
         ]);
     }
 
-    #[Route('/edit/{id}', name: 'user_management_edit', methods: ['GET', 'POST'])]
-    public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/delete', name: 'admin_users_delete', methods: ['POST'])]
+    public function delete(Request $request, User $user): Response
     {
-        $user = $this->repository->find($id);
-
-        if (!$user) {
-            throw $this->createNotFoundException('El usuario solicitado no existe.');
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            $this->entityManager->remove($user);
+            $this->entityManager->flush();
+            $this->addFlash('success', 'Usuario eliminado correctamente.');
         }
 
-        $form = $this->createForm(UsuarioType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Usuario actualizado exitosamente.');
-
-            return $this->redirectToRoute('user_management_index');
-        }
-
-        return $this->render('user_management/edit.html.twig', [
-            'title' => 'Editar Usuario',
-            'form' => $form->createView(),
-        ]);
-    }
-
-    #[Route('/delete/{id}', name: 'user_management_delete', methods: ['POST'])]
-    public function delete(int $id, Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $user = $this->repository->find($id);
-
-        if (!$user) {
-            throw $this->createNotFoundException('El usuario solicitado no existe.');
-        }
-
-        if ($this->isCsrfTokenValid('delete_user_' . $user->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($user);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Usuario eliminado exitosamente.');
-        }
-
-        return $this->redirectToRoute('user_management_index');
+        return $this->redirectToRoute('admin_users_index');
     }
 }

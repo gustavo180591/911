@@ -1,0 +1,248 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SACI - Estadísticas{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .estadisticas-container {
+            padding: 2rem;
+            background: linear-gradient(rgba(26, 26, 36, 0.85), rgba(26, 26, 36, 0.85)), 
+                        url('{{ asset('images/fondo-inicio.png') }}') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #FFFFFF;
+        }
+
+        .estadisticas-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .estadisticas-header h1 {
+            font-size: 2.5rem;
+            color: #E5A74E;
+            margin-bottom: 0.5rem;
+        }
+
+        .estadisticas-header p {
+            font-size: 1.2rem;
+            color: #FFFFFF;
+            opacity: 0.9;
+        }
+
+        .estadisticas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .estadistica-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .estadistica-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .estadistica-card h2 {
+            color: #E5A74E;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #E5A74E;
+            padding-bottom: 0.5rem;
+        }
+
+        .estadistica-total {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: rgba(229, 167, 78, 0.1);
+            border-radius: 1rem;
+            border: 1px solid rgba(229, 167, 78, 0.2);
+        }
+
+        .estadistica-total h1 {
+            color: #E5A74E;
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .estadistica-total p {
+            color: #FFFFFF;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .tabla-estadisticas {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            color: #FFFFFF;
+        }
+
+        .tabla-estadisticas th,
+        .tabla-estadisticas td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tabla-estadisticas th {
+            color: #E5A74E;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .tabla-estadisticas tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .barra-progreso {
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .barra-progreso-fill {
+            height: 100%;
+            background-color: #E5A74E;
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .estadisticas-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .estadistica-total h1 {
+                font-size: 2.5rem;
+            }
+
+            .estadisticas-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="estadisticas-container">
+    <div class="estadisticas-header">
+        <h1>Panel de Estadísticas</h1>
+        <p>Análisis detallado de denuncias en el sistema</p>
+    </div>
+
+    <div class="estadistica-total">
+        <h1>{{ totalDenuncias }}</h1>
+        <p>Total de Denuncias Registradas</p>
+    </div>
+
+    <div class="estadisticas-grid">
+        <!-- Estadísticas por Categoría -->
+        <div class="estadistica-card">
+            <h2>Denuncias por Categoría</h2>
+            <table class="tabla-estadisticas">
+                <thead>
+                    <tr>
+                        <th>Categoría</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for categoria, cantidad in estadisticasCategorias %}
+                        <tr>
+                            <td>{{ categoria }}</td>
+                            <td>
+                                {{ cantidad }}
+                                <div class="barra-progreso">
+                                    <div class="barra-progreso-fill" style="width: {{ (cantidad / totalDenuncias) * 100 }}%"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Estadísticas por Estado -->
+        <div class="estadistica-card">
+            <h2>Denuncias por Estado</h2>
+            <table class="tabla-estadisticas">
+                <thead>
+                    <tr>
+                        <th>Estado</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for estado, cantidad in estadisticasEstados %}
+                        <tr>
+                            <td>{{ estado }}</td>
+                            <td>
+                                {{ cantidad }}
+                                <div class="barra-progreso">
+                                    <div class="barra-progreso-fill" style="width: {{ (cantidad / totalDenuncias) * 100 }}%"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Denuncias por Mes -->
+        <div class="estadistica-card">
+            <h2>Denuncias por Mes</h2>
+            <table class="tabla-estadisticas">
+                <thead>
+                    <tr>
+                        <th>Mes</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mes, cantidad in denunciasPorMes %}
+                        <tr>
+                            <td>{{ mes|date('F') }}</td>
+                            <td>
+                                {{ cantidad }}
+                                <div class="barra-progreso">
+                                    <div class="barra-progreso-fill" style="width: {{ (cantidad / totalDenuncias) * 100 }}%"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %} 

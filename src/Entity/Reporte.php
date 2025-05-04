@@ -6,6 +6,7 @@ use App\Repository\ReporteRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: ReporteRepository::class)]
 class Reporte
@@ -32,9 +33,9 @@ class Reporte
     #[ORM\JoinColumn(nullable: false)]
     private ?Denuncia $denuncia = null;
 
-    #[ORM\ManyToOne(targetEntity: Usuario::class, inversedBy: 'reportes')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reportes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Usuario $usuario = null;
+    private ?User $usuario = null;
 
     // Getters y Setters
 
@@ -76,12 +77,12 @@ class Reporte
         return $this;
     }
 
-    public function getUsuario(): ?Usuario
+    public function getUsuario(): ?User
     {
         return $this->usuario;
     }
 
-    public function setUsuario(?Usuario $usuario): static
+    public function setUsuario(?User $usuario): static
     {
         $this->usuario = $usuario;
         return $this;

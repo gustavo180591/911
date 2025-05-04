@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\NotificacionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: NotificacionRepository::class)]
 class Notificacion
@@ -19,9 +20,9 @@ class Notificacion
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $fechaEnvio;
 
-    #[ORM\ManyToOne(targetEntity: Usuario::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private Usuario $usuario;
+    private User $usuario;
 
     #[ORM\ManyToOne(targetEntity: Denuncia::class)]
     #[ORM\JoinColumn(nullable: true)]
@@ -58,12 +59,12 @@ class Notificacion
         return $this;
     }
 
-    public function getUsuario(): Usuario
+    public function getUsuario(): User
     {
         return $this->usuario;
     }
 
-    public function setUsuario(Usuario $usuario): self
+    public function setUsuario(User $usuario): self
     {
         $this->usuario = $usuario;
 

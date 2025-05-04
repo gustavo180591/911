@@ -23,7 +23,7 @@ class SecurityController extends AbstractController
         // Último nombre de usuario ingresado
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', [
+        return $this->render('auth/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
         ]);
@@ -32,8 +32,7 @@ class SecurityController extends AbstractController
     #[Route('/logout', name: 'app_logout')]
     public function logout(): void
     {
-        // Este método nunca se ejecutará,
-        // Symfony maneja el logout automáticamente
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        // Este método puede estar vacío, Symfony lo gestiona automáticamente
+        throw new \Exception('No se debe llegar a este método');
     }
 }

@@ -40,4 +40,21 @@ class DenunciaRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function getDenunciasPorMes(): array
+    {
+        $qb = $this->createQueryBuilder('d')
+            ->select('COUNT(d.id) as total, MONTH(d.fechaHora) as mes')
+            ->groupBy('mes')
+            ->orderBy('mes', 'ASC');
+
+        $result = $qb->getQuery()->getResult();
+
+        $denunciasPorMes = [];
+        foreach ($result as $row) {
+            $denunciasPorMes[$row['mes']] = $row['total'];
+        }
+
+        return $denunciasPorMes;
+    }
 }

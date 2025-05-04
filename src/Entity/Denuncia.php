@@ -3,11 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\DenunciaRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Entity\Usuario;
+use App\Entity\User;
 use App\Entity\Reporte;
 
 
@@ -16,16 +17,19 @@ class Denuncia
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(length: 255)]
+    private ?string $titulo = null;
+
+    #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank(message: 'La descripción no puede estar vacía.')]
     #[Assert\Length(min: 10, minMessage: 'La descripción debe tener al menos 10 caracteres.')]
-    private string $descripcion;
+    private ?string $descripcion = null;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private \DateTimeImmutable $fechaHora;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $fechaHora = null;
 
     #[ORM\ManyToOne(targetEntity: EstadoDenuncia::class)]
     #[ORM\JoinColumn(nullable: false)]
@@ -35,9 +39,9 @@ class Denuncia
     #[ORM\JoinColumn(nullable: false)]
     private ?CategoriaDenuncia $categoria = null;
 
-    #[ORM\ManyToOne(targetEntity: Usuario::class, inversedBy: 'denuncias')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'denuncias')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Usuario $usuario = null;
+    private ?User $usuario = null;
 
     #[ORM\OneToMany(mappedBy: 'denuncia', targetEntity: Evidencia::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $evidencias;
@@ -61,23 +65,34 @@ class Denuncia
         return $this->id;
     }
 
-    public function getDescripcion(): string
+    public function getTitulo(): ?string
+    {
+        return $this->titulo;
+    }
+
+    public function setTitulo(?string $titulo): self
+    {
+        $this->titulo = $titulo;
+        return $this;
+    }
+
+    public function getDescripcion(): ?string
     {
         return $this->descripcion;
     }
 
-    public function setDescripcion(string $descripcion): self
+    public function setDescripcion(?string $descripcion): self
     {
         $this->descripcion = $descripcion;
         return $this;
     }
 
-    public function getFechaHora(): \DateTimeImmutable
+    public function getFechaHora(): ?\DateTimeInterface
     {
         return $this->fechaHora;
     }
 
-    public function setFechaHora(\DateTimeImmutable $fechaHora): self
+    public function setFechaHora(?\DateTimeInterface $fechaHora): self
     {
         $this->fechaHora = $fechaHora;
         return $this;
@@ -108,12 +123,12 @@ class Denuncia
     }
 
     // USUARIO
-    public function getUsuario(): ?Usuario
+    public function getUsuario(): ?User
     {
         return $this->usuario;
     }
 
-    public function setUsuario(?Usuario $usuario): self
+    public function setUsuario(?User $usuario): self
     {
         $this->usuario = $usuario;
         return $this;

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Usuario;
+use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Form\ForgotPasswordFormType; // Corrección: Importar desde App\Form
 use App\Security\LoginFormAuthenticator;
@@ -15,18 +15,22 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/auth')]
 class AuthController extends AbstractController
 {
-    #[Route('/register', name: 'auth_register', methods: ['GET', 'POST'])]
+    #[Route('/register', name: 'app_register')]
     public function register(
         Request $request,
-        EntityManagerInterface $entityManager,
-        UserAuthenticatorInterface $userAuthenticator,
-        LoginFormAuthenticator $authenticator
+        UserPasswordHasherInterface $passwordHasher,
+        EntityManagerInterface $entityManager
     ): Response {
-        $user = new Usuario();
+        if ($this->getUser()) {
+            return $this->redirectToRoute('home');
+        }
+
+        $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -36,36 +40,33 @@ class AuthController extends AbstractController
         $phoneCodes = json_decode($jsonData, true);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                // Comprobar si el usuario ya existe
-                $existingUser = $entityManager->getRepository(Usuario::class)
-                    ->findOneBy(['email' => $user->getEmail()]);
+            // Comprobar si el usuario ya existe
+            $existingUser = $entityManager->getRepository(User::class)
+                ->findOneBy(['email' => $user->getEmail()]);
 
-                if ($existingUser) {
-                    $this->addFlash('error', 'El correo electrónico ya está registrado. Intente con otro.');
-                    return $this->redirectToRoute('auth_register');
-                }
-
-                // Cifrar la contraseña
-                // Nota: Verifica que el nombre del campo en tu RegistrationFormType sea "Password" o ajústalo según corresponda.
-                $password = password_hash($form->get('Password')->getData(), PASSWORD_BCRYPT);
-                $user->setPassword($password);
-                $user->setRoles(['ROLE_USER']);
-                $user->setFechaRegistro(new \DateTime());
-
-                $entityManager->persist($user);
-                $entityManager->flush();
-
-                // Autenticar al usuario tras el registro
-                return $userAuthenticator->authenticateUser(
-                    $user,
-                    $authenticator,
-                    $request
-                );
-            } catch (UniqueConstraintViolationException $e) {
-                $this->addFlash('error', 'El correo electrónico ya está en uso. Intente con otro.');
-                return $this->redirectToRoute('auth_register');
+            if ($existingUser) {
+                $this->addFlash('error', 'Este correo electrónico ya está registrado.');
+                return $this->render('auth/register.html.twig', [
+                    'registrationForm' => $form->createView(),
+                ]);
             }
+
+            // Codificar la contraseña
+            $user->setPassword(
+                $passwordHasher->hashPassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+
+            // Asignar el rol ROLE_USER por defecto
+            $user->setRoles(['ROLE_USER']);
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            // Autenticar al usuario tras el registro
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('auth/register.html.twig', [
@@ -74,24 +75,27 @@ class AuthController extends AbstractController
         ]);
     }
 
-    #[Route('/login', name: 'auth_login', methods: ['GET', 'POST'])]
+    #[Route('/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-            return $this->redirectToRoute('home_index'); // Redirige al inicio si ya está autenticado
+            return $this->redirectToRoute('home');
         }
 
+        $error = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername = $authenticationUtils->getLastUsername();
+
         return $this->render('auth/login.html.twig', [
-            'last_username' => $authenticationUtils->getLastUsername(),
-            'error' => $authenticationUtils->getLastAuthenticationError(),
+            'last_username' => $lastUsername,
+            'error' => $error,
         ]);
     }
 
-    #[Route('/logout', name: 'auth_logout', methods: ['GET'])]
+    #[Route('/logout', name: 'app_logout')]
     public function logout(): void
     {
-        // Symfony maneja automáticamente el cierre de sesión
-        throw new \LogicException('Este método puede estar vacío, Symfony lo gestiona automáticamente.');
+        // El controlador puede estar vacío - será interceptado por la clave de logout de seguridad
+        throw new \LogicException('Este método puede estar vacío - será interceptado por la clave de logout de seguridad');
     }
 
     #[Route('/auth/success', name: 'auth_success')]

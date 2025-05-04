@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Notificacion;
-use App\Entity\Usuario;
+use App\Entity\User;
 use App\Entity\Denuncia;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -35,7 +35,7 @@ class NotificacionType extends AbstractType
                 ],
             ])
             ->add('usuario', EntityType::class, [
-                'class' => Usuario::class,
+                'class' => User::class,
                 'choice_label' => 'email',
                 'label' => 'Usuario',
                 'placeholder' => 'Selecciona un usuario',

@@ -4,36 +4,43 @@ namespace App\Entity;
 
 use App\Repository\LogSistemaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: LogSistemaRepository::class)]
 class LogSistema
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $accion;
+    #[ORM\Column(length: 255)]
+    private ?string $accion = null;
 
-    #[ORM\ManyToOne(targetEntity: Usuario::class)]
+    #[ORM\Column(length: 255)]
+    private ?string $entidad = null;
+
+    #[ORM\Column]
+    private ?int $entidadId = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $fechaHora = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: true)]
-    private ?Usuario $usuario = null;
+    private ?User $usuario = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private \DateTimeInterface $fechaHora;
-
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $detalle = null;
-
-    // Getters y Setters
+    public function __construct()
+    {
+        $this->fechaHora = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getAccion(): string
+    public function getAccion(): ?string
     {
         return $this->accion;
     }
@@ -41,43 +48,50 @@ class LogSistema
     public function setAccion(string $accion): self
     {
         $this->accion = $accion;
-
         return $this;
     }
 
-    public function getUsuario(): ?Usuario
+    public function getEntidad(): ?string
     {
-        return $this->usuario;
+        return $this->entidad;
     }
 
-    public function setUsuario(?Usuario $usuario): self
+    public function setEntidad(string $entidad): self
     {
-        $this->usuario = $usuario;
-
+        $this->entidad = $entidad;
         return $this;
     }
 
-    public function getFechaHora(): \DateTimeInterface
+    public function getEntidadId(): ?int
+    {
+        return $this->entidadId;
+    }
+
+    public function setEntidadId(int $entidadId): self
+    {
+        $this->entidadId = $entidadId;
+        return $this;
+    }
+
+    public function getFechaHora(): ?\DateTimeImmutable
     {
         return $this->fechaHora;
     }
 
-    public function setFechaHora(\DateTimeInterface $fechaHora): self
+    public function setFechaHora(\DateTimeImmutable $fechaHora): self
     {
         $this->fechaHora = $fechaHora;
-
         return $this;
     }
 
-    public function getDetalle(): ?string
+    public function getUsuario(): ?User
     {
-        return $this->detalle;
+        return $this->usuario;
     }
 
-    public function setDetalle(?string $detalle): self
+    public function setUsuario(?User $usuario): self
     {
-        $this->detalle = $detalle;
-
+        $this->usuario = $usuario;
         return $this;
     }
 }

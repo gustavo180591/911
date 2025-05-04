@@ -409,6 +409,18 @@
                 }
             }) }}
         </div>
+
+        {# Nombre de Usuario #}
+        <div class="form-group">
+            <label for="{{ registrationForm.username.vars.id }}">Nombre de Usuario</label>
+            {{ form_widget(registrationForm.username, {
+                'attr': {
+                    'class': 'form-control',
+                    'placeholder': 'usuario123'
+                }
+            }) }}
+            <small class="form-text">El nombre de usuario debe ser único y solo puede contener letras, números y guiones bajos</small>
+        </div>
         
         {# Número de Teléfono con selector de país #}
         <div class="form-group">
@@ -439,9 +451,9 @@
         
         {# Contraseña #}
         <div class="form-group">
-            <label for="{{ registrationForm.Password.vars.id }}">Contraseña</label>
+            <label for="{{ registrationForm.plainPassword.vars.id }}">Contraseña</label>
             <div class="password-container">
-                {{ form_widget(registrationForm.Password, {
+                {{ form_widget(registrationForm.plainPassword, {
                     'attr': {
                         'class': 'form-control',
                         'placeholder': '••••••'
@@ -464,14 +476,14 @@
         {{ form_end(registrationForm) }}
         
         <div class="login-link">
-            <p>¿Ya tenés una cuenta? <a href="{{ path('auth_login') }}">Inicia sesión</a></p>
+            <p>¿Ya tenés una cuenta? <a href="{{ path('app_login') }}">Inicia sesión</a></p>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Función para alternar la visibilidad de la contraseña
-            const passwordInput = document.getElementById('{{ registrationForm.Password.vars.id }}');
+            const passwordInput = document.getElementById('{{ registrationForm.plainPassword.vars.id }}');
             const toggleButton = document.getElementById('togglePassword');
             
             toggleButton.addEventListener('click', function() {

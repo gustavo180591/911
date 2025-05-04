@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\MensajeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: MensajeRepository::class)]
 class Mensaje
@@ -16,13 +17,13 @@ class Mensaje
     #[ORM\Column(type: 'text')]
     private string $contenido;
 
-    #[ORM\ManyToOne(targetEntity: Usuario::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private Usuario $usuarioRemitente;
+    private User $usuarioRemitente;
 
-    #[ORM\ManyToOne(targetEntity: Usuario::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private Usuario $usuarioDestinatario;
+    private User $usuarioDestinatario;
 
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $fechaEnvio;
@@ -50,24 +51,24 @@ class Mensaje
         return $this;
     }
 
-    public function getUsuarioRemitente(): Usuario
+    public function getUsuarioRemitente(): User
     {
         return $this->usuarioRemitente;
     }
 
-    public function setUsuarioRemitente(Usuario $usuarioRemitente): self
+    public function setUsuarioRemitente(User $usuarioRemitente): self
     {
         $this->usuarioRemitente = $usuarioRemitente;
 
         return $this;
     }
 
-    public function getUsuarioDestinatario(): Usuario
+    public function getUsuarioDestinatario(): User
     {
         return $this->usuarioDestinatario;
     }
 
-    public function setUsuarioDestinatario(Usuario $usuarioDestinatario): self
+    public function setUsuarioDestinatario(User $usuarioDestinatario): self
     {
         $this->usuarioDestinatario = $usuarioDestinatario;
 

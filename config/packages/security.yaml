@@ -22,19 +22,28 @@ security:
             entry_point: form_login
             custom_authenticator: App\Security\LoginFormAuthenticator
             form_login:
-                login_path: auth_login
-                check_path: auth_login
+                login_path: app_login
+                check_path: app_login
                 default_target_path: home_index
                 enable_csrf: true
             logout:
                 path: app_logout
                 target: home_index
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800 # 1 semana en segundos
+                path: /
+                domain: ~
 
     access_control:
-        - { path: ^/auth/login, roles: PUBLIC_ACCESS }
-        - { path: ^/auth/register, roles: PUBLIC_ACCESS }
-        - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/estadisticas, roles: ROLE_ADMIN }
+        - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/$, roles: PUBLIC_ACCESS }
+        - { path: ^/about, roles: PUBLIC_ACCESS }
+        - { path: ^/contact, roles: PUBLIC_ACCESS }
 
     role_hierarchy:
         ROLE_ADMIN: [ROLE_USER] 

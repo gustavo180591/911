@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Usuario;
+use App\Entity\User;
 use App\Form\ProfileType;
 use App\Form\ChangePasswordType; // Asegúrate de tener este formulario creado
 use App\Repository\DenunciaRepository; // <-- Agrega esta línea
@@ -21,7 +21,7 @@ class ProfileController extends AbstractController
     #[Route('/view', name: 'profile_view', methods: ['GET'])]
     public function view(Request $request, EntityManagerInterface $entityManager): Response
     {
-        /** @var Usuario $user */
+        /** @var User $user */
         $user = $this->getUser();
 
         $profileForm = $this->createForm(ProfileType::class, $user);
@@ -38,7 +38,7 @@ class ProfileController extends AbstractController
     #[Route('/edit', name: 'profile_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, EntityManagerInterface $entityManager): Response
     {
-        /** @var Usuario $user */
+        /** @var User $user */
         $user = $this->getUser();
 
         $profileForm = $this->createForm(ProfileType::class, $user);
@@ -65,7 +65,7 @@ class ProfileController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response
     {
-        /** @var Usuario $user */
+        /** @var User $user */
         $user = $this->getUser();
 
         // Creamos el formulario de cambio de contraseña
