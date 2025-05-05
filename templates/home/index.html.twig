@@ -189,29 +189,34 @@
             flex-wrap: wrap;
         }
 
-        .register-button, .admin-button {
-            background-color: #FF3B30;
-            color: #FFFFFF;
-            border: none;
-            border-radius: 9999px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            padding: 16px 32px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-            width: auto;
-            min-width: 200px;
-            justify-content: center;
-        }
-
+        .btn,
+        .register-button,
         .admin-button {
-            background-color: #E5A74E;
-            margin-left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 14px 22px;
+            font-size: 1.08rem;
+            font-weight: 700;
+            border-radius: 12px;
+            min-height: 48px;
+            min-width: 120px;
+            box-sizing: border-box;
+            border: none;
+            transition: box-shadow 0.2s, transform 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+            cursor: pointer;
+        }
+        .btn svg,
+        .register-button svg,
+        .admin-button svg {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+            margin: 0;
+            display: block;
         }
 
         .register-button:hover {
@@ -224,11 +229,6 @@
             background-color: #d99c2c;
             transform: scale(1.05);
             box-shadow: 0 8px 20px rgba(229, 167, 78, 0.3);
-        }
-
-        .register-button svg, .admin-button svg {
-            width: 20px;
-            height: 20px;
         }
 
         /* Sección institucional */
@@ -483,6 +483,18 @@
 
             .button-container {
                 max-width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .btn,
+            .register-button,
+            .admin-button {
+                width: 100%;
+                font-size: 1rem;
+                padding: 14px 10px;
+                min-width: 0;
+                margin-bottom: 10px;
             }
         }
     </style>

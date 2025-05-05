@@ -207,12 +207,12 @@ public function show(Denuncia $denuncia, Request $request): Response
         $entityManager->flush();
 
         // Enviar correo
-        $email = (new Email())
+/*         $email = (new Email())
             ->from('notificaciones@tuweb.com')
             ->to($denuncia->getUsuario()->getEmail())
             ->subject('Denuncia Aceptada')
             ->text('Su denuncia ha sido aceptada y será procesada.');
-        $mailer->send($email);
+        $mailer->send($email); */
 
         $this->addFlash('success', 'Emergencia aceptada exitosamente.');
 
@@ -249,12 +249,12 @@ public function show(Denuncia $denuncia, Request $request): Response
         $entityManager->flush();
 
         // Enviar correo
-        $email = (new Email())
+/*         $email = (new Email())
             ->from('notificaciones@tuweb.com')
             ->to($denuncia->getUsuario()->getEmail())
             ->subject('Denuncia Rechazada')
             ->text('Su denuncia ha sido rechazada. Por favor, contacte con soporte para más información.');
-        $mailer->send($email);
+        $mailer->send($email); */
 
         $this->addFlash('success', 'Emergencia rechazada exitosamente.');
 
