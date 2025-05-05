@@ -185,8 +185,8 @@ public function show(Denuncia $denuncia, Request $request): Response
     public function accept(
         Denuncia $denuncia,
         Request $request,
-        EntityManagerInterface $entityManager,
-        MailerInterface $mailer
+        EntityManagerInterface $entityManager
+        
     ): Response
     {
         if (!$this->isCsrfTokenValid(
@@ -227,8 +227,8 @@ public function show(Denuncia $denuncia, Request $request): Response
     public function reject(
         Denuncia $denuncia,
         Request $request,
-        EntityManagerInterface $entityManager,
-        MailerInterface $mailer
+        EntityManagerInterface $entityManager
+       
     ): Response
     {
         if (!$this->isCsrfTokenValid(
