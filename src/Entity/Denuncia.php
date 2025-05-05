@@ -50,6 +50,11 @@ class Denuncia
     #[ORM\OneToMany(mappedBy: 'denuncia', targetEntity: Reporte::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $reportes;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $observacion;
+
     public function __construct()
     {
         $this->evidencias = new ArrayCollection();
@@ -179,6 +184,17 @@ class Denuncia
                 $reporte->setDenuncia(null);
             }
         }
+        return $this;
+    }
+
+    public function getObservacion(): ?string
+    {
+        return $this->observacion;
+    }
+
+    public function setObservacion(?string $observacion): self
+    {
+        $this->observacion = $observacion;
         return $this;
     }
 }

@@ -466,6 +466,73 @@
             margin-top: 0;
         }
     }
+
+    .modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #232644;
+        color: #fff;
+        padding: 32px 24px;
+        border-radius: 12px;
+        z-index: 100;
+        min-width: 300px;
+        max-width: 90vw;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .modal-content h2 {
+        margin-top: 0;
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 10px;
+        right: 16px;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 2rem;
+        cursor: pointer;
+        z-index: 101;
+    }
+    .timeline {
+        margin: 32px 0 0 0;
+        padding: 0;
+        list-style: none;
+        border-left: 3px solid #ECB13A;
+    }
+    .timeline-item {
+        margin-bottom: 28px;
+        position: relative;
+        padding-left: 32px;
+    }
+    .timeline-item:before {
+        content: '';
+        position: absolute;
+        left: -10px;
+        top: 0;
+        width: 18px;
+        height: 18px;
+        background: #ECB13A;
+        border-radius: 50%;
+        border: 3px solid #232644;
+        z-index: 1;
+    }
+    .timeline-content {
+        background: #232644;
+        border-radius: 8px;
+        padding: 16px 18px;
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        font-size: 1rem;
+        margin-bottom: 4px;
+    }
+    .timeline-meta {
+        font-size: 0.92rem;
+        color: #ECB13A;
+        margin-bottom: 2px;
+    }
 </style>
 
 <header>
@@ -530,7 +597,7 @@
                     <div class="evidence-gallery">
                         {% for evidencia in emergency.evidencias %}
                             <div class="evidence-item">
-                                <img src="{{ asset('uploads/evidencias/' ~ evidencia.nombreArchivo) }}" 
+                                <img src="{{ asset('uploads/evidencias/' ~ evidencia.rutaArchivo) }}" 
                                      alt="Evidencia {{ loop.index }}" 
                                      class="evidence-image"
                                      onclick="window.open(this.src, '_blank')">
@@ -553,6 +620,7 @@
 
     <div class="button-group">
         {% if is_granted('ROLE_ADMIN') %}
+            {% if emergency.estado.nombre != 'Aceptado' %}
             <form action="{{ path('emergency_accept', {'id': emergency.id}) }}" method="post">
                 <input type="hidden" name="_token" value="{{ csrf_token('accept_emergency_' ~ emergency.id) }}">
                 <button type="submit" class="btn btn-success">
@@ -562,6 +630,8 @@
                     Aceptar
                 </button>
             </form>
+            {% endif %}
+            {% if emergency.estado.nombre != 'Rechazado' %}
             <form action="{{ path('emergency_reject', {'id': emergency.id}) }}" method="post">
                 <input type="hidden" name="_token" value="{{ csrf_token('reject_emergency_' ~ emergency.id) }}">
                 <button type="submit" class="btn btn-danger">
@@ -572,6 +642,7 @@
                     Rechazar
                 </button>
             </form>
+            {% endif %}
         {% endif %}
         <a href="{{ path('emergency_index') }}" class="btn volver-listado-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -684,5 +755,37 @@
     }
     document.addEventListener('turbo:load', initializeMobileMenu);
 </script>
+
+{# Formulario de observación debajo de los datos de la denuncia #}
+{% if emergency.estado.nombre == 'Aceptado' %}
+    <div class="observacion-form" style="margin: 32px auto 0 auto; padding: 18px 12px 18px 12px; background: #1E2240; border-radius: 10px; max-width: 650px;">
+        <h3 style="color: #ECB13A;">Agregar Observación</h3>
+        <form method="post" action="{{ path('mensaje_observacion', {'id': emergency.id}) }}">
+            <textarea name="observacion" required style="width:100%;min-height:80px;border-radius:8px;padding:10px;"></textarea>
+            <div style="margin-top: 16px; text-align: right;">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+{% endif %}
+
+{# Línea de tiempo de observaciones #}
+{% if observaciones is defined and observaciones|length > 0 %}
+    <div style="max-width: 650px; margin: 36px auto 0 auto;">
+        <h3 style="color: #ECB13A;">Observaciones</h3>
+        <ul class="timeline">
+            {% for obs in observaciones %}
+                <li class="timeline-item">
+                    <div class="timeline-meta">
+                        {{ obs.fechaEnvio|date('d-m-Y H:i') }}
+                    </div>
+                    <div class="timeline-content">
+                        {{ obs.contenido|e }}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
 
 {% endblock %}

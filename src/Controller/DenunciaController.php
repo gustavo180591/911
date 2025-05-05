@@ -7,10 +7,12 @@ use App\Entity\CategoriaDenuncia;
 use App\Entity\EstadoDenuncia;
 use App\Entity\Reporte;
 use App\Entity\User;
+use App\Entity\Mensaje;
 use App\Form\DenunciaType;
 use App\Form\ReporteType;
 use App\Repository\DenunciaRepository;
 use App\Repository\ReporteRepository;
+use App\Repository\MensajeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,11 +32,13 @@ class DenunciaController extends AbstractController
 {
     private DenunciaRepository $repository;
     private ReporteRepository $reporteRepository;
+    private MensajeRepository $mensajeRepository;
 
-    public function __construct(DenunciaRepository $repository, ReporteRepository $reporteRepository)
+    public function __construct(DenunciaRepository $repository, ReporteRepository $reporteRepository, MensajeRepository $mensajeRepository)
     {
         $this->repository = $repository;
         $this->reporteRepository = $reporteRepository;
+        $this->mensajeRepository = $mensajeRepository;
     }
 
     /**
@@ -99,8 +103,8 @@ class DenunciaController extends AbstractController
      * Ver detalles de una emergencia.
      */
     #[Route('/{id}', name: 'emergency_show', methods: ['GET'])]
-public function show(Denuncia $denuncia, Request $request): Response
-{
+    public function show(Denuncia $denuncia, Request $request): Response
+    {
         // Verificar si el usuario tiene permiso para ver esta denuncia
         if (!$this->isGranted('ROLE_ADMIN') && $denuncia->getUsuario() !== $this->getUser()) {
             throw $this->createAccessDeniedException('No tienes permiso para ver esta emergencia.');
@@ -110,21 +114,27 @@ public function show(Denuncia $denuncia, Request $request): Response
         $comentarios = $this->reporteRepository->findBy(['denuncia' => $denuncia], ['fechaHora' => 'ASC']);
 
         // Crear el formulario de comentario solo si la emergencia está aceptada
-    $commentForm = null;
-    if ($denuncia->getEstado() && $denuncia->getEstado()->getNombre() === 'Aceptado') {
+        $commentForm = null;
+        if ($denuncia->getEstado() && $denuncia->getEstado()->getNombre() === 'Aceptado') {
             $reporte = new Reporte();
             $reporte->setDenuncia($denuncia);
             $reporte->setUsuario($this->getUser());
             $commentForm = $this->createForm(ReporteType::class, $reporte);
         }
 
-    return $this->render('emergency/show.html.twig', [
+        // Obtener observaciones (mensajes) asociados a la denuncia
+        $observaciones = $this->mensajeRepository->findBy([
+            'denuncia' => $denuncia
+        ], ['fechaEnvio' => 'ASC']);
+
+        return $this->render('emergency/show.html.twig', [
             'title' => 'Detalle de Emergencia',
             'emergency' => $denuncia,
-        'commentForm' => $commentForm ? $commentForm->createView() : null,
+            'commentForm' => $commentForm ? $commentForm->createView() : null,
             'comentarios' => $comentarios,
-    ]);
-}
+            'observaciones' => $observaciones,
+        ]);
+    }
 
     /**
      * Editar una emergencia.
@@ -348,6 +358,24 @@ public function show(Denuncia $denuncia, Request $request): Response
             $this->addFlash('success', 'Comentario agregado exitosamente.');
         }
 
+        return $this->redirectToRoute('emergency_show', ['id' => $denuncia->getId()]);
+    }
+
+    #[Route('/{id}/observacion', name: 'mensaje_observacion', methods: ['POST'])]
+    public function observacion(Denuncia $denuncia, Request $request, EntityManagerInterface $em): Response
+    {
+        $observacion = $request->request->get('observacion');
+        if ($observacion) {
+            $mensaje = new Mensaje();
+            $mensaje->setDenuncia($denuncia);
+            $mensaje->setContenido($observacion);
+            $mensaje->setFechaEnvio(new \DateTime());
+            $mensaje->setUsuarioRemitente($this->getUser());
+            $mensaje->setUsuarioDestinatario($denuncia->getUsuario());
+            $em->persist($mensaje);
+            $em->flush();
+            $this->addFlash('success', 'Observación guardada correctamente.');
+        }
         return $this->redirectToRoute('emergency_show', ['id' => $denuncia->getId()]);
     }
 }
