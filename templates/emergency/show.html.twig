@@ -2,8 +2,14 @@
 
 {% block title %}{{ title|default('Detalle de Emergencia') }}{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+{% endblock %}
+
 {% block body %}
 <style>
+    /* ================== RESET / BASE ================== */
     body {
         font-family: 'Montserrat', sans-serif;
         background-color: #191D33;
@@ -17,32 +23,37 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 16px 24px;
+        padding: 20px 40px;
         background-color: #191D33;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     .logo-container {
         display: flex;
         align-items: center;
         cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+    .logo-container:hover {
+        transform: scale(1.02);
     }
 
     .logo-container img.favicon {
         height: 40px;
         width: auto;
-        margin-right: 12px;
+        margin-right: 10px;
     }
 
     .saci-logo {
-        height: 48px;
+        height: 50px;
         width: auto;
     }
 
     .header-right {
         display: flex;
         align-items: center;
-        gap: 32px;
+        gap: 30px;
     }
 
     nav.main-nav {
@@ -54,152 +65,86 @@
     .inicio-button {
         background-color: transparent;
         border-radius: 9999px;
-        padding: 10px 24px;
-        font-weight: 700;
-        font-size: 15px;
+        padding: 10px 30px;
+        font-weight: bold;
+        font-size: 16px;
         color: #E5A74E;
         text-decoration: none;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
     }
 
     .inicio-button:hover {
         color: #FFFFFF;
-        transform: translateY(-1px);
+        transform: translateY(-2px);
     }
 
     .about-button {
         background-color: transparent;
         border-radius: 9999px;
         padding: 10px 20px;
-        font-weight: 700;
-        font-size: 15px;
+        font-weight: bold;
+        font-size: 14px;
         color: #FFFFFF;
         text-decoration: none;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
     }
 
     .about-button:hover {
         color: #ECB13A;
-        transform: translateY(-1px);
+        transform: translateY(-2px);
     }
 
     .contact-button {
         background-color: #ECB13A;
         border-radius: 9999px;
         padding: 10px 20px;
-        font-weight: 700;
-        font-size: 15px;
+        font-weight: bold;
+        font-size: 14px;
         color: #FFFFFF;
         text-decoration: none;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
         box-shadow: 0 2px 5px rgba(236, 177, 58, 0.3);
     }
 
     .contact-button:hover {
         background-color: #dca02a;
-        transform: translateY(-1px);
+        transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(236, 177, 58, 0.4);
-    }
-
-    .user-profile {
-        position: relative;
-        display: flex;
-        align-items: center;
-    }
-
-    .profile-image {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        cursor: pointer;
-        border: 2px solid transparent;
-        transition: border-color 0.2s ease;
-    }
-
-    .profile-button:hover .profile-image {
-        border-color: rgba(236, 177, 58, 0.5);
-    }
-
-    .profile-dropdown {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        background-color: #1E2240;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        width: 180px;
-        z-index: 10;
-        display: none;
-        margin-top: 8px;
-        padding: 8px 0;
-        border: 1px solid #2e325a;
-    }
-
-    .profile-dropdown.show {
-        display: block;
-        animation: fadeIn 0.2s ease;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .dropdown-item {
-        display: block;
-        padding: 12px 16px;
-        color: white;
-        text-decoration: none;
-        transition: background-color 0.2s;
-        font-size: 14px;
-    }
-
-    .dropdown-item:hover {
-        background-color: #2e325a;
-    }
-
-    .profile-button {
-        display: flex;
-        align-items: center;
-        background: none;
-        border: none;
-        color: white;
-        cursor: pointer;
-        padding: 0;
-        gap: 8px;
-    }
-
-    .profile-button .arrow {
-        margin-left: 5px;
-        font-size: 12px;
-        transition: transform 0.2s ease;
-    }
-
-    .profile-button:hover .arrow {
-        transform: translateY(2px);
     }
 
     /* ================== MAIN CONTENT ================== */
     .container {
         max-width: 1200px;
-        margin: 0 auto;
-        padding: 32px 24px;
+        margin: 2.5rem auto;
+        padding: 0 20px;
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     h1 {
-        font-size: 28px;
+        font-size: 1.85rem;
         font-weight: 700;
-        margin-bottom: 24px;
+        margin-bottom: 1.8rem;
+        text-align: center;
+        color: #fff;
+        position: relative;
         padding-bottom: 12px;
-        border-bottom: 1px solid #2e325a;
     }
 
-    h3 {
-        font-size: 20px;
-        font-weight: 600;
-        margin-top: 24px;
-        margin-bottom: 16px;
-        color: #ECB13A;
+    h1::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(90deg, #E5A74E, #ECB13A);
+        border-radius: 3px;
     }
 
     /* Detail table styling */
@@ -208,7 +153,7 @@
         border-collapse: separate;
         border-spacing: 0;
         background-color: #1E2240;
-        border-radius: 8px;
+        border-radius: 12px;
         overflow: hidden;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         margin-bottom: 24px;
@@ -235,294 +180,16 @@
         border-bottom: none;
     }
 
-    .text-muted {
-        color: #9ca3af;
-    }
-
-    /* Evidence gallery styling */
-    .evidence-gallery {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 16px;
-        margin-top: 8px;
-    }
-
-    .evidence-card {
-        width: 180px;
-        background-color: #232644;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .evidence-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .evidence-image {
+    /* Map styling */
+    #map {
+        height: 300px;
         width: 100%;
-        height: 160px;
-        object-fit: cover;
-        border-bottom: 1px solid #2e325a;
-    }
-
-    .evidence-card-body {
-        padding: 12px;
-        text-align: center;
+        margin-top: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     /* Button styling */
-    .btn {
-        display: inline-block;
-        font-weight: 500;
-        text-align: center;
-        white-space: nowrap;
-        vertical-align: middle;
-        user-select: none;
-        border: 1px solid transparent;
-        padding: 10px 16px;
-        font-size: 14px;
-        line-height: 1.5;
-        border-radius: 6px;
-        transition: all 0.2s ease-in-out;
-        cursor: pointer;
-        text-decoration: none;
-    }
-
-    .btn-sm {
-        padding: 6px 12px;
-        font-size: 13px;
-        border-radius: 4px;
-    }
-
-    .btn-primary {
-        background-color: #ECB13A;
-        color: white !important;
-        box-shadow: 0 2px 4px rgba(236, 177, 58, 0.2);
-    }
-
-    .btn-primary:hover {
-        background-color: #dca02a;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px rgba(236, 177, 58, 0.3);
-    }
-
-    .btn-secondary {
-        background-color: #2e325a;
-        color: white !important;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-secondary:hover {
-        background-color: #373b6d;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-success {
-        background-color: #48bb78;
-        color: white !important;
-        box-shadow: 0 2px 4px rgba(72, 187, 120, 0.2);
-    }
-
-    .btn-success:hover {
-        background-color: #38a169;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px rgba(72, 187, 120, 0.3);
-    }
-
-    .btn-danger {
-        background-color: #e53e3e;
-        color: white !important;
-        box-shadow: 0 2px 4px rgba(229, 62, 62, 0.2);
-    }
-
-    .btn-danger:hover {
-        background-color: #c53030;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px rgba(229, 62, 62, 0.3);
-    }
-
-    /* Form styling */
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-        color: #ECB13A;
-    }
-
-    .form-control {
-        display: block;
-        width: 100%;
-        padding: 12px 16px;
-        font-size: 15px;
-        line-height: 1.5;
-        color: white;
-        background-color: #232644;
-        border: 1px solid #2e325a;
-        border-radius: 6px;
-        transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .form-control:focus {
-        border-color: #ECB13A;
-        outline: 0;
-        box-shadow: 0 0 0 3px rgba(236, 177, 58, 0.2);
-    }
-
-    textarea.form-control {
-        min-height: 120px;
-        resize: vertical;
-    }
-
-    /* Status badge */
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 6px 12px;
-        border-radius: 9999px;
-        font-size: 13px;
-        font-weight: 500;
-        background-color: rgba(236, 177, 58, 0.15);
-        color: #ECB13A;
-    }
-
-    /* Action buttons container */
-    .action-buttons {
-        display: flex;
-        gap: 12px;
-        margin-top: 24px;
-    }
-
-    .action-buttons form {
-        display: inline-block;
-    }
-
-    /* Divider */
-    hr {
-        border: 0;
-        height: 1px;
-        background-color: #2e325a;
-        margin: 32px 0;
-    }
-
-    /* Margin utilities */
-    .mt-2 { margin-top: 8px; }
-    .mt-3 { margin-top: 16px; }
-    .mt-4 { margin-top: 24px; }
-    .mb-3 { margin-bottom: 16px; }
-    .mb-4 { margin-bottom: 24px; }
-
-    /* ================== COMMENT SECTION (NUEVA) ================== */
-    .comment-section {
-        margin-top: 32px;
-        padding: 24px;
-        background-color: #232644;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .comment-item {
-        max-width: 80%;
-        margin-bottom: 16px;
-    }
-
-    .comment-sent {
-        margin-left: auto;
-    }
-
-    .comment-received {
-        margin-right: auto;
-    }
-
-    .comment-sent .comment-content {
-        background-color: #E5A74E;
-        color: white;
-    }
-
-    .comment-received .comment-content {
-        background-color: #2e325a;
-        color: white;
-    }
-
-    .comment-header {
-        margin-bottom: 8px;
-    }
-
-    .comment-content {
-        padding: 12px 16px;
-        border-radius: 8px;
-        word-break: break-word;
-    }
-
-    .comment-form {
-        margin-top: 24px;
-        padding-top: 24px;
-        border-top: 1px solid #2e325a;
-    }
-
-    .comment-textarea {
-        min-height: 100px;
-        resize: vertical;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        header {
-            padding: 16px;
-        }
-
-        .header-right {
-            gap: 16px;
-        }
-
-        nav.main-nav {
-            display: none;
-        }
-
-        .container {
-            padding: 30px 16px;
-        }
-
-        h1 {
-            font-size: 26px;
-            margin-bottom: 30px;
-        }
-
-        .detail-table th {
-            width: 120px;
-            padding: 12px 16px;
-        }
-
-        .detail-table td {
-            padding: 12px 16px;
-        }
-
-        .evidence-gallery {
-            justify-content: center;
-        }
-
-        .action-buttons {
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .comment-section {
-            padding: 16px;
-        }
-
-        .comment-item {
-            max-width: 100%;
-        }
-    }
-
-    /* Mejoras en los botones de acción */
     .button-group {
         display: flex;
         flex-wrap: wrap;
@@ -535,93 +202,67 @@
         margin: 0;
     }
 
-    .button-group .btn {
-        min-width: 120px;
+    .btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
         padding: 12px 24px;
         font-weight: 600;
+        font-size: 14px;
+        border-radius: 8px;
         transition: all 0.3s ease;
-    }
-
-    .button-group .btn-primary {
-        background-color: #ECB13A;
+        text-decoration: none;
         border: none;
+        cursor: pointer;
     }
 
-    .button-group .btn-primary:hover {
+    .btn-primary {
+        background-color: #ECB13A;
+        color: white;
+        box-shadow: 0 2px 4px rgba(236, 177, 58, 0.2);
+    }
+
+    .btn-primary:hover {
         background-color: #dca02a;
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(236, 177, 58, 0.3);
     }
 
-    .button-group .btn-success {
+    .btn-success {
         background-color: #48bb78;
-        border: none;
+        color: white;
+        box-shadow: 0 2px 4px rgba(72, 187, 120, 0.2);
     }
 
-    .button-group .btn-success:hover {
+    .btn-success:hover {
         background-color: #38a169;
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(72, 187, 120, 0.3);
     }
 
-    .button-group .btn-danger {
+    .btn-danger {
         background-color: #e53e3e;
-        border: none;
+        color: white;
+        box-shadow: 0 2px 4px rgba(229, 62, 62, 0.2);
     }
 
-    .button-group .btn-danger:hover {
+    .btn-danger:hover {
         background-color: #c53030;
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(229, 62, 62, 0.3);
     }
 
-    /* Mejoras en el contenedor de perfil */
-    .profile-container {
-        background-color: #1E2240;
-        border-radius: 12px;
-        padding: 24px;
-        margin-top: 24px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .profile-container h2 {
-        color: #ECB13A;
-        margin-bottom: 16px;
-        font-size: 20px;
-        font-weight: 600;
-    }
-
-    .profile-info {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 16px;
-    }
-
-    .profile-info-item {
-        background-color: #232644;
-        padding: 16px;
-        border-radius: 8px;
-        border: 1px solid #2e325a;
-    }
-
-    .profile-info-label {
-        color: #9ca3af;
-        font-size: 14px;
-        margin-bottom: 4px;
-    }
-
-    .profile-info-value {
-        color: #FFFFFF;
-        font-size: 16px;
-        font-weight: 500;
-    }
-
-    /* Mejoras responsivas */
+    /* Responsive adjustments */
     @media (max-width: 768px) {
+        header {
+            padding: 15px 20px;
+        }
+
+        .container {
+            padding: 0 15px;
+        }
+
         .button-group {
             flex-direction: column;
             width: 100%;
@@ -629,98 +270,10 @@
 
         .button-group .btn {
             width: 100%;
-            margin: 4px 0;
         }
 
-        .profile-container {
-            padding: 16px;
-            margin: 16px 0;
-        }
-
-        .profile-info {
-            grid-template-columns: 1fr;
-        }
-
-        .profile-info-item {
-            padding: 12px;
-        }
-
-        .header-right {
-            gap: 12px;
-        }
-
-        .inicio-button, .about-button, .contact-button {
-            padding: 8px 16px;
-            font-size: 14px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .container {
-            padding: 16px;
-        }
-
-        h1 {
-            font-size: 24px;
-        }
-
-        .button-group .btn {
-            padding: 10px 16px;
-            font-size: 14px;
-        }
-
-        .profile-container {
-            margin: 12px 0;
-        }
-    }
-
-    /* Estilos para el menú hamburguesa */
-    .nav-toggle {
-        display: none;
-        font-size: 28px;
-        color: #FFFFFF;
-        background: none;
-        border: none;
-        cursor: pointer;
-        z-index: 1002;
-    }
-
-    nav.main-nav {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-
-    @media (max-width: 768px) {
-        .nav-toggle {
-            display: block;
-        }
-
-        nav.main-nav {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.95);
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            width: 100vw;
-            padding-top: 60px;
-            z-index: 1000;
-        }
-
-        nav.main-nav.active {
-            display: flex;
-        }
-
-        .inicio-button, .about-button, .contact-button {
-            font-size: 20px;
-            margin: 10px 0;
-        }
-
-        header {
-            padding: 15px 20px;
+        #map {
+            height: 250px;
         }
     }
 </style>
@@ -730,15 +283,8 @@
         <img src="{{ asset('images/favicon.png') }}" alt="SACI" class="favicon"/>
         <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="saci-logo"/>
     </div>
-    <button class="nav-toggle" id="navToggle">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-    </button>
     <div class="header-right">
-        <nav class="main-nav" id="mainNav">
+        <nav class="main-nav">
             <a href="{{ path('app_login') }}" class="inicio-button">INICIO</a>
             <a href="{{ path('home_about') }}" class="about-button">SOBRE NOSOTROS</a>
             <a href="{{ path('home_contact') }}" class="contact-button">CONTACTO</a>
@@ -747,30 +293,20 @@
     </div>
 </header>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const navToggle = document.getElementById('navToggle');
-        const mainNav = document.getElementById('mainNav');
-
-        navToggle.addEventListener('click', function() {
-            mainNav.classList.toggle('active');
-        });
-
-        // Cerrar el menú al hacer clic en un enlace
-        const navLinks = mainNav.querySelectorAll('a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                mainNav.classList.remove('active');
-            });
-        });
-    });
-</script>
-
 <div class="container">
     <h1>{{ title }}</h1>
 
-    <div class="profile-container">
     <table class="detail-table">
+        <tr>
+            <th>Información del Usuario</th>
+            <td>
+                {% if emergency.usuario %}
+                    {{ emergency.usuario.nombre ~ ' ' ~ emergency.usuario.apellido ~ ' - Tel: ' ~ emergency.usuario.telefono }}
+                {% else %}
+                    <span class="text-muted">Usuario no disponible</span>
+                {% endif %}
+            </td>
+        </tr>
         <tr>
             <th>Descripción</th>
             <td>{{ emergency.descripcion }}</td>
@@ -784,39 +320,9 @@
             <td>
                 {% if emergency.ubicacion %}
                     {{ emergency.ubicacion.calle ~ ', ' ~ emergency.ubicacion.numero }}
+                    <div id="map"></div>
                 {% else %}
                     <span class="text-muted">Sin ubicación</span>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <th>Evidencias</th>
-            <td>
-                {% if emergency.evidencias|length > 0 %}
-                    <div class="evidence-gallery">
-                        {% for evidencia in emergency.evidencias %}
-                            <div class="evidence-card">
-                                {% if evidencia.rutaArchivo %}
-                                    <img src="{{ asset('uploads/denuncias/' ~ evidencia.rutaArchivo) }}"
-                                         alt="Evidencia"
-                                         class="evidence-image">
-                                    <div class="evidence-card-body">
-                                        <a href="{{ asset('uploads/denuncias/' ~ evidencia.rutaArchivo) }}"
-                                           target="_blank"
-                                           class="btn btn-sm btn-primary">
-                                            Ver archivo
-                                        </a>
-                                    </div>
-                                {% else %}
-                                    <div class="evidence-card-body text-muted">
-                                        Sin imagen
-                                    </div>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <span class="text-muted">No hay evidencias disponibles.</span>
                 {% endif %}
             </td>
         </tr>
@@ -828,89 +334,103 @@
         </tr>
     </table>
 
-        <div class="button-group">
-            {% if is_granted('ROLE_ADMIN') %}
-                <form action="{{ path('emergency_accept', {'id': emergency.id}) }}" method="post">
-            <input type="hidden" name="_token" value="{{ csrf_token('accept_emergency_' ~ emergency.id) }}">
-            <button type="submit" class="btn btn-success">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                Aceptar
-            </button>
-        </form>
-                <form action="{{ path('emergency_reject', {'id': emergency.id}) }}" method="post">
-            <input type="hidden" name="_token" value="{{ csrf_token('reject_emergency_' ~ emergency.id) }}">
-            <button type="submit" class="btn btn-danger">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-                Rechazar
-            </button>
-        </form>
-            {% endif %}
-            <a href="{{ path('emergency_index') }}" class="btn btn-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left">
-                    <line x1="19" y1="12" x2="5" y2="12"></line>
-                    <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-                Volver al listado
-        </a>
-        </div>
-    </div>
-
-    {# Sección de comentarios #}
-    {% if emergency.estado.nombre == 'Aceptado' %}
-        <hr>
-        <div class="comment-section">
-            <h3>Comentarios</h3>
-            
-            {# Lista de comentarios existentes #}
-            {% if comentarios|length > 0 %}
-                <div class="comments-list space-y-4 mb-6">
-                    {% for comentario in comentarios %}
-                        <div class="comment-item {% if comentario.usuario == app.user %}comment-sent{% else %}comment-received{% endif %}">
-                            <div class="comment-header flex items-center mb-1">
-                                <span class="font-semibold">{{ comentario.usuario.nombre }} {{ comentario.usuario.apellido }}</span>
-                                <span class="text-sm text-gray-500 ml-2">{{ comentario.fechaHora|date('d/m/Y H:i') }}</span>
-                            </div>
-                            <div class="comment-content bg-gray-100 p-3 rounded-lg">
-                                {{ comentario.descripcion }}
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p class="text-gray-500 text-center mb-6">No hay comentarios aún. Sé el primero en comentar.</p>
-            {% endif %}
-
-            {# Formulario de comentario #}
-            {% if commentForm %}
-                <div class="comment-form">
-                    {{ form_start(commentForm, {'action': path('emergency_comment', {'id': emergency.id})}) }}
-                <div class="form-group">
-                            {{ form_label(commentForm.descripcion, 'Tu comentario', {'label_attr': {'class': 'form-label comment-label'}}) }}
-                            {{ form_widget(commentForm.descripcion, {'attr': {
-                                'class': 'form-control comment-textarea',
-                                'placeholder': 'Escribe tu comentario aquí...',
-                                'rows': 3
-                            }}) }}
-                    {{ form_errors(commentForm.descripcion) }}
-                </div>
-                <button type="submit" class="btn btn-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send" style="margin-right: 6px;">
-                        <line x1="22" y1="2" x2="11" y2="13"></line>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+    <div class="button-group">
+        {% if is_granted('ROLE_ADMIN') %}
+            <form action="{{ path('emergency_accept', {'id': emergency.id}) }}" method="post">
+                <input type="hidden" name="_token" value="{{ csrf_token('accept_emergency_' ~ emergency.id) }}">
+                <button type="submit" class="btn btn-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
-                    Enviar Comentario
+                    Aceptar
                 </button>
-            {{ form_end(commentForm) }}
-                </div>
-            {% endif %}
-        </div>
-    {% endif %}
-
+            </form>
+            <form action="{{ path('emergency_reject', {'id': emergency.id}) }}" method="post">
+                <input type="hidden" name="_token" value="{{ csrf_token('reject_emergency_' ~ emergency.id) }}">
+                <button type="submit" class="btn btn-danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                    Rechazar
+                </button>
+            </form>
+        {% endif %}
+        <a href="{{ path('emergency_index') }}" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Volver al listado
+        </a>
+    </div>
 </div>
+
+{% if emergency.ubicacion %}
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Asegurarse de que el mapa se inicialice después de que el DOM esté listo
+        function initializeMap() {
+            const mapElement = document.getElementById('map');
+            if (!mapElement) return;
+
+            const location = {
+                lat: {{ emergency.ubicacion.latitud|default(0) }},
+                lng: {{ emergency.ubicacion.longitud|default(0) }}
+            };
+
+            // Limpiar el contenedor del mapa antes de inicializar
+            mapElement.innerHTML = '';
+
+            const map = L.map(mapElement).setView([location.lat, location.lng], 15);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            const redIcon = L.icon({
+                iconUrl: '/images/marker-icon.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34]
+            });
+
+            const marker = L.marker([location.lat, location.lng], {
+                icon: redIcon
+            }).addTo(map);
+
+            const popup = L.popup()
+                .setLatLng([location.lat, location.lng])
+                .setContent('{{ emergency.ubicacion.calle ~ ', ' ~ emergency.ubicacion.numero }}')
+                .openOn(map);
+
+            marker.bindPopup(popup);
+
+            // Forzar una actualización del mapa
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 100);
+        }
+
+        // Intentar inicializar el mapa cuando el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeMap);
+        } else {
+            initializeMap();
+        }
+
+        // También inicializar cuando la ventana cambie de tamaño
+        window.addEventListener('resize', function() {
+            const mapElement = document.getElementById('map');
+            if (mapElement && mapElement._leaflet_id) {
+                const map = L.DomUtil.get(mapElement)._leaflet_map;
+                if (map) {
+                    map.invalidateSize();
+                }
+            }
+        });
+    </script>
+{% endif %}
 
 {% endblock %}

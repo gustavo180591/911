@@ -692,12 +692,15 @@
     });
 
     // Mapa y geocodificación
-    document.addEventListener('DOMContentLoaded', function() {
+    function initializeMap() {
         const mapElement = document.getElementById('map');
         if (!mapElement) return;
         if (mapElement._leaflet_id) {
             mapElement._leaflet_id = null;
         }
+        
+        // Limpiar el contenedor del mapa antes de inicializar
+        mapElement.innerHTML = '';
         
         // Obtener coordenadas iniciales (si existen en el formulario)
         const coordsField = document.getElementById('{{ form.ubicacion.coordenadas.vars.id }}');
@@ -751,7 +754,7 @@
                 coordsField.value = `${lat},${lng}`;
             }
         }
-        
+
         async function reverseGeocode(lat, lng) {
             try {
                 const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`;
@@ -796,8 +799,31 @@
         const numeroField = document.getElementById('{{ form.ubicacion.numero.vars.id }}');
         if (calleField) calleField.addEventListener('change', onAddressChange);
         if (numeroField) numeroField.addEventListener('change', onAddressChange);
+
+        // Forzar una actualización del mapa
+        setTimeout(() => {
+            window.map.invalidateSize();
+        }, 100);
+    }
+
+    // Intentar inicializar el mapa cuando el DOM esté listo
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeMap);
+    } else {
+        initializeMap();
+    }
+
+    // También inicializar cuando la ventana cambie de tamaño
+    window.addEventListener('resize', function() {
+        const mapElement = document.getElementById('map');
+        if (mapElement && mapElement._leaflet_id) {
+            const map = L.DomUtil.get(mapElement)._leaflet_map;
+            if (map) {
+                map.invalidateSize();
+            }
+        }
     });
-    
+
     // Soporte para arrastrar y soltar archivos
     document.addEventListener('DOMContentLoaded', function() {
         const evidenceUpload = document.querySelector('.evidence-upload');
