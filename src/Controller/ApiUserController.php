@@ -30,4 +30,30 @@ class ApiUserController extends AbstractController
             return $this->json(['error' => 'Usuario no encontrado'], 404);
         }
     }
+
+    #[Route('/api/search-phone', name: 'api_search_phone', methods: ['POST'])]
+    public function searchPhone(Request $request, UserRepository $userRepository): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        if (!isset($data['telefono'])) {
+            return $this->json(['error' => 'Falta el campo telefono'], 400);
+        }
+
+        $telefono = trim($data['telefono']);
+        if ($telefono === '') {
+            return $this->json(['error' => 'El teléfono no puede estar vacío'], 400);
+        }
+
+        $user = $userRepository->createQueryBuilder('u')
+            ->where('u.telefono LIKE :telefono')
+            ->setParameter('telefono', '%' . $telefono . '%')
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if ($user) {
+            return $this->json(['id' => $user->getId()], 200);
+        } else {
+            return $this->json(['error' => 'Usuario no encontrado'], 404);
+        }
+    }
 } 
