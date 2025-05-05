@@ -390,6 +390,24 @@
         display: flex;
         gap: 8px;
         align-items: center;
+        justify-content: flex-start;
+    }
+
+    .action-buttons .btn {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 0 12px;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .action-buttons .btn svg {
+        margin-right: 6px;
     }
 
     /* Back button styling */
@@ -433,6 +451,96 @@
         background-color: #dca02a;
         transform: translateY(-1px);
         box-shadow: 0 4px 6px rgba(236, 177, 58, 0.3);
+    }
+
+    /* Mejoras de proporción y responsividad para botones */
+    .btn,
+    .btn-primary,
+    .btn-secondary,
+    .btn-warning,
+    .btn-danger,
+    .new-emergency-button,
+    .back-button {
+        min-width: 120px;
+        padding: 12px 20px;
+        font-size: 1rem;
+        border-radius: 10px;
+        box-sizing: border-box;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+    @media (max-width: 900px) {
+        .btn,
+        .btn-primary,
+        .btn-secondary,
+        .btn-warning,
+        .btn-danger,
+        .new-emergency-button,
+        .back-button {
+            min-width: 100px;
+            padding: 12px 14px;
+            font-size: 0.97rem;
+        }
+    }
+    @media (max-width: 600px) {
+        .btn,
+        .btn-primary,
+        .btn-secondary,
+        .btn-warning,
+        .btn-danger,
+        .new-emergency-button,
+        .back-button {
+            min-width: 90px;
+            width: 100%;
+            padding: 12px 8px;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+        .action-buttons {
+            flex-direction: column;
+            gap: 10px;
+            align-items: stretch;
+        }
+        .action-buttons .btn {
+            width: 100%;
+            justify-content: flex-start;
+            font-size: 1rem;
+            padding: 10px 14px;
+        }
+        .action-buttons .btn svg {
+            margin-right: 12px;
+        }
+        .table-container {
+            border-radius: 0;
+        }
+    }
+    /* Tabla responsiva */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px;
+    }
+    @media (max-width: 700px) {
+        table {
+            min-width: 400px;
+        }
+        th, td {
+            padding: 10px;
+            font-size: 13px;
+        }
+    }
+    @media (max-width: 500px) {
+        table {
+            min-width: 320px;
+        }
+        th, td {
+            padding: 8px;
+            font-size: 12px;
+        }
     }
 </style>
 
@@ -503,14 +611,12 @@
                             <td class="action-buttons">
                                 <a href="{{ path('emergency_show', { id: emergency.id }) }}" class="btn btn-sm btn-warning">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                    Ver
+                                    <span class="btn-text">Ver</span>
                                 </a>
-
                                 <a href="{{ path('emergency_edit', { id: emergency.id }) }}" class="btn btn-sm btn-secondary">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-                                    Editar
+                                    <span class="btn-text">Editar</span>
                                 </a>
-
                                 <form method="post"
                                     action="{{ path('emergency_delete', { id: emergency.id }) }}"
                                     style="display: inline-block;"
@@ -518,9 +624,9 @@
                                     <input type="hidden"
                                         name="token"
                                         value="{{ csrf_token('delete_emergency' ~ emergency.id) }}">
-                                    <button class="btn btn-sm btn-danger">
+                                    <button class="btn btn-sm btn-danger" type="submit">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                                        Eliminar
+                                        <span class="btn-text">Eliminar</span>
                                     </button>
                                 </form>
                             </td>
@@ -549,25 +655,38 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    // Manejo del dropdown del perfil
+    function initializeProfileMenu() {
         const profileButton = document.getElementById('profileButton');
         const profileDropdown = document.getElementById('profileDropdown');
         
         if (profileButton && profileDropdown) {
-            profileButton.addEventListener('click', function(e) {
+            // Remover listeners existentes para evitar duplicación
+            const newProfileButton = profileButton.cloneNode(true);
+            profileButton.parentNode.replaceChild(newProfileButton, profileButton);
+            
+            newProfileButton.addEventListener('click', function(e) {
                 e.stopPropagation();
                 profileDropdown.classList.toggle('show');
             });
             
-            document.addEventListener('click', function() {
-                profileDropdown.classList.remove('show');
-            });
-            
-            // Prevent dropdown from closing when clicking inside it
-            profileDropdown.addEventListener('click', function(e) {
-                e.stopPropagation();
+            // Cerrar el dropdown al hacer clic fuera
+            document.addEventListener('click', function(e) {
+                if (!profileDropdown.contains(e.target) && !newProfileButton.contains(e.target)) {
+                    profileDropdown.classList.remove('show');
+                }
             });
         }
-    });
+    }
+
+    // Inicializar el menú de perfil cuando el DOM esté listo
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeProfileMenu);
+    } else {
+        initializeProfileMenu();
+    }
+
+    // También inicializar cuando Turbo cargue la página
+    document.addEventListener('turbo:load', initializeProfileMenu);
 </script> 
 {% endblock %}

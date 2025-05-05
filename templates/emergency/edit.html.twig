@@ -618,21 +618,41 @@
 
 <script>
     // Manejo del dropdown del perfil
-    document.addEventListener('DOMContentLoaded', function() {
+    function initializeProfileMenu() {
         const profileButton = document.getElementById('profileButton');
         const profileDropdown = document.getElementById('profileDropdown');
         
         if (profileButton && profileDropdown) {
-            profileButton.addEventListener('click', function(e) {
+            // Remover listeners existentes para evitar duplicación
+            const newProfileButton = profileButton.cloneNode(true);
+            profileButton.parentNode.replaceChild(newProfileButton, profileButton);
+            
+            newProfileButton.addEventListener('click', function(e) {
                 e.stopPropagation();
                 profileDropdown.classList.toggle('show');
             });
-            document.addEventListener('click', function() {
-                profileDropdown.classList.remove('show');
+            
+            // Cerrar el dropdown al hacer clic fuera
+            document.addEventListener('click', function(e) {
+                if (!profileDropdown.contains(e.target) && !newProfileButton.contains(e.target)) {
+                    profileDropdown.classList.remove('show');
+                }
             });
         }
-        
-        // Manejo de evidencia
+    }
+
+    // Inicializar el menú de perfil cuando el DOM esté listo
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeProfileMenu);
+    } else {
+        initializeProfileMenu();
+    }
+
+    // También inicializar cuando Turbo cargue la página
+    document.addEventListener('turbo:load', initializeProfileMenu);
+
+    // Manejo de evidencia
+    function initializeEvidenceHandling() {
         const evidenceUploadContainer = document.getElementById('evidence-upload-container');
         const addEvidenciaBtn = document.getElementById('add-evidencia-btn');
         const evidenciasList = document.getElementById('evidencias-list');
@@ -689,7 +709,17 @@
                 item.style.pointerEvents = 'none';
             });
         });
-    });
+    }
+
+    // Inicializar el manejo de evidencias cuando el DOM esté listo
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeEvidenceHandling);
+    } else {
+        initializeEvidenceHandling();
+    }
+
+    // También inicializar cuando Turbo cargue la página
+    document.addEventListener('turbo:load', initializeEvidenceHandling);
 
     // Mapa y geocodificación
     function initializeMap() {
