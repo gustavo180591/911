@@ -22,8 +22,8 @@ class HomeController extends AbstractController
         return $this->render('home/nuestramision.html.twig', [
             'title' => 'Acerca del Sistema de Alerta Ciudadana Integrada',
             'description' => 'El Sistema de Alerta Ciudadana Integrada Reporta incidentes de manera rápida y eficiente.
-SACI conecta a ciudadanos y autoridades en toda
-la provincia de Misiones..',
+SAC conecta a ciudadanos y autoridades en toda
+la ciudad de Posadas..',
         ]);
     }
 

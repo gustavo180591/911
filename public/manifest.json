@@ -1,6 +1,6 @@
 {
     "name": "SISTEMA DE ALERTA CIUDADANA INTEGRADA",
-    "short_name": "SACI",
+    "short_name": "SAC",
     "start_url": "/index.php",
   "display": "standalone",
   "icons": [

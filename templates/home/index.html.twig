@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SACI - INICIO{% endblock %}
+{% block title %}SAC - INICIO{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -219,16 +219,76 @@
             display: block;
         }
 
+        .register-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 14px 22px;
+            font-size: 1.08rem;
+            font-weight: 700;
+            border-radius: 9999px;
+            min-height: 48px;
+            min-width: 200px;
+            background-color: #F05A45;
+            color: #FFFFFF;
+            box-sizing: border-box;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(240, 90, 69, 0.3);
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
         .register-button:hover {
             background-color: #E22D26;
             transform: scale(1.05);
             box-shadow: 0 8px 20px rgba(255, 59, 48, 0.3);
         }
 
+        .register-button svg {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+            margin: 0;
+            display: block;
+        }
+
+        .admin-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 14px 22px;
+            font-size: 1.08rem;
+            font-weight: 700;
+            border-radius: 9999px;
+            min-height: 48px;
+            min-width: 200px;
+            background-color: #E5A74E;
+            color: #FFFFFF;
+            box-sizing: border-box;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(229, 167, 78, 0.3);
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
         .admin-button:hover {
             background-color: #d99c2c;
             transform: scale(1.05);
             box-shadow: 0 8px 20px rgba(229, 167, 78, 0.3);
+        }
+
+        .admin-button svg {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+            margin: 0;
+            display: block;
         }
 
         /* Sección institucional */
@@ -503,8 +563,8 @@
 {% block body %}
     <header class="header" id="header">
         <div class="logo-container">
-            <img src="{{ asset('images/favicon.png') }}" alt="SACI Logo" class="logo" style="margin-right: 10px;">
-            <img src="{{ asset('images/saci-blanco.png') }}" alt="SACI" class="logo">
+            <img src="{{ asset('images/favicon.png') }}" alt="SAC Logo" class="logo" style="margin-right: 10px;">
+            <img src="{{ asset('images/SAC-blanco.png') }}" alt="SAC" class="logo">
         </div>
         
         <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú">☰</button>
@@ -520,7 +580,7 @@
         <h1 class="main-title">
             BIENVENIDO<br>
             AL SISTEMA<br>
-            <span class="highlight">SACI</span>
+            <span class="highlight">SAC</span>
         </h1>
         
         <div class="subtitle">
@@ -529,8 +589,8 @@
         
         <div class="description">
             <p>Reporta incidentes de manera <strong>rápida y eficiente.</strong></p>
-            <p><strong>SACI</strong> conecta a ciudadanos y autoridades en toda</p>
-            <p>la provincia de <em>Misiones</em>.</p>
+            <p><strong>SAC</strong> conecta a ciudadanos y autoridades en toda</p>
+            <p>la ciudad de <em>Posadas</em>.</p>
         </div>
         
         <div class="button-container">
@@ -574,8 +634,8 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-logo">
-                <img src="{{ asset('images/favicon.png') }}" alt="SACI Logo">
-                <span>SACI © {{ "now"|date("Y") }}</span>
+                <img src="{{ asset('images/favicon.png') }}" alt="SAC Logo">
+                <span>SAC © {{ "now"|date("Y") }}</span>
             </div>
             <div class="footer-links">
                 <a href="#" class="footer-link">Términos y Condiciones</a>
