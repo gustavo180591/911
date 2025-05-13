@@ -34,40 +34,100 @@ class AuthController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
+        // Si el formulario se envió, manejarlo
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                try {
+                    // Comprobar si el usuario ya existe
+                    $existingUser = $entityManager->getRepository(User::class)
+                        ->findOneBy(['email' => $user->getEmail()]);
+
+                    if ($existingUser) {
+                        $this->addFlash('error', 'Este correo electrónico ya está registrado.');
+                        return $this->redirectToRoute('app_register');
+                    }
+
+                    // Codificar la contraseña
+                    $user->setPassword(
+                        $passwordHasher->hashPassword(
+                            $user,
+                            $form->get('plainPassword')->getData()
+                        )
+                    );
+
+                    // Asignar el rol ROLE_USER por defecto
+                    $user->setRoles(['ROLE_USER']);
+
+                    // Procesar las imágenes subidas
+                    $fotoRostro = $form->get('fotoRostro')->getData();
+                    $fotoDniFrente = $form->get('fotoDniFrente')->getData();
+                    $fotoDniDorso = $form->get('fotoDniDorso')->getData();
+
+                    // Asegurarse de que los directorios existan
+                    $uploadsPhotoDir = $this->getParameter('user_photos_directory');
+                    $uploadsDocDir = $this->getParameter('user_documents_directory');
+                    
+                    if (!file_exists($uploadsPhotoDir)) {
+                        mkdir($uploadsPhotoDir, 0777, true);
+                    }
+                    
+                    if (!file_exists($uploadsDocDir)) {
+                        mkdir($uploadsDocDir, 0777, true);
+                    }
+
+                    // Rostro
+                    if ($fotoRostro) {
+                        $newFilename = uniqid().'.'.$fotoRostro->guessExtension();
+                        $fotoRostro->move($uploadsPhotoDir, $newFilename);
+                        $user->setFotoRostro($newFilename);
+                        error_log("Foto de rostro guardada: $newFilename");
+                    } else {
+                        error_log("No se proporcionó foto de rostro");
+                    }
+
+                    // DNI frente
+                    if ($fotoDniFrente) {
+                        $newFilename = uniqid().'.'.$fotoDniFrente->guessExtension();
+                        $fotoDniFrente->move($uploadsDocDir, $newFilename);
+                        $user->setFotoDniFrente($newFilename);
+                        error_log("Foto de DNI frente guardada: $newFilename");
+                    } else {
+                        error_log("No se proporcionó foto de DNI frente");
+                    }
+
+                    // DNI dorso
+                    if ($fotoDniDorso) {
+                        $newFilename = uniqid().'.'.$fotoDniDorso->guessExtension();
+                        $fotoDniDorso->move($uploadsDocDir, $newFilename);
+                        $user->setFotoDniDorso($newFilename);
+                        error_log("Foto de DNI dorso guardada: $newFilename");
+                    } else {
+                        error_log("No se proporcionó foto de DNI dorso");
+                    }
+
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+
+                    $this->addFlash('success', 'Registro exitoso! Ahora puedes iniciar sesión.');
+                    // Autenticar al usuario tras el registro
+                    return $this->redirectToRoute('app_login');
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'Error durante el registro: ' . $e->getMessage());
+                    return $this->redirectToRoute('app_register');
+                }
+            } else {
+                // Si hay errores de validación, agregar un mensaje de flash
+                foreach ($form->getErrors(true) as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+                return $this->redirectToRoute('app_register');
+            }
+        }
+
         // Carga el JSON con los códigos de teléfono
         $jsonPath = $this->getParameter('kernel.project_dir') . '/public/json/phone-code.json';
         $jsonData = file_get_contents($jsonPath);
         $phoneCodes = json_decode($jsonData, true);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-                // Comprobar si el usuario ya existe
-            $existingUser = $entityManager->getRepository(User::class)
-                    ->findOneBy(['email' => $user->getEmail()]);
-
-                if ($existingUser) {
-                $this->addFlash('error', 'Este correo electrónico ya está registrado.');
-                return $this->render('auth/register.html.twig', [
-                    'registrationForm' => $form->createView(),
-                ]);
-            }
-
-            // Codificar la contraseña
-            $user->setPassword(
-                $passwordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
-
-            // Asignar el rol ROLE_USER por defecto
-                $user->setRoles(['ROLE_USER']);
-
-                $entityManager->persist($user);
-                $entityManager->flush();
-
-                // Autenticar al usuario tras el registro
-            return $this->redirectToRoute('app_login');
-        }
 
         return $this->render('auth/register.html.twig', [
             'registrationForm' => $form->createView(),
@@ -112,16 +172,24 @@ class AuthController extends AbstractController
         $form = $this->createForm(ForgotPasswordFormType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $emailIntroducido = $form->get('email')->getData();
-            
-            // Aquí iría la lógica para:
-            // 1. Verificar que el email existe.
-            // 2. Generar un token único y guardarlo.
-            // 3. Enviar un correo de recuperación utilizando $mailer.
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $emailIntroducido = $form->get('email')->getData();
+                
+                // Aquí iría la lógica para:
+                // 1. Verificar que el email existe.
+                // 2. Generar un token único y guardarlo.
+                // 3. Enviar un correo de recuperación utilizando $mailer.
 
-            $this->addFlash('success', 'Si el email existe en nuestro sistema, te enviaremos instrucciones para restablecer la contraseña.');
-            return $this->redirectToRoute('app_login');
+                $this->addFlash('success', 'Si el email existe en nuestro sistema, te enviaremos instrucciones para restablecer la contraseña.');
+                return $this->redirectToRoute('app_login');
+            } else {
+                // Si hay errores de validación, agregar un mensaje de flash
+                foreach ($form->getErrors(true) as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+                return $this->redirectToRoute('auth_forgot_password');
+            }
         }
 
         return $this->render('auth/forgot_password.html.twig', [

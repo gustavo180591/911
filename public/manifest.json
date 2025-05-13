@@ -1,5 +1,5 @@
 {
-    "name": "SISTEMA DE ALERTA CIUDADANA INTEGRADA",
+    "name": "SISTEMA DE ALERTA CIUDADANA",
     "short_name": "SAC",
     "start_url": "/index.php",
   "display": "standalone",

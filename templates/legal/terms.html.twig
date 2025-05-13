@@ -1,0 +1,400 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Términos y Condiciones - SAC{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #191D33;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-container img.favicon {
+            height: 40px;
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .logo-container img.logo-text {
+            height: 40px;
+            width: auto;
+        }
+
+        .main-title {
+            margin-bottom: 30px;
+            font-size: 32px;
+            font-weight: 700;
+            color: #ECB13A;
+            text-align: center;
+        }
+
+        .terms-container {
+            max-width: 900px;
+            margin: 20px auto 60px;
+            padding: 0 20px;
+        }
+
+        .terms-section {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .terms-section h2 {
+            color: #ECB13A;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(236, 177, 58, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .terms-section h3 {
+            color: #FFFFFF;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .terms-section p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .article-box {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 3px solid #ECB13A;
+        }
+
+        .article-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ECB13A;
+            margin-bottom: 10px;
+        }
+
+        .article-content {
+            font-size: 16px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .article-explanation {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .legal-note {
+            background-color: rgba(240, 90, 69, 0.1);
+            border-left: 3px solid #F05A45;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .legal-note-title {
+            font-weight: 600;
+            color: #F05A45;
+            margin-bottom: 10px;
+        }
+
+        .legal-note p {
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0 0 10px 0;
+        }
+
+        .toc {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .toc-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ECB13A;
+            margin-bottom: 15px;
+        }
+
+        .toc-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: #FFFFFF;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            display: block;
+            padding: 5px 0;
+        }
+
+        .toc-list a:hover {
+            color: #ECB13A;
+        }
+
+        .example-box {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: #ECB13A;
+            margin-bottom: 10px;
+        }
+
+        .example-content {
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .back-button {
+            display: inline-block;
+            background-color: #ECB13A;
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin-top: 30px;
+        }
+
+        .back-button:hover {
+            background-color: #d9a035;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(236, 177, 58, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+            
+            .terms-container {
+                padding: 0 15px;
+            }
+            
+            .terms-section {
+                padding: 20px;
+            }
+            
+            .main-title {
+                font-size: 26px;
+            }
+            
+            .terms-section h2 {
+                font-size: 22px;
+            }
+            
+            .terms-section h3 {
+                font-size: 18px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <header>
+        <div class="logo-container">
+            <img src="{{ asset('images/favicon.png') }}" alt="SAC" class="favicon">
+            <img src="{{ asset('images/SAC-blanco.png') }}" alt="SAC" class="logo-text">
+        </div>
+    </header>
+
+    <div class="terms-container">
+        <h1 class="main-title">Términos y Condiciones</h1>
+
+        <div class="toc">
+            <div class="toc-title">Contenido</div>
+            <ul class="toc-list">
+                <li><a href="#introduccion">1. Introducción</a></li>
+                <li><a href="#declaracion-jurada">2. Declaración Jurada</a></li>
+                <li><a href="#articulo-245">3. Artículo 245 del Código Penal</a></li>
+                <li><a href="#implicaciones-legales">4. Implicaciones Legales</a></li>
+                <li><a href="#falsas-denuncias">5. Falsas Denuncias</a></li>
+                <li><a href="#privacidad">6. Política de Privacidad</a></li>
+            </ul>
+        </div>
+
+        <section id="introduccion" class="terms-section">
+            <h2>1. Introducción</h2>
+            
+            <p>Bienvenido a los Términos y Condiciones del Sistema de Alerta Ciudadana (SAC). Este documento establece las reglas y normativas que regulan el uso de nuestra plataforma, diseñada para facilitar la comunicación entre ciudadanos y autoridades.</p>
+            
+            <p>El Sistema de Alerta Ciudadana permite a los usuarios registrar incidentes y denuncias, proporcionando información relevante a las autoridades competentes para su atención y seguimiento.</p>
+            
+            <p>Al registrarse y utilizar esta plataforma, usted acepta cumplir con todos los términos y condiciones aquí establecidos, así como con la legislación vigente aplicable.</p>
+        </section>
+
+        <section id="declaracion-jurada" class="terms-section">
+            <h2>2. Declaración Jurada</h2>
+            
+            <p>Durante el proceso de registro y al presentar cualquier denuncia o alerta a través de nuestra plataforma, se le solicitará aceptar una <strong>Declaración Jurada</strong>. Esta declaración tiene validez legal y confirma que toda la información proporcionada es verídica y completa.</p>
+            
+            <p>Al aceptar la Declaración Jurada, usted afirma bajo juramento que:</p>
+            
+            <ul>
+                <li>Todos los datos personales proporcionados son verídicos y actuales.</li>
+                <li>Los documentos presentados (DNI, fotografías, etc.) son auténticos y corresponden a su identidad.</li>
+                <li>Las denuncias o alertas que presente contendrán información verdadera y precisa.</li>
+                <li>Comprende las consecuencias legales de proporcionar información falsa.</li>
+            </ul>
+            
+            <div class="legal-note">
+                <div class="legal-note-title">Importante</div>
+                <p>Una Declaración Jurada tiene el mismo valor que una declaración realizada ante una autoridad pública. Proporcionar información falsa en una Declaración Jurada constituye un delito según la legislación argentina.</p>
+            </div>
+        </section>
+
+        <section id="articulo-245" class="terms-section">
+            <h2>3. Artículo 245 del Código Penal</h2>
+            
+            <p>Al utilizar nuestra plataforma, debe conocer y comprender el Artículo 245 del Código Penal Argentino, que establece sanciones para quienes realicen falsas denuncias.</p>
+            
+            <div class="article-box">
+                <div class="article-title">Artículo 245 del Código Penal:</div>
+                <div class="article-content">
+                    "Se impondrá prisión de dos meses a un año o multa a quien denunciare falsamente un delito ante la autoridad."
+                </div>
+                
+                <div class="article-explanation">
+                    <h3>Explicación del artículo:</h3>
+                    <p>El Artículo 245 del Código Penal tipifica el delito de falsa denuncia. Este delito se configura cuando una persona denuncia ante las autoridades un hecho delictivo a sabiendas de que no se ha cometido, o cuando atribuye falsamente la comisión de un delito a una persona sabiendo que es inocente.</p>
+                    
+                    <p>Las penas establecidas para este delito son:</p>
+                    <ul>
+                        <li><strong>Prisión:</strong> De dos meses a un año</li>
+                        <li><strong>Multa:</strong> Según determine el tribunal competente</li>
+                    </ul>
+                    
+                    <p>Estas sanciones buscan proteger el correcto funcionamiento de la administración de justicia y prevenir el uso indebido de los recursos públicos destinados a la investigación de delitos.</p>
+                </div>
+            </div>
+            
+            <h3>Elementos constitutivos del delito:</h3>
+            <ol>
+                <li><strong>Formulación de una denuncia:</strong> La comunicación formal a una autoridad sobre un presunto delito.</li>
+                <li><strong>Falsedad de la denuncia:</strong> La información proporcionada debe ser falsa, ya sea porque el hecho no ocurrió o porque se atribuye falsamente a una persona.</li>
+                <li><strong>Conocimiento de la falsedad:</strong> El denunciante debe saber que la información que está proporcionando es falsa.</li>
+                <li><strong>Ante autoridad competente:</strong> La denuncia debe realizarse ante una autoridad facultada para recibir denuncias.</li>
+            </ol>
+            
+            <div class="example-box">
+                <div class="example-title">Ejemplo de aplicación:</div>
+                <div class="example-content">
+                    <p>Un ciudadano que, por animadversión hacia su vecino, reporta a través del Sistema de Alerta Ciudadana que este vecino está cometiendo un delito (como venta de drogas o violencia doméstica), sabiendo que tal acusación es falsa, podría ser procesado por el delito de falsa denuncia según el Artículo 245.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="implicaciones-legales" class="terms-section">
+            <h2>4. Implicaciones Legales</h2>
+            
+            <p>El Sistema de Alerta Ciudadana mantiene un registro detallado de todas las denuncias realizadas, incluyendo:</p>
+            
+            <ul>
+                <li>Fecha y hora de la denuncia</li>
+                <li>Información del usuario que realiza la denuncia</li>
+                <li>Contenido completo de la denuncia</li>
+                <li>Direcciones IP y otros datos técnicos relevantes</li>
+                <li>Aceptación de la Declaración Jurada</li>
+            </ul>
+            
+            <p>Esta información puede ser proporcionada a las autoridades judiciales en caso de investigación por falsa denuncia u otros delitos relacionados.</p>
+            
+            <div class="legal-note">
+                <div class="legal-note-title">Consecuencias de las falsas denuncias</div>
+                <p>Además de las sanciones penales establecidas en el Artículo 245, las falsas denuncias pueden generar:</p>
+                <ul>
+                    <li>Responsabilidad civil por daños y perjuicios causados a terceros</li>
+                    <li>Suspensión o cancelación definitiva de su cuenta en el Sistema de Alerta Ciudadana</li>
+                    <li>Inclusión en listas de usuarios con restricciones para utilizar servicios públicos similares</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="falsas-denuncias" class="terms-section">
+            <h2>5. Falsas Denuncias</h2>
+            
+            <p>El Sistema de Alerta Ciudadana implementa diversos mecanismos para detectar y prevenir falsas denuncias, entre ellos:</p>
+            
+            <ul>
+                <li>Verificación de identidad mediante documentos oficiales</li>
+                <li>Análisis de patrones en denuncias realizadas</li>
+                <li>Verificación cruzada de información</li>
+                <li>Seguimiento de denuncias previas</li>
+            </ul>
+            
+            <h3>Situaciones que pueden configurar falsa denuncia:</h3>
+            
+            <ul>
+                <li>Reportar incidentes inexistentes</li>
+                <li>Atribuir falsamente conductas delictivas a terceros</li>
+                <li>Modificar hechos reales para agravar artificialmente una situación</li>
+                <li>Ocultar información relevante que cambiaría la naturaleza de los hechos</li>
+                <li>Presentar pruebas adulteradas o manipuladas</li>
+            </ul>
+            
+            <div class="example-box">
+                <div class="example-title">¿Qué NO constituye falsa denuncia?</div>
+                <div class="example-content">
+                    <p>Error de buena fe: Cuando el denunciante cree genuinamente que está reportando un hecho delictivo, aunque posteriormente se determine que no existió tal delito.</p>
+                    <p>Interpretación razonable: Cuando los hechos denunciados son reales pero existe una interpretación jurídica diferente de los mismos.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="privacidad" class="terms-section">
+            <h2>6. Política de Privacidad</h2>
+            
+            <p>Toda la información proporcionada a través del Sistema de Alerta Ciudadana será tratada de conformidad con nuestra Política de Privacidad y la legislación vigente en materia de protección de datos personales.</p>
+            
+            <p>El Sistema garantiza la confidencialidad de la información proporcionada, limitando su acceso únicamente a personal autorizado y para los fines específicos de gestión de alertas y denuncias.</p>
+            
+            <p>Para obtener información detallada sobre el tratamiento de sus datos personales, consulte nuestra <a href="{{ path('app_privacy') }}" style="color: #ECB13A; text-decoration: none;">Política de Privacidad</a>.</p>
+        </section>
+        
+        <div style="text-align: center;">
+            <a href="{{ path('app_home') }}" class="back-button">Volver al Inicio</a>
+        </div>
+    </div>
+{% endblock %} 

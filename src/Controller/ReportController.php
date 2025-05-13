@@ -43,7 +43,7 @@ class ReportController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @param string $redirectRoute Ruta a la que redirigir en caso de éxito
      * @param array $redirectParams Parámetros para la redirección
-     * @return Response|null
+     * @return Response
      */
     private function handleReportForm(
         Reporte $report,
@@ -51,23 +51,37 @@ class ReportController extends AbstractController
         EntityManagerInterface $entityManager,
         string $redirectRoute,
         array $redirectParams = []
-    ): ?Response {
+    ): Response {
         $form = $this->createForm(ReporteType::class, $report);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $report->setAutor($this->getUser());
-            $report->setFechaGeneracion(new \DateTime());
+        // Si el formulario fue enviado
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                // Si es válido, guardar y redirigir
+                $report->setAutor($this->getUser());
+                $report->setFechaGeneracion(new \DateTime());
 
-            $entityManager->persist($report);
-            $entityManager->flush();
+                $entityManager->persist($report);
+                $entityManager->flush();
 
-            $this->addFlash('success', 'Reporte creado exitosamente.');
+                $this->addFlash('success', 'Reporte creado exitosamente.');
 
-            return $this->redirectToRoute($redirectRoute, $redirectParams);
+                return $this->redirectToRoute($redirectRoute, $redirectParams);
+            } else {
+                // Si hay errores de validación, agregar mensajes flash
+                foreach ($form->getErrors(true) as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+
+                // Redirigir a la misma ruta para manejo compatible con Turbo
+                $currentRoute = $request->attributes->get('_route');
+                $currentParams = $request->attributes->get('_route_params', []);
+                return $this->redirectToRoute($currentRoute, $currentParams);
+            }
         }
 
-        // Renderizamos el formulario si no se ha enviado o hay errores
+        // Renderizamos el formulario solo para GET requests
         return $this->render('report/form.html.twig', [
             'title' => 'Crear Reporte',
             'form'  => $form->createView(),

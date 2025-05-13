@@ -319,8 +319,370 @@
         }
         
         .alert-success {
-            background-color: rgba(76, 175, 80, 0.2);
-            border: 1px solid #4CAF50;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #000;
+        }
+
+        /* Estilos para la carga de archivos */
+        .file-upload-container {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload-container:hover {
+            border-color: #ECB13A;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .file-upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .file-upload-icon {
+            color: #ECB13A;
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+        
+        .file-upload-text {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .file-upload-subtext {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .file-preview {
+            margin-top: 15px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            overflow: hidden;
+            display: none;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+        }
+        
+        .file-preview.show {
+            display: block;
+        }
+        
+        .file-preview img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+        
+        .file-name {
+            margin-top: 5px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            word-break: break-all;
+        }
+        
+        .file-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 5px;
+        }
+        
+        .file-remove {
+            color: #F05A45;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .file-remove:hover {
+            background-color: rgba(240, 90, 69, 0.2);
+        }
+        
+        .file-type {
+            display: inline-block;
+            padding: 2px 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+        
+        .file-size {
+            margin-left: 10px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            height: 4px;
+            border-radius: 2px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #ECB13A;
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        /* Estilos para validación de imágenes */
+        .file-validation-error {
+            color: #F05A45;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            border-radius: 4px;
+            display: none;
+            padding: 5px 10px;
+            background-color: rgba(240, 90, 69, 0.1);
+        }
+        
+        .file-validation-error.show {
+            display: block;
+        }
+
+        /* Nuevos estilos para la carga de archivos */
+        .uploads-section {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .uploads-title {
+            color: #ECB13A;
+            font-size: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .uploads-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .field-hint {
+            display: block;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: normal;
+            margin-top: 2px;
+        }
+        
+        .required-field {
+            color: #ECB13A;
+            margin-right: 3px;
+        }
+        
+        .field-requirements {
+            margin-top: 8px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .field-requirements ul {
+            padding-left: 15px;
+            margin: 5px 0;
+        }
+        
+        .document-uploads {
+            margin-top: 20px;
+        }
+        
+        .document-title {
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 15px;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+        }
+        
+        .document-instructions {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 13px;
+            margin-top: 15px;
+        }
+        
+        .document-instructions p {
+            margin: 0 0 8px 0;
+            color: #ECB13A;
+        }
+        
+        .document-instructions ul {
+            padding-left: 15px;
+            margin: 0;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .file-upload-container {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 5px;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        .file-upload-container:hover {
+            border-color: #ECB13A;
+            background-color: rgba(236, 177, 58, 0.05);
+        }
+        
+        .file-preview {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        .file-preview img {
+            max-height: 180px;
+        }
+        
+        .file-validation-error.show {
+            margin-top: 10px;
+            border-left: 3px solid #F05A45;
+        }
+
+        /* Mejoras para el contenedor de carga de archivos */
+        .file-upload-container {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 5px;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        .file-upload-container:hover {
+            border-color: #ECB13A;
+            background-color: rgba(236, 177, 58, 0.05);
+        }
+
+        .file-upload-container.file-selected {
+            border-style: solid;
+            background-color: rgba(40, 167, 69, 0.05);
+        }
+        
+        .file-preview {
+            margin-top: 15px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            overflow: hidden;
+            display: none;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+        }
+        
+        .file-preview.show {
+            display: block;
+        }
+        
+        .file-preview img {
+            max-height: 180px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .preview-content {
+            padding: 5px;
+        }
+        
+        .file-name {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            word-break: break-all;
+            font-weight: 500;
+        }
+
+        /* Estilos para mensajes de error específicos por campo */
+        .field-error {
+            color: #ff6b6b;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            padding: 5px 8px;
+            border-left: 3px solid #ff6b6b;
+            background-color: rgba(255, 107, 107, 0.1);
+            border-radius: 0 3px 3px 0;
+            animation: errorFadeIn 0.3s ease;
+        }
+        
+        .field-error ul {
+            margin: 0;
+            padding-left: 20px;
+            list-style-type: square;
+        }
+        
+        .field-error li {
+            margin: 0;
+        }
+        
+        @keyframes errorFadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Destacar campos con error */
+        .form-control.is-invalid {
+            border-color: #ff6b6b;
+            background-color: rgba(255, 107, 107, 0.05);
+        }
+        
+        /* Alerta para errores globales */
+        .alert {
+            background-color: rgba(255, 107, 107, 0.2);
+            border: 1px solid #ff6b6b;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .alert-success {
+            background-color: rgba(40, 167, 69, 0.2);
+            border: 1px solid #28a745;
+            color: white;
         }
     </style>
 {% endblock %}
@@ -365,6 +727,11 @@
                         'placeholder': ''
                     }
                 }) }}
+                {% if registrationForm.nombre.vars.errors is not empty %}
+                <div class="field-error">
+                    {{ form_errors(registrationForm.nombre) }}
+                </div>
+                {% endif %}
             </div>
             <div class="form-col">
                 <label for="{{ registrationForm.apellido.vars.id }}">Apellido</label>
@@ -374,6 +741,11 @@
                         'placeholder': ''
                     }
                 }) }}
+                {% if registrationForm.apellido.vars.errors is not empty %}
+                <div class="field-error">
+                    {{ form_errors(registrationForm.apellido) }}
+                </div>
+                {% endif %}
             </div>
         </div>
         
@@ -387,6 +759,11 @@
                         'placeholder': ''
                     }
                 }) }}
+                {% if registrationForm.dni.vars.errors is not empty %}
+                <div class="field-error">
+                    {{ form_errors(registrationForm.dni) }}
+                </div>
+                {% endif %}
             </div>
             <div class="form-col">
                 <label for="{{ registrationForm.direccion.vars.id }}">Dirección</label>
@@ -396,6 +773,11 @@
                         'placeholder': ''
                     }
                 }) }}
+                {% if registrationForm.direccion.vars.errors is not empty %}
+                <div class="field-error">
+                    {{ form_errors(registrationForm.direccion) }}
+                </div>
+                {% endif %}
             </div>
         </div>
         
@@ -403,11 +785,16 @@
         <div class="form-group">
             <label for="{{ registrationForm.email.vars.id }}">Correo electrónico</label>
             {{ form_widget(registrationForm.email, {
-                'attr': {
+            'attr': {
                     'class': 'form-control',
                     'placeholder': 'ejemplo@hotmail.com'
-                }
-            }) }}
+            }
+        }) }}
+            {% if registrationForm.email.vars.errors is not empty %}
+            <div class="field-error">
+                {{ form_errors(registrationForm.email) }}
+            </div>
+            {% endif %}
         </div>
         
         {# Nombre de Usuario #}
@@ -419,6 +806,11 @@
                     'placeholder': 'usuario123'
                 }
             }) }}
+            {% if registrationForm.username.vars.errors is not empty %}
+            <div class="field-error">
+                {{ form_errors(registrationForm.username) }}
+            </div>
+            {% endif %}
             <small class="form-text">El nombre de usuario debe ser único y solo puede contener letras, números y guiones bajos</small>
         </div>
         
@@ -438,17 +830,61 @@
                     }
                 }) }}
             </div>
+            {% if registrationForm.telefono.vars.errors is not empty %}
+            <div class="field-error">
+                {{ form_errors(registrationForm.telefono) }}
+            </div>
+            {% endif %}
             <div id="countrySelectorDropdown" class="country-selector-dropdown">
-                {% for country in phoneCodes %}
-                    <div class="country-option" data-code="{{ country.phoneCode }}" data-flag="{{ country.flagEmoji }}">
-                        <span class="flag">{{ country.flagEmoji }}</span>
-                        <span class="code">{{ country.phoneCode }}</span>
-                        <span class="name">{{ country.name }}</span>
-                    </div>
-                {% endfor %}
+                {# Hard-coded phone codes instead of depending on variable from controller #}
+                <div class="country-option" data-code="+54" data-flag="🇦🇷">
+                    <span class="flag">🇦🇷</span>
+                    <span class="code">+54</span>
+                    <span class="name">Argentina</span>
+                </div>
+                <div class="country-option" data-code="+55" data-flag="🇧🇷">
+                    <span class="flag">🇧🇷</span>
+                    <span class="code">+55</span>
+                    <span class="name">Brasil</span>
+                </div>
+                <div class="country-option" data-code="+56" data-flag="🇨🇱">
+                    <span class="flag">🇨🇱</span>
+                    <span class="code">+56</span>
+                    <span class="name">Chile</span>
+                </div>
+                <div class="country-option" data-code="+57" data-flag="🇨🇴">
+                    <span class="flag">🇨🇴</span>
+                    <span class="code">+57</span>
+                    <span class="name">Colombia</span>
+                </div>
+                <div class="country-option" data-code="+593" data-flag="🇪🇨">
+                    <span class="flag">🇪🇨</span>
+                    <span class="code">+593</span>
+                    <span class="name">Ecuador</span>
+                </div>
+                <div class="country-option" data-code="+52" data-flag="🇲🇽">
+                    <span class="flag">🇲🇽</span>
+                    <span class="code">+52</span>
+                    <span class="name">México</span>
+                </div>
+                <div class="country-option" data-code="+51" data-flag="🇵🇪">
+                    <span class="flag">🇵🇪</span>
+                    <span class="code">+51</span>
+                    <span class="name">Perú</span>
+                </div>
+                <div class="country-option" data-code="+598" data-flag="🇺🇾">
+                    <span class="flag">🇺🇾</span>
+                    <span class="code">+598</span>
+                    <span class="name">Uruguay</span>
+                </div>
+                <div class="country-option" data-code="+58" data-flag="🇻🇪">
+                    <span class="flag">🇻🇪</span>
+                    <span class="code">+58</span>
+                    <span class="name">Venezuela</span>
+                </div>
             </div>
         </div>
-        
+
         {# Contraseña #}
         <div class="form-group">
             <label for="{{ registrationForm.plainPassword.vars.id }}">Contraseña</label>
@@ -467,6 +903,165 @@
                 </button>
             </div>
         </div>
+
+        {# Sección de Upload de Documentos #}
+        <div class="uploads-section">
+            <h3 class="uploads-title">Documentación Requerida</h3>
+            <p class="uploads-description">Por favor, sube tu foto de rostro y ambas caras de tu DNI. La imagen debe ser clara y legible.</p>
+            
+            {# Foto de Rostro #}
+            <div class="form-group">
+                <label for="{{ registrationForm.fotoRostro.vars.id }}">
+                    <span class="required-field">*</span> Foto de Rostro
+                    <span class="field-hint">Tu rostro debe ser claramente visible, sin lentes de sol o máscaras</span>
+                </label>
+                <div class="file-upload-container" id="fotoRostroContainer">
+                    <label for="{{ registrationForm.fotoRostro.vars.id }}" class="file-upload-label">
+                        <div class="file-upload-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 16.7a5 5 0 0 0-10 0"></path>
+                                <path d="M18 20a5 5 0 0 0-5-8 5 5 0 0 0-10 4"></path>
+                                <line x1="12" y1="12" x2="12" y2="20"></line>
+                                <line x1="8" y1="16" x2="12" y2="12"></line>
+                                <line x1="16" y1="16" x2="12" y2="12"></line>
+                            </svg>
+                        </div>
+                        <div class="file-upload-text">Arrastra o haz clic para subir foto de rostro</div>
+                        <div class="file-upload-subtext">JPG o PNG - Máximo 5MB</div>
+                    </label>
+                    {{ form_widget(registrationForm.fotoRostro, {
+                        'attr': {
+                            'class': 'file-input',
+                            'accept': 'image/jpeg,image/png',
+                            'data-max-size': '5242880',
+                            'required': 'required'
+                        }
+                    }) }}
+                    <div class="file-preview" id="fotoRostroPreview"></div>
+                    <div class="file-validation-error" id="fotoRostroError"></div>
+                    <div class="progress-container" id="fotoRostroProgress">
+                        <div class="progress-bar" id="fotoRostroProgressBar"></div>
+                    </div>
+                </div>
+                <div class="field-requirements">
+                    <ul>
+                        <li>Formato: JPG o PNG</li>
+                        <li>Tamaño máximo: 5MB</li>
+                        <li>Fondo claro, rostro completo visible</li>
+                    </ul>
+                </div>
+            </div>
+
+            {# Documentos de Identidad #}
+            <div class="document-uploads">
+                <h4 class="document-title">Documento Nacional de Identidad (DNI)</h4>
+                
+                {# Foto DNI Frente #}
+                <div class="form-group">
+                    <label for="{{ registrationForm.fotoDniFrente.vars.id }}">
+                        <span class="required-field">*</span> Frente del DNI
+                        <span class="field-hint">Debe verse claramente tu foto y tus datos</span>
+                    </label>
+                    <div class="file-upload-container" id="fotoDniFrenteContainer">
+                        <label for="{{ registrationForm.fotoDniFrente.vars.id }}" class="file-upload-label">
+                            <div class="file-upload-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                            </div>
+                            <div class="file-upload-text">Arrastra o haz clic para subir frente del DNI</div>
+                            <div class="file-upload-subtext">JPG o PNG - Máximo 5MB</div>
+                        </label>
+                        {{ form_widget(registrationForm.fotoDniFrente, {
+                            'attr': {
+                                'class': 'file-input',
+                                'accept': 'image/jpeg,image/png',
+                                'data-max-size': '5242880',
+                                'required': 'required'
+                            }
+                        }) }}
+                        <div class="file-preview" id="fotoDniFrentePreview"></div>
+                        <div class="file-validation-error" id="fotoDniFrenteError"></div>
+                        <div class="progress-container" id="fotoDniFrenteProgress">
+                            <div class="progress-bar" id="fotoDniFrenteProgressBar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Foto DNI Dorso #}
+                <div class="form-group">
+                    <label for="{{ registrationForm.fotoDniDorso.vars.id }}">
+                        <span class="required-field">*</span> Dorso del DNI
+                        <span class="field-hint">Debe verse claramente el reverso del documento</span>
+                    </label>
+                    <div class="file-upload-container" id="fotoDniDorsoContainer">
+                        <label for="{{ registrationForm.fotoDniDorso.vars.id }}" class="file-upload-label">
+                            <div class="file-upload-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                            </div>
+                            <div class="file-upload-text">Arrastra o haz clic para subir dorso del DNI</div>
+                            <div class="file-upload-subtext">JPG o PNG - Máximo 5MB</div>
+                        </label>
+                        {{ form_widget(registrationForm.fotoDniDorso, {
+                            'attr': {
+                                'class': 'file-input',
+                                'accept': 'image/jpeg,image/png',
+                                'data-max-size': '5242880',
+                                'required': 'required'
+                            }
+                        }) }}
+                        <div class="file-preview" id="fotoDniDorsoPreview"></div>
+                        <div class="file-validation-error" id="fotoDniDorsoError"></div>
+                        <div class="progress-container" id="fotoDniDorsoProgress">
+                            <div class="progress-bar" id="fotoDniDorsoProgressBar"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="document-instructions">
+                    <p>Asegúrate de que:</p>
+                    <ul>
+                        <li>Se vean claramente todos los datos</li>
+                        <li>El documento esté vigente</li>
+                        <li>Las fotos sean de buena calidad (sin reflejos o sombras)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        {# Declaración Jurada #}
+        <div class="form-group declaration-container">
+            <div class="declaration-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+            <div class="declaration-checkbox">
+                
+                <label for="{{ registrationForm.declaracionJurada.vars.id }}" class="declaration-label" style="font-size: 1.2rem;">
+                    Declaro bajo juramento que todos los datos proporcionados son verdaderos y que tomo conocimiento que en caso de falsa denuncia se aplicará lo establecido en el <a href="{{ path('app_terms') }}#articulo-245" target="_blank" style="color: #ECB13A; text-decoration: underline;">artículo 245 del código penal</a>.
+                </label>
+
+                {{ form_widget(registrationForm.declaracionJurada, {
+                    'attr': {
+                        'class': 'declaration-input',
+                        'data-toggle': 'declaration',
+                        'style': 'transform: scale(1.2);'
+                    }
+                }) }}
+            </div>
+            <div class="declaration-error" id="declarationError">
+                Debe aceptar la declaración jurada para continuar con el registro
+            </div>
+        </div>
         
         <button type="submit" class="register-button">Registrar</button>
         
@@ -482,6 +1077,36 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Highlight fields with errors
+            const fieldErrors = document.querySelectorAll('.field-error');
+            let firstErrorField = null;
+            
+            fieldErrors.forEach(function(errorDiv) {
+                // Find the related input field (previous sibling or parent's previous child)
+                let inputField = errorDiv.previousElementSibling;
+                if (inputField && (inputField.tagName === 'INPUT' || inputField.tagName === 'SELECT' || inputField.tagName === 'TEXTAREA')) {
+                    inputField.classList.add('is-invalid');
+                    if (!firstErrorField) {
+                        firstErrorField = inputField;
+                    }
+                } else if (errorDiv.previousElementSibling && errorDiv.previousElementSibling.querySelector('input')) {
+                    // For container elements like phone input
+                    inputField = errorDiv.previousElementSibling.querySelector('input');
+                    inputField.classList.add('is-invalid');
+                    if (!firstErrorField) {
+                        firstErrorField = inputField;
+                    }
+                }
+            });
+            
+            // Scroll to first error field if any
+            if (firstErrorField) {
+                setTimeout(function() {
+                    firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstErrorField.focus();
+                }, 500);
+            }
+            
             // Función para alternar la visibilidad de la contraseña
             const passwordInput = document.getElementById('{{ registrationForm.plainPassword.vars.id }}');
             const toggleButton = document.getElementById('togglePassword');
@@ -543,6 +1168,392 @@
                     dropdown.classList.remove('show');
                 });
             });
+            
+            // Enhanced image validation functionality
+            class ImageValidator {
+                constructor(inputId, previewId, errorId, progressId, progressBarId, containerId) {
+                    this.input = document.getElementById(inputId);
+                    this.preview = document.getElementById(previewId);
+                    this.error = document.getElementById(errorId);
+                    this.progress = document.getElementById(progressId);
+                    this.progressBar = document.getElementById(progressBarId);
+                    this.container = document.getElementById(containerId);
+                    
+                    this.maxSize = parseInt(this.input.getAttribute('data-max-size')) || 5242880; // 5MB default
+                    this.allowedTypes = ['image/jpeg', 'image/png'];
+                    
+                    this.setupListeners();
+                }
+                
+                setupListeners() {
+                    // File selection event
+                    this.input.addEventListener('change', (e) => this.handleFileSelect(e));
+                    
+                    // Drag and drop events
+                    this.container.addEventListener('dragover', (e) => this.handleDragOver(e));
+                    this.container.addEventListener('dragleave', (e) => this.handleDragLeave(e));
+                    this.container.addEventListener('drop', (e) => this.handleFileDrop(e));
+                    
+                    // Prevent opening file on drop
+                    window.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        return false;
+                    });
+                    
+                    window.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        return false;
+                    });
+                }
+                
+                handleFileSelect(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        this.validateAndProcessFile(file);
+                    }
+                }
+                
+                handleDragOver(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.container.style.borderColor = '#ECB13A';
+                    this.container.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                }
+                
+                handleDragLeave(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.container.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                    this.container.style.backgroundColor = '';
+                }
+                
+                handleFileDrop(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    this.container.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                    this.container.style.backgroundColor = '';
+                    
+                    const dt = e.dataTransfer;
+                    const file = dt.files[0];
+                    
+                    if (file) {
+                        this.input.files = dt.files; // Update the input file
+                        this.validateAndProcessFile(file);
+                    }
+                }
+                
+                validateAndProcessFile(file) {
+                    console.log('Validando archivo:', file.name);
+                    this.resetErrors();
+                    
+                    // Validate file size
+                    if (file.size > this.maxSize) {
+                        this.showError(`El archivo es demasiado grande (${this.formatFileSize(file.size)}). El tamaño máximo permitido es ${this.formatFileSize(this.maxSize)}.`);
+                        this.clearFileInput();
+                        return false;
+                    }
+                    
+                    // Validate file type
+                    if (!this.allowedTypes.includes(file.type)) {
+                        this.showError(`Tipo de archivo no válido. Solo se permiten imágenes JPG y PNG.`);
+                        this.clearFileInput();
+                        return false;
+                    }
+                    
+                    // Show progress animation
+                    this.showProgress();
+                    
+                    // Validate image content
+                    const reader = new FileReader();
+                    
+                    reader.onprogress = (e) => {
+                        if (e.lengthComputable) {
+                            const percentLoaded = Math.round((e.loaded / e.total) * 100);
+                            this.updateProgress(percentLoaded);
+                        }
+                    };
+                    
+                    reader.onload = (e) => {
+                        console.log('Archivo leído correctamente');
+                        // Create an image to verify content
+                        const img = new Image();
+                        
+                        img.onload = () => {
+                            console.log('Imagen cargada:', img.width, 'x', img.height);
+                            
+                            // Update progress to 100%
+                            this.updateProgress(100);
+                            
+                            // Additional check for image dimensions (at least 300x300 pixels)
+                            if (img.width < 300 || img.height < 300) {
+                                this.hideProgress();
+                                this.showError('La imagen es demasiado pequeña. Debe tener al menos 300x300 píxeles para ser legible.');
+                                this.clearFileInput();
+                                return;
+                            }
+                            
+                            // Valid image - show preview with metadata
+                            setTimeout(() => {
+                                this.hideProgress();
+                                this.showPreview(e.target.result, file);
+                            }, 500);
+                        };
+                        
+                        img.onerror = () => {
+                            console.error('Error al cargar la imagen');
+                            this.hideProgress();
+                            this.showError('El archivo no es una imagen válida.');
+                            this.clearFileInput();
+                        };
+                        
+                        img.src = e.target.result;
+                    };
+                    
+                    reader.onerror = () => {
+                        console.error('Error al leer el archivo');
+                        this.hideProgress();
+                        this.showError('Error al leer el archivo.');
+                        this.clearFileInput();
+                    };
+                    
+                    reader.readAsDataURL(file);
+                    return true;
+                }
+                
+                showPreview(dataUrl, file) {
+                    // Debug info
+                    console.log('Mostrando vista previa para:', file.name);
+                    
+                    // Create a timestamp to prevent browser caching
+                    const timestamp = new Date().getTime();
+                    
+                    this.preview.innerHTML = `
+                        <div class="preview-content">
+                            <img src="${dataUrl}" alt="Vista previa" style="max-width: 100%; border-radius: 4px; display: block; margin: 0 auto;">
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-meta">
+                                <span>
+                                    <span class="file-type">${file.type.split('/')[1].toUpperCase()}</span>
+                                    <span class="file-size">${this.formatFileSize(file.size)}</span>
+                                </span>
+                                <button type="button" class="file-remove">Quitar</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Add success status to container
+                    this.container.classList.add('file-selected');
+                    this.preview.classList.add('show');
+                    this.container.style.borderColor = '#28a745';
+                    
+                    // Add event listener to remove button
+                    const removeButton = this.preview.querySelector('.file-remove');
+                    if (removeButton) {
+                        removeButton.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            this.clearFileInput();
+                            this.hidePreview();
+                            this.container.classList.remove('file-selected');
+                            this.container.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                        });
+                    }
+                }
+                
+                showError(message) {
+                    this.error.textContent = message;
+                    this.error.classList.add('show');
+                }
+                
+                resetErrors() {
+                    this.error.textContent = '';
+                    this.error.classList.remove('show');
+                }
+                
+                clearFileInput() {
+                    this.input.value = '';
+                    try {
+                        // For IE/Edge
+                        this.input.type = '';
+                        this.input.type = 'file';
+                    } catch (e) {
+                        // For other browsers
+                        // Create a form and reset it
+                        const form = document.createElement('form');
+                        const parentNode = this.input.parentNode;
+                        const ref = this.input.nextSibling;
+                        form.appendChild(this.input);
+                        form.reset();
+                        if (ref) {
+                            parentNode.insertBefore(this.input, ref);
+                        } else {
+                            parentNode.appendChild(this.input);
+                        }
+                    }
+                }
+                
+                hidePreview() {
+                    this.preview.innerHTML = '';
+                    this.preview.classList.remove('show');
+                }
+                
+                showProgress() {
+                    this.progress.style.display = 'block';
+                    this.updateProgress(0);
+                }
+                
+                hideProgress() {
+                    setTimeout(() => {
+                        this.progress.style.display = 'none';
+                    }, 300);
+                }
+                
+                updateProgress(percent) {
+                    this.progressBar.style.width = `${percent}%`;
+                }
+                
+                formatFileSize(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+                }
+                
+                isValid() {
+                    return this.input.files && this.input.files.length > 0 && !this.error.classList.contains('show');
+                }
+            }
+            
+            // Initialize validators for all image uploads
+            const fotoRostroValidator = new ImageValidator(
+                '{{ registrationForm.fotoRostro.vars.id }}',
+                'fotoRostroPreview',
+                'fotoRostroError',
+                'fotoRostroProgress',
+                'fotoRostroProgressBar',
+                'fotoRostroContainer'
+            );
+            
+            const fotoDniFrenteValidator = new ImageValidator(
+                '{{ registrationForm.fotoDniFrente.vars.id }}',
+                'fotoDniFrentePreview',
+                'fotoDniFrenteError',
+                'fotoDniFrenteProgress',
+                'fotoDniFrenteProgressBar',
+                'fotoDniFrenteContainer'
+            );
+            
+            const fotoDniDorsoValidator = new ImageValidator(
+                '{{ registrationForm.fotoDniDorso.vars.id }}',
+                'fotoDniDorsoPreview',
+                'fotoDniDorsoError',
+                'fotoDniDorsoProgress',
+                'fotoDniDorsoProgressBar',
+                'fotoDniDorsoContainer'
+            );
+            
+            // Validate form before submission
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function(e) {
+                let isValid = true;
+                
+                // Validate image files
+                const validators = [fotoRostroValidator, fotoDniFrenteValidator, fotoDniDorsoValidator];
+                validators.forEach(validator => {
+                    if (!validator.isValid()) {
+                        validator.showError('Por favor seleccione un archivo válido');
+                        isValid = false;
+                    }
+                });
+                
+                // Check for empty files more explicitly
+                const requiredFiles = [
+                    { input: document.getElementById('{{ registrationForm.fotoRostro.vars.id }}'), name: 'foto de rostro', validator: fotoRostroValidator },
+                    { input: document.getElementById('{{ registrationForm.fotoDniFrente.vars.id }}'), name: 'frente del DNI', validator: fotoDniFrenteValidator },
+                    { input: document.getElementById('{{ registrationForm.fotoDniDorso.vars.id }}'), name: 'dorso del DNI', validator: fotoDniDorsoValidator }
+                ];
+                
+                requiredFiles.forEach(item => {
+                    if (!item.input.files || !item.input.files[0]) {
+                        item.validator.showError(`Debe subir una imagen para ${item.name}`);
+                        isValid = false;
+                    }
+                });
+                
+                // Validate declaration
+                const declarationCheckbox = document.getElementById('{{ registrationForm.declaracionJurada.vars.id }}');
+                const declarationError = document.getElementById('declarationError');
+                const declarationInfo = document.getElementById('declarationInfo');
+                
+                if (!declarationCheckbox.checked) {
+                    declarationError.classList.add('show');
+                    isValid = false;
+                    // Scroll towards the declaration
+                    declarationCheckbox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    declarationError.classList.remove('show');
+                    declarationInfo.style.display = 'block';
+                }
+                
+                if (!isValid) {
+                    e.preventDefault();
+                }
+            });
+            
+            // Efectos de UI para la declaración jurada
+            declarationInfo.style.display = declarationCheckbox.checked ? 'block' : 'none';
+            
+            const declarationContainer = document.querySelector('.declaration-container');
+            declarationContainer.addEventListener('mouseenter', function() {
+                if (!declarationCheckbox.checked) {
+                    declarationInfo.style.display = 'block';
+                }
+            });
+            
+            declarationContainer.addEventListener('mouseleave', function() {
+                if (!declarationCheckbox.checked) {
+                    declarationInfo.style.display = 'none';
+                }
+            });
+
+            // Init debug function to check if file upload works
+            function debugFileUpload() {
+                console.log('Depuración carga de archivos:');
+                const fileInputs = [
+                    document.getElementById('{{ registrationForm.fotoRostro.vars.id }}'),
+                    document.getElementById('{{ registrationForm.fotoDniFrente.vars.id }}'),
+                    document.getElementById('{{ registrationForm.fotoDniDorso.vars.id }}')
+                ];
+                
+                fileInputs.forEach(input => {
+                    if (!input) {
+                        console.error('Input no encontrado:', input);
+                        return;
+                    }
+                    
+                    console.log('Input:', input.id);
+                    console.log('- Files:', input.files ? input.files.length : 'sin archivos');
+                    
+                    const container = input.closest('.file-upload-container');
+                    if (container) {
+                        console.log('- Container encontrado');
+                    } else {
+                        console.error('- Container no encontrado');
+                    }
+                    
+                    const preview = container ? container.querySelector('.file-preview') : null;
+                    if (preview) {
+                        console.log('- Preview encontrado, visible:', preview.classList.contains('show'));
+                    } else {
+                        console.error('- Preview no encontrado');
+                    }
+                });
+            }
+            
+            // Run debug on page load
+            setTimeout(debugFileUpload, 1000);
         });
     </script>
 {% endblock %}

@@ -12,7 +12,7 @@ class HomeController extends AbstractController
     public function index(): Response
     {
         return $this->render('home/index.html.twig', [
-            'title' => 'Bienvenido al Sistema de Alerta Ciudadana Integrada',
+            'title' => 'Bienvenido al Sistema de Alerta Ciudadana ',
         ]);
     }
 
@@ -20,8 +20,8 @@ class HomeController extends AbstractController
     public function about(): Response
     {
         return $this->render('home/nuestramision.html.twig', [
-            'title' => 'Acerca del Sistema de Alerta Ciudadana Integrada',
-            'description' => 'El Sistema de Alerta Ciudadana Integrada Reporta incidentes de manera rápida y eficiente.
+            'title' => 'Acerca del Sistema de Alerta Ciudadana ',
+            'description' => 'El Sistema de Alerta Ciudadana  Reporta incidentes de manera rápida y eficiente.
 SAC conecta a ciudadanos y autoridades en toda
 la ciudad de Posadas..',
         ]);

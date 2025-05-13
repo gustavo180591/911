@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Política de Privacidad - SAC{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #191D33;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-container img.favicon {
+            height: 40px;
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .logo-container img.logo-text {
+            height: 40px;
+            width: auto;
+        }
+
+        .main-title {
+            margin-bottom: 30px;
+            font-size: 32px;
+            font-weight: 700;
+            color: #ECB13A;
+            text-align: center;
+        }
+
+        .privacy-container {
+            max-width: 900px;
+            margin: 20px auto 60px;
+            padding: 0 20px;
+        }
+
+        .privacy-section {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .privacy-section h2 {
+            color: #ECB13A;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(236, 177, 58, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .privacy-section p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .back-button {
+            display: inline-block;
+            background-color: #ECB13A;
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin-top: 30px;
+        }
+
+        .back-button:hover {
+            background-color: #d9a035;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(236, 177, 58, 0.3);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <header>
+        <div class="logo-container">
+            <img src="{{ asset('images/favicon.png') }}" alt="SAC" class="favicon">
+            <img src="{{ asset('images/SAC-blanco.png') }}" alt="SAC" class="logo-text">
+        </div>
+    </header>
+
+    <div class="privacy-container">
+        <h1 class="main-title">Política de Privacidad</h1>
+
+        <div class="privacy-section">
+            <h2>Protección de Datos</h2>
+            <p>El Sistema de Alerta Ciudadana (SAC) está comprometido con la protección de sus datos personales y el respeto a su privacidad. Esta Política de Privacidad explica cómo recopilamos, utilizamos y protegemos la información que usted nos proporciona.</p>
+            <p>Pronto publicaremos aquí nuestra política de privacidad completa, detallando todos los aspectos relacionados con el tratamiento de sus datos personales.</p>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="{{ path('app_home') }}" class="back-button">Volver al Inicio</a>
+        </div>
+    </div>
+{% endblock %} 
