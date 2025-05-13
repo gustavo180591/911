@@ -57,6 +57,9 @@ class AuthController extends AbstractController
 
                     // Asignar el rol ROLE_USER por defecto
                     $user->setRoles(['ROLE_USER']);
+                    
+                    // Establecer el estado como pendiente
+                    $user->setEstado('pendiente');
 
                     // Procesar las imágenes subidas
                     $fotoRostro = $form->get('fotoRostro')->getData();
@@ -108,8 +111,10 @@ class AuthController extends AbstractController
                     $entityManager->persist($user);
                     $entityManager->flush();
 
-                    $this->addFlash('success', 'Registro exitoso! Ahora puedes iniciar sesión.');
-                    // Autenticar al usuario tras el registro
+                    // Guardar mensaje en sesión para mostrarlo en el modal
+                    $this->addFlash('registro_exitoso', '✅ Gracias por completar el formulario. Su solicitud para registrarse se encuentra en proceso de validación. Recibirá una notificación una vez que su cuenta haya sido verificada.');
+                    
+                    // Redireccionar al login
                     return $this->redirectToRoute('app_login');
                 } catch (\Exception $e) {
                     $this->addFlash('error', 'Error durante el registro: ' . $e->getMessage());

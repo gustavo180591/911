@@ -49,7 +49,7 @@ class DenunciaController extends AbstractController
     {
         // Si es admin, mostrar todas las emergencias
         if ($this->isGranted('ROLE_ADMIN')) {
-        $emergencies = $this->repository->findBy([], ['fechaHora' => 'DESC']);
+            $emergencies = $this->repository->findBy([], ['fechaHora' => 'DESC']);
         } else {
             // Si es usuario normal, mostrar solo sus emergencias
             $emergencies = $this->repository->findBy(['usuario' => $this->getUser()], ['fechaHora' => 'DESC']);
@@ -67,6 +67,14 @@ class DenunciaController extends AbstractController
     #[Route('/create', name: 'emergency_create', methods: ['GET', 'POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
+        // Verificar si el usuario está aprobado
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$user->isAprobado()) {
+            $this->addFlash('error', 'Su cuenta está pendiente de aprobación o ha sido rechazada. No puede crear denuncias en este momento.');
+            return $this->redirectToRoute('emergency_index');
+        }
+        
         $denuncia = new Denuncia();
         $form = $this->createForm(DenunciaType::class, $denuncia);
         $form->handleRequest($request);

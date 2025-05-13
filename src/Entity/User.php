@@ -69,6 +69,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[CustomAssert\LegalDeclaration]
     private bool $declaracionJurada = false;
 
+    #[ORM\Column(length: 20)]
+    private string $estado = 'pendiente';
 
     #[ORM\Column]
     private ?\DateTimeImmutable $fechaRegistro = null;
@@ -85,6 +87,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->denuncias = new ArrayCollection();
         $this->reportes = new ArrayCollection();
         $this->declaracionJurada = false;
+        $this->estado = 'pendiente';
     }
 
     public function getId(): ?int
@@ -256,6 +259,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->declaracionJurada = $declaracionJurada;
         return $this;
+    }
+
+    public function getEstado(): string
+    {
+        return $this->estado;
+    }
+
+    public function setEstado(string $estado): static
+    {
+        $this->estado = $estado;
+        return $this;
+    }
+
+    public function isAprobado(): bool
+    {
+        return $this->estado === 'aprobado';
+    }
+
+    public function isPendiente(): bool
+    {
+        return $this->estado === 'pendiente';
+    }
+
+    public function isRechazado(): bool
+    {
+        return $this->estado === 'rechazado';
     }
 
     public function getDenuncias(): Collection

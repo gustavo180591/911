@@ -1,0 +1,763 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Validación de Usuarios{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #191D33;
+            color: #FFFFFF;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+        
+        h1 {
+            font-weight: 700;
+            color: #ECB13A;
+            margin-bottom: 30px;
+        }
+        
+        .user-photos {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+        
+        .user-photos img {
+            width: 160px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #ECB13A;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .user-photos img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(236, 177, 58, 0.3);
+        }
+        
+        .user-card {
+            border: none;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            background-color: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .user-card h5 {
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #ECB13A;
+            font-size: 1.2rem;
+        }
+        
+        .user-details {
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .user-details p {
+            margin-bottom: 8px;
+        }
+        
+        .user-details strong {
+            color: #FFFFFF;
+            font-weight: 600;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .nav-tabs {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 30px;
+        }
+        
+        .nav-tabs .nav-item {
+            margin-right: 5px;
+        }
+        
+        .nav-tabs .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px 6px 0 0;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            background-color: transparent;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            color: #FFFFFF;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: #ECB13A;
+            font-weight: 600;
+            background-color: rgba(236, 177, 58, 0.1);
+            border-bottom: 3px solid #ECB13A;
+        }
+        
+        .badge {
+            padding: 0.35em 0.65em;
+            font-size: 0.75em;
+            font-weight: 700;
+            border-radius: 20px;
+            margin-left: 8px;
+        }
+        
+        .badge-pending {
+            background-color: #F05A45;
+            color: #FFFFFF;
+        }
+        
+        .badge-approved {
+            background-color: #4BB543;
+            color: #FFFFFF;
+        }
+        
+        .badge-rejected {
+            background-color: #DC3545;
+            color: #FFFFFF;
+        }
+        
+        .btn {
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .btn-success {
+            background-color: #4BB543;
+            color: #FFFFFF;
+        }
+        
+        .btn-success:hover {
+            background-color: #429a3a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(75, 181, 67, 0.3);
+        }
+        
+        .btn-danger {
+            background-color: #F05A45;
+            color: #FFFFFF;
+        }
+        
+        .btn-danger:hover {
+            background-color: #d64b38;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(240, 90, 69, 0.3);
+        }
+        
+        .btn-warning {
+            background-color: #ECB13A;
+            color: #FFFFFF;
+        }
+        
+        .btn-warning:hover {
+            background-color: #d69e33;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(236, 177, 58, 0.3);
+        }
+        
+        .alert {
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 25px;
+            border: none;
+        }
+        
+        .alert-success {
+            background-color: rgba(75, 181, 67, 0.2);
+            color: #FFFFFF;
+            border-left: 4px solid #4BB543;
+        }
+        
+        .alert-warning {
+            background-color: rgba(236, 177, 58, 0.2);
+            color: #FFFFFF;
+            border-left: 4px solid #ECB13A;
+        }
+        
+        .alert-danger {
+            background-color: rgba(240, 90, 69, 0.2);
+            color: #FFFFFF;
+            border-left: 4px solid #F05A45;
+        }
+        
+        .photo-label {
+            color: #ECB13A;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .no-users-message {
+            text-align: center;
+            padding: 40px 0;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+        }
+        
+        /* Estilos para el formulario de filtro y búsqueda */
+        .filter-section {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .search-container {
+            position: relative;
+            width: 100%;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ECB13A;
+            font-size: 18px;
+        }
+        
+        .search-input {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #FFFFFF;
+            border-radius: 30px;
+            padding: 15px 20px 15px 45px;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .search-input:focus {
+            border-color: #ECB13A;
+            box-shadow: 0 0 0 0.2rem rgba(236, 177, 58, 0.25);
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+        
+        .clear-search {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(240, 90, 69, 0.2);
+            border: none;
+            color: #FFFFFF;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .clear-search:hover {
+            background-color: rgba(240, 90, 69, 0.5);
+        }
+        
+        .btn-warning {
+            background-color: #ECB13A;
+            color: #FFFFFF;
+            border-radius: 30px;
+            font-weight: 600;
+            padding: 15px 25px;
+            transition: all 0.3s ease;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-warning:hover {
+            background-color: #d69e33;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(236, 177, 58, 0.3);
+        }
+        
+        /* Estilos para la paginación */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .page-item {
+            margin: 0 5px;
+        }
+        
+        .page-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #FFFFFF;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .page-link:hover {
+            background-color: rgba(236, 177, 58, 0.2);
+            color: #ECB13A;
+        }
+        
+        .page-item.active .page-link {
+            background-color: #ECB13A;
+            color: #FFFFFF;
+        }
+        
+        .page-item.disabled .page-link {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.3);
+            cursor: not-allowed;
+        }
+        
+        @media (max-width: 767px) {
+            .user-photos {
+                justify-content: center;
+            }
+            
+            .user-photos img {
+                width: 140px;
+                height: 140px;
+            }
+            
+            .user-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .filter-section {
+                padding: 15px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Validación de Usuarios</h1>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    
+    {# Formulario de búsqueda y filtros #}
+    <div class="filter-section">
+        <form method="GET" action="{{ path('admin_users_validation_index') }}" class="row g-3">
+            <input type="hidden" name="tab" value="{{ activeTab }}">
+            
+            <div class="col-md-9">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" id="search" name="search" value="{{ filters.search }}" placeholder="Buscar por nombre, apellido, email, DNI o teléfono...">
+                    {% if filters.search %}
+                        <button type="button" class="clear-search" id="clearSearch">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-warning w-100">
+                    <i class="fas fa-search me-2"></i> Buscar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <ul class="nav nav-tabs mb-4" id="userTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link {{ activeTab == 'pending' ? 'active' : '' }}" 
+               id="pending-tab" 
+               href="{{ path('admin_users_validation_index', {'tab': 'pending', 'search': filters.search}) }}" 
+               role="tab" 
+               aria-controls="pending" 
+               aria-selected="{{ activeTab == 'pending' ? 'true' : 'false' }}">
+                Pendientes <span class="badge badge-pending">{{ pendingCount }}</span>
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link {{ activeTab == 'approved' ? 'active' : '' }}" 
+               id="approved-tab" 
+               href="{{ path('admin_users_validation_index', {'tab': 'approved', 'search': filters.search}) }}" 
+               role="tab" 
+               aria-controls="approved" 
+               aria-selected="{{ activeTab == 'approved' ? 'true' : 'false' }}">
+                Aprobados <span class="badge badge-approved">{{ approvedCount }}</span>
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link {{ activeTab == 'rejected' ? 'active' : '' }}" 
+               id="rejected-tab" 
+               href="{{ path('admin_users_validation_index', {'tab': 'rejected', 'search': filters.search}) }}" 
+               role="tab" 
+               aria-controls="rejected" 
+               aria-selected="{{ activeTab == 'rejected' ? 'true' : 'false' }}">
+                Rechazados <span class="badge badge-rejected">{{ rejectedCount }}</span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="userTabsContent">
+        <div class="tab-pane fade {{ activeTab == 'pending' ? 'show active' : '' }}" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+            {% if pendingUsers|length > 0 %}
+                <div class="row">
+                    {% for user in pendingUsers %}
+                        <div class="col-lg-6">
+                            <div class="user-card">
+                                <h5>{{ user.nombre }} {{ user.apellido }}</h5>
+                                <div class="user-details">
+                                    <p><strong>Email:</strong> {{ user.email }}</p>
+                                    <p><strong>DNI:</strong> {{ user.dni }}</p>
+                                    <p><strong>Teléfono:</strong> {{ user.telefono }}</p>
+                                    <p><strong>Fecha de registro:</strong> {{ user.fechaRegistro|date('d/m/Y H:i') }}</p>
+                                </div>
+                                
+                                <div class="user-photos">
+                                    {% if user.fotoRostro %}
+                                        <div>
+                                            <p class="photo-label">Foto de perfil</p>
+                                            <a href="{{ asset('uploads/user_photos/' ~ user.fotoRostro) }}" target="_blank">
+                                                <img src="{{ asset('uploads/user_photos/' ~ user.fotoRostro) }}" alt="Foto de perfil">
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {% if user.fotoDniFrente %}
+                                        <div>
+                                            <p class="photo-label">DNI (frente)</p>
+                                            <a href="{{ asset('uploads/user_documents/' ~ user.fotoDniFrente) }}" target="_blank">
+                                                <img src="{{ asset('uploads/user_documents/' ~ user.fotoDniFrente) }}" alt="DNI frente">
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {% if user.fotoDniDorso %}
+                                        <div>
+                                            <p class="photo-label">DNI (dorso)</p>
+                                            <a href="{{ asset('uploads/user_documents/' ~ user.fotoDniDorso) }}" target="_blank">
+                                                <img src="{{ asset('uploads/user_documents/' ~ user.fotoDniDorso) }}" alt="DNI dorso">
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="user-actions mt-3">
+                                    <form method="post" action="{{ path('admin_user_approve', {'id': user.id}) }}" style="display: inline-block;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('approve' ~ user.id) }}">
+                                        <input type="hidden" name="search" value="{{ filters.search }}">
+                                        <input type="hidden" name="tab" value="{{ activeTab }}">
+                                        <input type="hidden" name="page" value="{{ pagination.page }}">
+                                        <button class="btn btn-success" type="submit">Aprobar</button>
+                                    </form>
+                                    <form method="post" action="{{ path('admin_user_reject', {'id': user.id}) }}" style="display: inline-block;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('reject' ~ user.id) }}">
+                                        <input type="hidden" name="search" value="{{ filters.search }}">
+                                        <input type="hidden" name="tab" value="{{ activeTab }}">
+                                        <input type="hidden" name="page" value="{{ pagination.page }}">
+                                        <button class="btn btn-danger" type="submit">Rechazar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                {# Paginación #}
+                {% if activeTab == 'pending' and pagination %}
+                    <div class="pagination-container">
+                        <ul class="pagination">
+                            <li class="page-item {{ pagination.hasPrevious ? '' : 'disabled' }}">
+                                <a class="page-link" href="{{ pagination.hasPrevious ? path('admin_users_validation_index', {'tab': activeTab, 'page': pagination.page - 1, 'search': filters.search}) : '#' }}" aria-label="Anterior">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                            
+                            {% for p in 1..pagination.pageCount %}
+                                <li class="page-item {{ p == pagination.page ? 'active' : '' }}">
+                                    <a class="page-link" href="{{ path('admin_users_validation_index', {'tab': activeTab, 'page': p, 'search': filters.search}) }}">
+                                        {{ p }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                            
+                            <li class="page-item {{ pagination.hasNext ? '' : 'disabled' }}">
+                                <a class="page-link" href="{{ pagination.hasNext ? path('admin_users_validation_index', {'tab': activeTab, 'page': pagination.page + 1, 'search': filters.search}) : '#' }}" aria-label="Siguiente">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+            {% else %}
+                <p class="no-users-message">No hay usuarios pendientes de validación que coincidan con los criterios de búsqueda.</p>
+            {% endif %}
+        </div>
+
+        <div class="tab-pane fade {{ activeTab == 'approved' ? 'show active' : '' }}" id="approved" role="tabpanel" aria-labelledby="approved-tab">
+            {% if approvedUsers|length > 0 %}
+                <div class="row">
+                    {% for user in approvedUsers %}
+                        <div class="col-lg-6">
+                            <div class="user-card">
+                                <h5>{{ user.nombre }} {{ user.apellido }}</h5>
+                                <div class="user-details">
+                                    <p><strong>Email:</strong> {{ user.email }}</p>
+                                    <p><strong>DNI:</strong> {{ user.dni }}</p>
+                                    <p><strong>Teléfono:</strong> {{ user.telefono }}</p>
+                                    <p><strong>Fecha de registro:</strong> {{ user.fechaRegistro|date('d/m/Y H:i') }}</p>
+                                </div>
+                                
+                                <div class="user-photos">
+                                    {% if user.fotoRostro %}
+                                        <div>
+                                            <p class="photo-label">Foto de perfil</p>
+                                            <a href="{{ asset('uploads/user_photos/' ~ user.fotoRostro) }}" target="_blank">
+                                                <img src="{{ asset('uploads/user_photos/' ~ user.fotoRostro) }}" alt="Foto de perfil">
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="user-actions mt-3">
+                                    <form method="post" action="{{ path('admin_user_reject', {'id': user.id}) }}" style="display: inline-block;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('reject' ~ user.id) }}">
+                                        <input type="hidden" name="search" value="{{ filters.search }}">
+                                        <input type="hidden" name="tab" value="{{ activeTab }}">
+                                        <input type="hidden" name="page" value="{{ pagination.page }}">
+                                        <button class="btn btn-warning" type="submit">Cambiar a Rechazado</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                {# Paginación #}
+                {% if activeTab == 'approved' and pagination %}
+                    <div class="pagination-container">
+                        <ul class="pagination">
+                            <li class="page-item {{ pagination.hasPrevious ? '' : 'disabled' }}">
+                                <a class="page-link" href="{{ pagination.hasPrevious ? path('admin_users_validation_index', {'tab': activeTab, 'page': pagination.page - 1, 'search': filters.search}) : '#' }}" aria-label="Anterior">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                            
+                            {% for p in 1..pagination.pageCount %}
+                                <li class="page-item {{ p == pagination.page ? 'active' : '' }}">
+                                    <a class="page-link" href="{{ path('admin_users_validation_index', {'tab': activeTab, 'page': p, 'search': filters.search}) }}">
+                                        {{ p }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                            
+                            <li class="page-item {{ pagination.hasNext ? '' : 'disabled' }}">
+                                <a class="page-link" href="{{ pagination.hasNext ? path('admin_users_validation_index', {'tab': activeTab, 'page': pagination.page + 1, 'search': filters.search}) : '#' }}" aria-label="Siguiente">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+            {% else %}
+                <p class="no-users-message">No hay usuarios aprobados que coincidan con los criterios de búsqueda.</p>
+            {% endif %}
+        </div>
+
+        <div class="tab-pane fade {{ activeTab == 'rejected' ? 'show active' : '' }}" id="rejected" role="tabpanel" aria-labelledby="rejected-tab">
+            {% if rejectedUsers|length > 0 %}
+                <div class="row">
+                    {% for user in rejectedUsers %}
+                        <div class="col-lg-6">
+                            <div class="user-card">
+                                <h5>{{ user.nombre }} {{ user.apellido }}</h5>
+                                <div class="user-details">
+                                    <p><strong>Email:</strong> {{ user.email }}</p>
+                                    <p><strong>DNI:</strong> {{ user.dni }}</p>
+                                    <p><strong>Teléfono:</strong> {{ user.telefono }}</p>
+                                    <p><strong>Fecha de registro:</strong> {{ user.fechaRegistro|date('d/m/Y H:i') }}</p>
+                                </div>
+                                
+                                <div class="user-photos">
+                                    {% if user.fotoRostro %}
+                                        <div>
+                                            <p class="photo-label">Foto de perfil</p>
+                                            <a href="{{ asset('uploads/user_photos/' ~ user.fotoRostro) }}" target="_blank">
+                                                <img src="{{ asset('uploads/user_photos/' ~ user.fotoRostro) }}" alt="Foto de perfil">
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="user-actions mt-3">
+                                    <form method="post" action="{{ path('admin_user_approve', {'id': user.id}) }}" style="display: inline-block;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('approve' ~ user.id) }}">
+                                        <input type="hidden" name="search" value="{{ filters.search }}">
+                                        <input type="hidden" name="tab" value="{{ activeTab }}">
+                                        <input type="hidden" name="page" value="{{ pagination.page }}">
+                                        <button class="btn btn-success" type="submit">Cambiar a Aprobado</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                {# Paginación #}
+                {% if activeTab == 'rejected' and pagination %}
+                    <div class="pagination-container">
+                        <ul class="pagination">
+                            <li class="page-item {{ pagination.hasPrevious ? '' : 'disabled' }}">
+                                <a class="page-link" href="{{ pagination.hasPrevious ? path('admin_users_validation_index', {'tab': activeTab, 'page': pagination.page - 1, 'search': filters.search}) : '#' }}" aria-label="Anterior">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                            
+                            {% for p in 1..pagination.pageCount %}
+                                <li class="page-item {{ p == pagination.page ? 'active' : '' }}">
+                                    <a class="page-link" href="{{ path('admin_users_validation_index', {'tab': activeTab, 'page': p, 'search': filters.search}) }}">
+                                        {{ p }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                            
+                            <li class="page-item {{ pagination.hasNext ? '' : 'disabled' }}">
+                                <a class="page-link" href="{{ pagination.hasNext ? path('admin_users_validation_index', {'tab': activeTab, 'page': pagination.page + 1, 'search': filters.search}) : '#' }}" aria-label="Siguiente">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+            {% else %}
+                <p class="no-users-message">No hay usuarios rechazados que coincidan con los criterios de búsqueda.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Botón para limpiar la búsqueda
+        const clearSearchBtn = document.getElementById('clearSearch');
+        if (clearSearchBtn) {
+            clearSearchBtn.addEventListener('click', function() {
+                const searchInput = document.getElementById('search');
+                searchInput.value = '';
+                // Enviar el formulario automáticamente
+                searchInput.closest('form').submit();
+            });
+        }
+        
+        // Activar el tooltip para las imágenes
+        const imageLinks = document.querySelectorAll('.user-photos a');
+        imageLinks.forEach(link => {
+            link.setAttribute('data-bs-toggle', 'tooltip');
+            link.setAttribute('data-bs-placement', 'top');
+            link.setAttribute('title', 'Haz clic para ver en tamaño completo');
+        });
+        
+        // Inicializar los tooltips si Bootstrap está disponible
+        if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        }
+        
+        // Efecto de enfoque en el buscador
+        const searchInput = document.getElementById('search');
+        if (searchInput) {
+            // Enfocar el campo de búsqueda cuando se carga la página si tiene contenido
+            if (searchInput.value.trim() !== '') {
+                searchInput.focus();
+            }
+            
+            // Actualizar dinámicamente el botón de limpiar
+            searchInput.addEventListener('input', function() {
+                const clearBtn = document.getElementById('clearSearch');
+                if (!clearBtn && this.value.trim() !== '') {
+                    // Crear botón si no existe y hay texto
+                    const newClearBtn = document.createElement('button');
+                    newClearBtn.type = 'button';
+                    newClearBtn.className = 'clear-search';
+                    newClearBtn.id = 'clearSearch';
+                    
+                    const icon = document.createElement('i');
+                    icon.className = 'fas fa-times';
+                    newClearBtn.appendChild(icon);
+                    
+                    const searchContainer = this.parentNode;
+                    searchContainer.appendChild(newClearBtn);
+                    
+                    newClearBtn.addEventListener('click', function() {
+                        searchInput.value = '';
+                        searchInput.focus();
+                        this.remove();
+                    });
+                } else if (clearBtn && this.value.trim() === '') {
+                    // Eliminar botón si existe y no hay texto
+                    clearBtn.remove();
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %} 
