@@ -123,7 +123,7 @@ class DenunciaController extends AbstractController
 
         // Crear el formulario de comentario solo si la emergencia está aceptada
         $commentForm = null;
-        if ($denuncia->getEstado() && $denuncia->getEstado()->getNombre() === 'Aceptado') {
+        if ($denuncia->getEstado() && $denuncia->getEstado()->getNombre() === 'En proceso') {
             $reporte = new Reporte();
             $reporte->setDenuncia($denuncia);
             $reporte->setUsuario($this->getUser());
@@ -215,13 +215,13 @@ class DenunciaController extends AbstractController
             return $this->redirectToRoute('emergency_index');
         }
 
-        $estadoAceptado = $entityManager->getRepository(EstadoDenuncia::class)
-            ->findOneBy(['nombre' => 'Aceptado']);
-        if (!$estadoAceptado) {
-            throw new \Exception('El estado "Aceptado" no existe.');
+        $estadoEnproceso = $entityManager->getRepository(EstadoDenuncia::class)
+            ->findOneBy(['nombre' => 'En proceso']);
+        if (!$estadoEnproceso) {
+            throw new \Exception('El estado "En proceso" no existe.');
         }
 
-        $denuncia->setEstado($estadoAceptado);
+        $denuncia->setEstado($estadoEnproceso);
         $entityManager->flush();
 
         // Enviar correo
@@ -233,48 +233,6 @@ class DenunciaController extends AbstractController
         $mailer->send($email); */
 
         $this->addFlash('success', 'Emergencia aceptada exitosamente.');
-
-        return $this->redirectToRoute('emergency_index');
-    }
-
-    /**
-     * Rechazar una emergencia.
-     */
-    #[Route('/reject/{id}', name: 'emergency_reject', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN')]
-    public function reject(
-        Denuncia $denuncia,
-        Request $request,
-        EntityManagerInterface $entityManager
-       
-    ): Response
-    {
-        if (!$this->isCsrfTokenValid(
-            'reject_emergency_' . $denuncia->getId(),
-            $request->request->get('_token')
-        )) {
-            $this->addFlash('error', 'Token CSRF inválido.');
-            return $this->redirectToRoute('emergency_index');
-        }
-
-        $estadoRechazado = $entityManager->getRepository(EstadoDenuncia::class)
-            ->findOneBy(['nombre' => 'Rechazado']);
-        if (!$estadoRechazado) {
-            throw new \Exception('El estado "Rechazado" no existe.');
-        }
-
-        $denuncia->setEstado($estadoRechazado);
-        $entityManager->flush();
-
-        // Enviar correo
-/*         $email = (new Email())
-            ->from('notificaciones@tuweb.com')
-            ->to($denuncia->getUsuario()->getEmail())
-            ->subject('Denuncia Rechazada')
-            ->text('Su denuncia ha sido rechazada. Por favor, contacte con soporte para más información.');
-        $mailer->send($email); */
-
-        $this->addFlash('success', 'Emergencia rechazada exitosamente.');
 
         return $this->redirectToRoute('emergency_index');
     }
