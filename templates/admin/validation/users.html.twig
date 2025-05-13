@@ -402,7 +402,7 @@
             <div class="col-md-9">
                 <div class="search-container">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" class="search-input" id="search" name="search" value="{{ filters.search }}" placeholder="Buscar por nombre, apellido, email, DNI o teléfono...">
+                    <input type="text" class="search-input" id="search" name="search" value="{{ filters.search }}" placeholder="Buscar por nombre, apellido, email, DNI o teléfono..." style="width: 500px;">
                     {% if filters.search %}
                         <button type="button" class="clear-search" id="clearSearch">
                             <i class="fas fa-times"></i>
@@ -410,8 +410,8 @@
                     {% endif %}
                 </div>
             </div>
-            
-            <div class="col-md-3 d-flex align-items-end">
+            <br>
+            <div class="col-md-3 d-flex align-items-end mt-3">
                 <button type="submit" class="btn btn-warning w-100">
                     <i class="fas fa-search me-2"></i> Buscar
                 </button>
@@ -419,39 +419,30 @@
         </form>
     </div>
 
-    <ul class="nav nav-tabs mb-4" id="userTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <a class="nav-link {{ activeTab == 'pending' ? 'active' : '' }}" 
-               id="pending-tab" 
-               href="{{ path('admin_users_validation_index', {'tab': 'pending', 'search': filters.search}) }}" 
-               role="tab" 
-               aria-controls="pending" 
-               aria-selected="{{ activeTab == 'pending' ? 'true' : 'false' }}">
-                Pendientes <span class="badge badge-pending">{{ pendingCount }}</span>
-            </a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link {{ activeTab == 'approved' ? 'active' : '' }}" 
-               id="approved-tab" 
-               href="{{ path('admin_users_validation_index', {'tab': 'approved', 'search': filters.search}) }}" 
-               role="tab" 
-               aria-controls="approved" 
-               aria-selected="{{ activeTab == 'approved' ? 'true' : 'false' }}">
-                Aprobados <span class="badge badge-approved">{{ approvedCount }}</span>
-            </a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link {{ activeTab == 'rejected' ? 'active' : '' }}" 
-               id="rejected-tab" 
-               href="{{ path('admin_users_validation_index', {'tab': 'rejected', 'search': filters.search}) }}" 
-               role="tab" 
-               aria-controls="rejected" 
-               aria-selected="{{ activeTab == 'rejected' ? 'true' : 'false' }}">
-                Rechazados <span class="badge badge-rejected">{{ rejectedCount }}</span>
-            </a>
-        </li>
-    </ul>
-
+    <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
+        <a href="{{ path('admin_users_validation_index', {'tab': 'pending', 'search': filters.search}) }}" 
+           class="btn btn-outline-primary {{ activeTab == 'pending' ? 'active' : '' }} gap-2"
+           role="tab" 
+           aria-controls="pending" 
+           aria-selected="{{ activeTab == 'pending' ? 'true' : 'false' }}">
+            Pendientes <span class="badge badge-pending ms-2">{{ pendingCount }}</span>
+        </a>
+        <a href="{{ path('admin_users_validation_index', {'tab': 'approved', 'search': filters.search}) }}" 
+           class="btn btn-outline-success {{ activeTab == 'approved' ? 'active' : '' }} gap-2"
+           role="tab" 
+           aria-controls="approved" 
+           aria-selected="{{ activeTab == 'approved' ? 'true' : 'false' }}">
+            Aprobados <span class="badge badge-approved ms-2">{{ approvedCount }}</span>
+        </a>
+        <a href="{{ path('admin_users_validation_index', {'tab': 'rejected', 'search': filters.search}) }}" 
+           class="btn btn-outline-danger {{ activeTab == 'rejected' ? 'active' : '' }} gap-2"
+           role="tab" 
+           aria-controls="rejected" 
+           aria-selected="{{ activeTab == 'rejected' ? 'true' : 'false' }}">
+            Rechazados <span class="badge badge-rejected ms-2">{{ rejectedCount }}</span>
+        </a>
+    </div>
+<br>
     <div class="tab-content" id="userTabsContent">
         <div class="tab-pane fade {{ activeTab == 'pending' ? 'show active' : '' }}" id="pending" role="tabpanel" aria-labelledby="pending-tab">
             {% if pendingUsers|length > 0 %}
