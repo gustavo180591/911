@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sin conexión - SAC</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #191D33;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 600px;
+            padding: 2rem;
+            background-color: #1E2240;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            color: #ECB13A;
+            margin-bottom: 1.5rem;
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: #ECB13A;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #ECB13A;
+            color: #191D33;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #dca02a;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">📡</div>
+        <h1>Sin conexión a Internet</h1>
+        <p>No se pudo cargar la página solicitada porque no hay conexión a Internet.</p>
+        <p>Por favor, verifica tu conexión e intenta nuevamente.</p>
+        <a href="/" class="btn">Reintentar</a>
+    </div>
+    
+    <script>
+        // Verificar conexión periódicamente
+        function checkConnection() {
+            if (navigator.onLine) {
+                document.querySelector('.btn').textContent = 'Conexión restaurada. Haz clic para recargar';
+            } else {
+                document.querySelector('.btn').textContent = 'Reintentar';
+            }
+        }
+        
+        // Comprobar al cargar la página
+        window.addEventListener('load', checkConnection);
+        
+        // Comprobar cuando el estado de la conexión cambia
+        window.addEventListener('online', checkConnection);
+        window.addEventListener('offline', checkConnection);
+        
+        // Agregar función para forzar recarga cuando se hace clic en el botón
+        document.querySelector('.btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Intentar recargar la página
+            window.location.reload();
+        });
+    </script>
+</body>
+</html> 

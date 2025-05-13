@@ -4,7 +4,10 @@
     <head>
      {{ pwa() }}
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1"> {# OPTIMIZACIÓN MÓVIL #}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
         <title>{% block title %}SAC{% endblock %}</title>
         <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
         
@@ -15,6 +18,11 @@
 
         {# PWA: Manifest y tema #}
         <meta name="theme-color" content="#0d6efd">
+
+        {# Fonts #}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
         {# Estilos personalizados #}
         {% block stylesheets %}
@@ -61,14 +69,175 @@
 
     <body>
         {% block body %}{% endblock %}
+
+        {# Script para limpiar caché y evitar problemas de F5 #}
+        <script>
+            (function() {
+                // Función para limpiar caché del navegador
+                function clearBrowserCache() {
+                    // No ejecutar si ya se ha limpiado en esta sesión
+                    if (sessionStorage.getItem('cacheCleared')) {
+                        return Promise.resolve();
+                    }
+                    
+                    // Registrar que se ha limpiado la caché
+                    sessionStorage.setItem('cacheCleared', 'true');
+                    
+                    // Limpiar caché si hay problemas (detectados por parámetro o flag)
+                    const clearCache = new URLSearchParams(window.location.search).has('clear-cache') || 
+                                       localStorage.getItem('need_cache_clear');
+                    
+                    if (clearCache) {
+                        console.log('Limpiando caché del navegador...');
+                        
+                        // Eliminar flag de localStorage
+                        localStorage.removeItem('need_cache_clear');
+                        
+                        // Intentar limpiar la caché del navegador para esta página
+                        return window.caches?.delete(window.location.pathname)
+                            .then(() => console.log('Caché eliminada correctamente'))
+                            .catch(err => console.error('Error al limpiar caché:', err));
+                    }
+                    
+                    return Promise.resolve();
+                }
+                
+                // Función para comunicarse con el service worker y limpiar su caché
+                function clearServiceWorkerCache() {
+                    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                        return new Promise((resolve, reject) => {
+                            // Crear un canal de comunicación
+                            const messageChannel = new MessageChannel();
+                            
+                            // Configurar el handler para la respuesta
+                            messageChannel.port1.onmessage = event => {
+                                if (event.data && event.data.cleared) {
+                                    console.log('Service Worker: caché eliminada');
+                                    resolve();
+                                } else {
+                                    reject(new Error('Error al limpiar caché del Service Worker'));
+                                }
+                            };
+                            
+                            // Enviar mensaje al service worker
+                            navigator.serviceWorker.controller.postMessage('clearCache', [messageChannel.port2]);
+                        });
+                    }
+                    
+                    return Promise.resolve();
+                }
+                
+                // Ejecutar acciones de limpieza al cargar
+                window.addEventListener('load', () => {
+                    // Esperar a que la página esté completamente cargada
+                    setTimeout(() => {
+                        // Verificar si hay errores o elementos no inicializados
+                        const hasErrors = document.querySelectorAll('.error-indicator, [data-should-be-initialized]:not(.initialized)').length > 0;
+                        
+                        if (hasErrors) {
+                            console.warn('Se detectaron errores o elementos no inicializados en la página');
+                            
+                            // Marcar para limpiar caché en la próxima carga
+                            localStorage.setItem('need_cache_clear', 'true');
+                            
+                            // Intentar recargar sin caché
+                            clearBrowserCache()
+                                .then(clearServiceWorkerCache)
+                                .then(() => {
+                                    console.log('Recargando página sin caché...');
+                                    window.location.reload(true);
+                                });
+                        }
+                    }, 1000); // Esperar 1 segundo para dar tiempo a inicializarse
+                });
+                
+                // Verificar al inicio
+                clearBrowserCache()
+                    .then(() => {
+                        // Verificar parámetro de URL para forzar recarga completa
+                        if (new URLSearchParams(window.location.search).has('reload')) {
+                            // Limpiar la URL
+                            const url = new URL(window.location);
+                            url.searchParams.delete('reload');
+                            history.replaceState({}, document.title, url);
+                            
+                            // Reload solo si viene de otra página 
+                            if (document.referrer && new URL(document.referrer).host === window.location.host) {
+                                window.location.reload(true);
+                            }
+                        }
+                    });
+            })();
+        </script>
+
+        {# Script para garantizar la carga correcta de la página #}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Asegurar que todos los enlaces funcionen correctamente sin necesidad de F5
+                document.querySelectorAll('a').forEach(function(link) {
+                    if (link.getAttribute('href') && 
+                        !link.getAttribute('href').startsWith('#') && 
+                        !link.getAttribute('href').startsWith('javascript:') &&
+                        !link.getAttribute('target')) {
+                        
+                        link.addEventListener('click', function(e) {
+                            // No interferir con los enlaces que ya tienen comportamiento personalizado
+                            if (this.getAttribute('data-turbo') === 'false' || this.getAttribute('data-no-reload-fix')) {
+                                return;
+                            }
+                            
+                            // Si es una navegación interna, asegurar que la página se cargue correctamente
+                            if (this.host === window.location.host) {
+                                localStorage.setItem('last_navigation', Date.now());
+                            }
+                        });
+                    }
+                });
+
+                // Verificar si se necesita una recarga forzada (para sistemas SPA)
+                const lastNav = localStorage.getItem('last_navigation');
+                if (lastNav) {
+                    const navTime = parseInt(lastNav);
+                    const now = Date.now();
+                    // Si ha pasado menos de 2 segundos desde la última navegación, podría ser un problema de recarga
+                    if (now - navTime < 2000) {
+                        // Forzar recarga completa si parece que venimos de una navegación reciente
+                        window.addEventListener('load', function() {
+                            // Verificar si hay elementos que deberían estar inicializados pero no lo están
+                            setTimeout(function() {
+                                const needsReload = document.querySelectorAll('[data-should-be-initialized]');
+                                if (needsReload.length > 0) {
+                                    window.location.reload(true);
+                                }
+                            }, 500);
+                        });
+                    }
+                    localStorage.removeItem('last_navigation');
+                }
+            });
+        </script>
+        
+        {% block bottom_javascripts %}{% endblock %}
+
         {# PWA: Registro del Service Worker #}
         <script>
+            // Registro del Service Worker
             if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
-    .then(() => console.log('Service Worker registrado con éxito'))
-    .catch((error) => console.error('Error registrando el Service Worker:', error));
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('{{ asset('service-worker.js') }}')
+                        .then(function(registration) {
+                            console.log('Service Worker registrado con éxito:', registration.scope);
+                        })
+                        .catch(function(error) {
+                            console.log('Registro de Service Worker fallido:', error);
+                        });
+                });
             }
         </script>
+        
+        {# Script para solucionar problemas de recarga (F5) #}
+        <script src="{{ asset('js/page-refresh-fix.js') }}"></script>
+        <script src="{{ asset('js/event-initializer.js') }}"></script>
         <script src="{{ asset('js/profile-menu.js') }}"></script>
         {% if app.user %}
             <div class="user-menu">

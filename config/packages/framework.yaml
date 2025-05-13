@@ -13,3 +13,14 @@ framework:
 
     # esi: true
     # fragments: true
+
+    # Ajuste para evitar problemas de caché en las páginas
+    http_method_override: false
+    http_cache:
+        # Desactivar la caché HTTP para evitar problemas de recarga
+        enabled: '%kernel.debug%'
+        default_ttl: 0
+    
+    assets:
+        # Configuración simple con valor fijo para versión
+        version: '1.0.0'
