@@ -318,7 +318,7 @@
         <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú">☰</button>
 
         <nav id="nav-menu" class="nav-menu">
-            <a href="{{ path('app_login') }}" class="nav-link inicio">INICIO</a>
+            <a href="{{ path('home_index') }}" class="nav-link inicio">INICIO</a>
             <a href="{{ path('home_about') }}" class="nav-link sobre-nosotros">SOBRE NOSOTROS</a>
             <a href="{{ path('home_contact') }}" class="nav-link contacto">CONTACTO</a>
         </nav>
@@ -393,7 +393,11 @@
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
             <div>
-                <a href="{{ path('auth_forgot_password') }}" class="forgot-password">Olvidé mi contraseña</a>
+                <div class="forgot-password">
+                    <a href="{{ path('auth_forgot_password') }}" class="forgot-password-link">
+                        <i class="fas fa-unlock-alt"></i> Olvidé mi contraseña
+                    </a>
+                </div>
             </div>
             <button type="submit">Iniciar</button>
             <div class="register-text">
