@@ -93,6 +93,20 @@ class DenunciaController extends AbstractController
             $denuncia->setFechaHora(new \DateTime());
             $denuncia->setEstado($estado);
 
+            // Procesar y guardar las evidencias
+            foreach ($denuncia->getEvidencias() as $evidencia) {
+                $file = $evidencia->getImageFile();
+                if ($file) {
+                    $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+                    $file->move(
+                        $this->getParameter('evidence_directory'),
+                        $fileName
+                    );
+                    $evidencia->setRutaArchivo($fileName);
+                    $evidencia->setDenuncia($denuncia);
+                }
+            }
+
             $entityManager->persist($denuncia);
             $entityManager->flush();
 

@@ -353,6 +353,199 @@
             transform: translateY(-2px);
         }
         }
+
+    /* Estilos para la carga de archivos */
+    .file-upload-container {
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 15px;
+        border: 2px dashed rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    .file-upload-container:hover {
+        border-color: #ECB13A;
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    .file-upload-container.file-selected {
+        border-style: solid;
+        background-color: rgba(40, 167, 69, 0.05);
+    }
+    
+    .file-upload-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .file-upload-icon {
+        color: #ECB13A;
+        font-size: 30px;
+        margin-bottom: 10px;
+    }
+    
+    .file-upload-text {
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+    }
+    
+    .file-upload-subtext {
+        font-size: 0.7rem;
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .file-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+    
+    .file-preview {
+        margin-top: 15px;
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        overflow: hidden;
+        display: none;
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 10px;
+    }
+    
+    .file-preview.show {
+        display: block;
+    }
+    
+    .file-preview img {
+        width: 100%;
+        max-height: 200px;
+        object-fit: contain;
+        border-radius: 4px;
+    }
+    
+    .file-name {
+        margin-top: 5px;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.7);
+        word-break: break-all;
+    }
+    
+    .file-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 5px;
+    }
+    
+    .file-remove {
+        color: #F05A45;
+        cursor: pointer;
+        background: none;
+        border: none;
+        font-size: 0.8rem;
+        padding: 3px 8px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+    }
+    
+    .file-remove:hover {
+        background-color: rgba(240, 90, 69, 0.2);
+    }
+    
+    .file-type {
+        display: inline-block;
+        padding: 2px 6px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+    }
+    
+    .file-size {
+        margin-left: 10px;
+    }
+    
+    .progress-container {
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.1);
+        height: 4px;
+        border-radius: 2px;
+        margin-top: 10px;
+        display: none;
+    }
+    
+    .progress-bar {
+        height: 100%;
+        background-color: #ECB13A;
+        border-radius: 2px;
+        width: 0%;
+        transition: width 0.3s ease;
+    }
+    
+    .file-validation-error {
+        color: #F05A45;
+        font-size: 0.85rem;
+        margin-top: 8px;
+        border-radius: 4px;
+        display: none;
+        padding: 5px 10px;
+        background-color: rgba(240, 90, 69, 0.1);
+    }
+    
+    .file-validation-error.show {
+        display: block;
+    }
+
+    /* Estilos adicionales para video */
+    .file-preview video {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 4px;
+        background-color: #000;
+    }
+    
+    .video-controls {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    
+    .video-controls button {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .video-controls button:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .video-controls button:active {
+        background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .video-duration {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-top: 5px;
+        text-align: center;
+    }
 </style>
 
 <header>
@@ -448,19 +641,26 @@
     </div>
 
     <div class="form-group">
-        <div class="evidence-upload" id="evidence-upload-container">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
-                 viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="17 8 12 3 7 8"></polyline>
-                <line x1="12" y1="3" x2="12" y2="15"></line>
-            </svg>
-            <span>Upload a File</span>
-            <span style="font-size: 12px;">Drag and drop files here</span>
+        <div class="file-upload-container" id="evidence-upload-container">
+            <label for="evidence-input" class="file-upload-label">
+                <div class="file-upload-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                </div>
+                <div class="file-upload-text">Arrastra o haz clic para subir evidencia</div>
+                <div class="file-upload-subtext">JPG, PNG, PDF o MP4 - Máximo 100MB por archivo</div>
+            </label>
+            <input type="file" id="evidence-input" class="file-input" accept="image/jpeg,image/png,application/pdf,video/mp4,video/quicktime,video/x-msvideo" multiple style="position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 2;">
+            <div class="file-preview" id="evidence-preview"></div>
+            <div class="file-validation-error" id="evidence-error"></div>
+            <div class="progress-container" id="evidence-progress">
+                <div class="progress-bar" id="evidence-progress-bar"></div>
+            </div>
         </div>
         {{ form_widget(form.ubicacion.coordenadas) }}
-        <ul id="evidencias-list" data-prototype="{{ form_widget(form.evidencias.vars.prototype)|e('html_attr') }}" style="list-style: none; padding: 0;"></ul>
     </div>
 
     <div class="form-group text-center">
@@ -593,47 +793,54 @@
     }
   };
   document.addEventListener('DOMContentLoaded', () => {
-            // Toggle del menú hamburguesa
-            const navToggle = document.getElementById('nav-toggle');
-            const navMenu = document.getElementById('nav-menu');
-            
-            navToggle.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
-                navToggle.innerHTML = navMenu.classList.contains('active') ? '✕' : '☰';
-            });
-            
-            // Cerrar menú al hacer clic en un enlace
-            const links = document.querySelectorAll('#nav-menu a');
-            links.forEach(link => {
-                link.addEventListener('click', () => {
-                    navMenu.classList.remove('active');
-                    navToggle.innerHTML = '☰';
-                });
-            });
-            
-            // Efecto de scroll en el header
-            const header = document.getElementById('header');
-            window.addEventListener('scroll', () => {
+    // Toggle del menú hamburguesa
+    const navToggle = document.getElementById('nav-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    
+    navToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        navToggle.innerHTML = navMenu.classList.contains('active') ? '✕' : '☰';
+    });
+    
+    // Cerrar menú al hacer clic en un enlace
+    const links = document.querySelectorAll('#nav-menu a');
+    links.forEach(link => {
+        link.addEventListener('click', () => {
+            navMenu.classList.remove('active');
+            navToggle.innerHTML = '☰';
+        });
+    });
+    
+    // Efecto de scroll en el header - modificado para evitar recargas
+    const header = document.getElementById('header');
+    if (header) {
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            // Usar debounce para evitar múltiples actualizaciones
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
                 if (window.scrollY > 20) {
                     header.classList.add('scrolled');
                 } else {
                     header.classList.remove('scrolled');
                 }
-            });
-
-            // Toggle de visibilidad de contraseña
-            const passwordField = document.getElementById('password');
-            const togglePasswordIcon = document.getElementById('togglePassword');
-            togglePasswordIcon.addEventListener('click', () => {
-                if (passwordField.type === 'password') {
-                    passwordField.type = 'text';
-                    togglePasswordIcon.classList.replace('fa-eye', 'fa-eye-slash');
-                } else {
-                    passwordField.type = 'password';
-                    togglePasswordIcon.classList.replace('fa-eye-slash', 'fa-eye');
-                }
-            });
+            }, 10);
         });
+    }
+
+    // Toggle de visibilidad de contraseña
+    const passwordField = document.getElementById('password');
+    const togglePasswordIcon = document.getElementById('togglePassword');
+    togglePasswordIcon.addEventListener('click', () => {
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            togglePasswordIcon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            passwordField.type = 'password';
+            togglePasswordIcon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    });
+  });
   
 </script>
 
@@ -661,4 +868,275 @@ function initEvidenceUpload() {
 document.addEventListener('DOMContentLoaded', initEvidenceUpload);
 document.addEventListener('turbo:load', initEvidenceUpload);
 </script>
+
+<script>
+// Clase para manejar la validación y carga de archivos
+class ImageValidator {
+    constructor(inputId, previewId, errorId, progressId, progressBarId, containerId) {
+        this.input = document.getElementById(inputId);
+        this.preview = document.getElementById(previewId);
+        this.error = document.getElementById(errorId);
+        this.progress = document.getElementById(progressId);
+        this.progressBar = document.getElementById(progressBarId);
+        this.container = document.getElementById(containerId);
+        
+        this.maxSize = 104857600; // 100MB
+        this.allowedTypes = [
+            'image/jpeg', 
+            'image/png', 
+            'application/pdf',
+            'video/mp4',
+            'video/quicktime',
+            'video/x-msvideo'
+        ];
+        
+        this.files = new Map(); // Almacena los archivos cargados
+        this.setupListeners();
+    }
+    
+    setupListeners() {
+        // File selection event
+        this.input.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            files.forEach(file => this.validateAndProcessFile(file));
+        });
+        
+        // Click event for the container
+        this.container.addEventListener('click', (e) => {
+            // Evitar que el clic se propague si se hace clic en un botón de eliminar
+            if (e.target.closest('.file-remove')) {
+                return;
+            }
+            this.input.click();
+        });
+        
+        // Drag and drop events
+        this.container.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.container.style.borderColor = '#ECB13A';
+            this.container.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+        });
+        
+        this.container.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.container.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+            this.container.style.backgroundColor = '';
+        });
+        
+        this.container.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            this.container.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+            this.container.style.backgroundColor = '';
+            
+            const dt = e.dataTransfer;
+            const files = Array.from(dt.files);
+            
+            files.forEach(file => {
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                this.input.files = dataTransfer.files;
+                this.validateAndProcessFile(file);
+            });
+        });
+        
+        // Prevent opening file on drop
+        window.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            return false;
+        });
+        
+        window.addEventListener('drop', (e) => {
+            e.preventDefault();
+            return false;
+        });
+    }
+    
+    validateAndProcessFile(file) {
+        console.log('Validando archivo:', file.name);
+        this.resetErrors();
+        
+        // Validate file size
+        if (file.size > this.maxSize) {
+            this.showError(`El archivo ${file.name} es demasiado grande (${this.formatFileSize(file.size)}). El tamaño máximo permitido es ${this.formatFileSize(this.maxSize)}.`);
+            return false;
+        }
+        
+        // Validate file type
+        if (!this.allowedTypes.includes(file.type)) {
+            this.showError(`Tipo de archivo no válido para ${file.name}. Solo se permiten imágenes JPG, PNG, PDF y videos MP4.`);
+            return false;
+        }
+        
+        // Show progress animation
+        this.showProgress();
+        
+        // Process file
+        const reader = new FileReader();
+        
+        reader.onprogress = (e) => {
+            if (e.lengthComputable) {
+                const percentLoaded = Math.round((e.loaded / e.total) * 100);
+                this.updateProgress(percentLoaded);
+            }
+        };
+        
+        reader.onload = (e) => {
+            console.log('Archivo leído correctamente');
+            
+            // Update progress to 100%
+            this.updateProgress(100);
+            
+            // Show preview
+            setTimeout(() => {
+                this.hideProgress();
+                this.addFilePreview(e.target.result, file);
+            }, 500);
+        };
+        
+        reader.onerror = () => {
+            console.error('Error al leer el archivo');
+            this.hideProgress();
+            this.showError('Error al leer el archivo.');
+        };
+        
+        reader.readAsDataURL(file);
+        return true;
+    }
+    
+    addFilePreview(dataUrl, file) {
+        const fileId = Date.now() + Math.random().toString(36).substr(2, 9);
+        this.files.set(fileId, file);
+        
+        let previewContent = '';
+        const isImage = file.type.startsWith('image/');
+        const isVideo = file.type.startsWith('video/');
+        
+        if (isImage) {
+            previewContent = `<img src="${dataUrl}" alt="Vista previa">`;
+        } else if (isVideo) {
+            previewContent = `
+                <video controls>
+                    <source src="${dataUrl}" type="${file.type}">
+                    Tu navegador no soporta el elemento de video.
+                </video>
+            `;
+        } else {
+            previewContent = `<div class="file-icon"><i class="fas fa-file-pdf fa-3x"></i></div>`;
+        }
+        
+        const previewItem = document.createElement('div');
+        previewItem.className = 'preview-item';
+        previewItem.dataset.fileId = fileId;
+        
+        previewItem.innerHTML = `
+            <button type="button" class="file-remove" title="Eliminar archivo">×</button>
+            <div class="preview-content">
+                ${previewContent}
+            </div>
+            <div class="file-info">
+                <div class="file-name">${file.name}</div>
+                <div class="file-meta">
+                    <span class="file-type">${file.type.split('/')[1].toUpperCase()}</span>
+                    <span class="file-size">${this.formatFileSize(file.size)}</span>
+                </div>
+            </div>
+        `;
+        
+        // Configurar controles de video si es un video
+        if (isVideo) {
+            const video = previewItem.querySelector('video');
+            if (video) {
+                video.addEventListener('ended', () => {
+                    video.currentTime = 0;
+                });
+            }
+        }
+        
+        // Configurar botón de eliminar
+        const removeButton = previewItem.querySelector('.file-remove');
+        if (removeButton) {
+            removeButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.removeFile(fileId);
+            });
+        }
+        
+        // Asegurar que existe el contenedor de grid
+        if (!this.preview.querySelector('.preview-grid')) {
+            this.preview.innerHTML = '<div class="preview-grid"></div>';
+        }
+        
+        this.preview.querySelector('.preview-grid').appendChild(previewItem);
+        this.preview.classList.add('show');
+        this.container.classList.add('file-selected');
+    }
+    
+    removeFile(fileId) {
+        const previewItem = this.preview.querySelector(`[data-file-id="${fileId}"]`);
+        if (previewItem) {
+            previewItem.remove();
+            this.files.delete(fileId);
+            
+            // Si no hay más archivos, ocultar el contenedor de preview
+            if (this.files.size === 0) {
+                this.preview.classList.remove('show');
+                this.container.classList.remove('file-selected');
+            }
+        }
+    }
+    
+    showError(message) {
+        this.error.textContent = message;
+        this.error.classList.add('show');
+    }
+    
+    resetErrors() {
+        this.error.textContent = '';
+        this.error.classList.remove('show');
+    }
+    
+    showProgress() {
+        this.progress.style.display = 'block';
+        this.updateProgress(0);
+    }
+    
+    hideProgress() {
+        setTimeout(() => {
+            this.progress.style.display = 'none';
+        }, 300);
+    }
+    
+    updateProgress(percent) {
+        this.progressBar.style.width = `${percent}%`;
+    }
+    
+    // Convierte el tamaño del archivo en bytes a una representación más amigable
+    // (por ejemplo, 1024 bytes se convierte en "1 KB")
+    formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+}
+
+// Inicializar el validador cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    const evidenceValidator = new ImageValidator(
+        'evidence-input',
+        'evidence-preview',
+        'evidence-error',
+        'evidence-progress',
+        'evidence-progress-bar',
+        'evidence-upload-container'
+    );
+});
+</script>
 {% endblock %}
+

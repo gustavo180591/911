@@ -1328,19 +1328,20 @@
                     // Create a timestamp to prevent browser caching
                     const timestamp = new Date().getTime();
                     
-                    this.preview.innerHTML = `
-                        <div class="preview-content">
-                            <img src="${dataUrl}" alt="Vista previa" style="max-width: 100%; border-radius: 4px; display: block; margin: 0 auto;">
-                            <div class="file-name">${file.name}</div>
-                            <div class="file-meta">
-                                <span>
-                                    <span class="file-type">${file.type.split('/')[1].toUpperCase()}</span>
-                                    <span class="file-size">${this.formatFileSize(file.size)}</span>
-                                </span>
-                                <button type="button" class="file-remove">Quitar</button>
-                            </div>
-                        </div>
-                    `;
+this.preview.innerHTML = `
+  <div class="preview-content">
+    <img src="${dataUrl}" alt="Vista previa" style="max-width: 100%; border-radius: 4px; display: block; margin: 0 auto;">
+    <div class="file-name">${file.name}</div>
+    <div class="file-meta">
+      <span>
+        <span class="file-type">${file.type.split('/')[1].toUpperCase()}</span>
+        <span class="file-size">${this.formatFileSize(file.size)}</span>
+      </span>
+      <!-- ¡Sin onclick! -->
+      <button type="button" class="file-remove">Quitar</button>
+    </div>
+  </div>
+`;
                     
                     // Add success status to container
                     this.container.classList.add('file-selected');
@@ -1349,18 +1350,22 @@
                     
                     // Add event listener to remove button
                     const removeButton = this.preview.querySelector('.file-remove');
-                    if (removeButton) {
-                        removeButton.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            this.clearFileInput();
-                            this.hidePreview();
-                            this.container.classList.remove('file-selected');
-                            this.container.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-                        });
-                    }
+if (removeButton) {
+  removeButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.clearFileInput();            // vacía el input
+    this.hidePreview();               // borra la vista previa
+    this.container.classList.remove('file-selected');
+    this.container.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+  });
+}
                 }
-                
+                hidePreview() {
+  this.preview.innerHTML = '';
+  this.preview.classList.remove('show');
+}
                 showError(message) {
                     this.error.textContent = message;
                     this.error.classList.add('show');

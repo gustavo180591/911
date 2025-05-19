@@ -593,6 +593,7 @@
         <tr>
             <th>Evidencias</th>
             <td>
+                <!-- Muestra las evidencias asociadas a esta denuncia -->
                 {% if emergency.evidencias|length > 0 %}
                     <div class="evidence-gallery">
                         {% for evidencia in emergency.evidencias %}

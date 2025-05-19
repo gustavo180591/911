@@ -23,7 +23,7 @@ class EvidenciaType extends AbstractType
                         'message' => 'Debes subir un archivo.',
                     ]),
                     new File([
-                        'maxSize' => '10M',
+                        'maxSize' => '100M',
                         'mimeTypes' => [
                             'image/*',
                             'video/*',

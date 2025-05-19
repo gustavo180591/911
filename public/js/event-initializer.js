@@ -1,7 +1,6 @@
 /**
  * Script para garantizar la inicialización correcta de eventos en todas las páginas
- * Resuelve problemas donde los manejadores de eventos no se registran correctamente,
- * lo que requiere presionar F5 para que funcionen.
+ * Resuelve problemas donde los manejadores de eventos no se registran correctamente
  */
 
 (function() {
@@ -46,27 +45,21 @@
             }
         },
         
-        // Ejecutar una función de inicialización y guardar referencia
+        // Ejecutar un inicializador y registrarlo
         _runInitializer: function(moduleName, initFunction) {
-            console.log(`Inicializando módulo: ${moduleName}`);
             try {
                 initFunction();
-                // Guardar referencia para posible reinicialización
                 this.initializedModules[moduleName] = initFunction;
-                
-                // Marcar el elemento relacionado como inicializado
-                document.querySelectorAll(`[data-module="${moduleName}"]`).forEach(el => {
-                    el.classList.add('initialized');
-                });
-            } catch (e) {
-                console.error(`Error al inicializar ${moduleName}:`, e);
+                console.log(`Módulo ${moduleName} inicializado correctamente`);
+            } catch (error) {
+                console.error(`Error al inicializar módulo ${moduleName}:`, error);
             }
         }
     };
-    
-    // Exponer al ámbito global
+
+    // Exponer el inicializador globalmente
     window.EventInitializer = EventInitializer;
-    
+
     // Detectar problemas de navegación y reinicializar si es necesario
     window.addEventListener('load', function() {
         const pageLoadTimestamp = Date.now();
@@ -84,24 +77,6 @@
                         EventInitializer.reinitialize(moduleName);
                     }
                 });
-                
-                // Si aún hay elementos sin inicializar después de un segundo intento, sugerir recarga
-                setTimeout(function() {
-                    const stillUninitializedElements = document.querySelectorAll('[data-module]:not(.initialized)');
-                    if (stillUninitializedElements.length > 0) {
-                        console.error('Elementos que siguen sin inicializar después de reintentos:', stillUninitializedElements);
-                        
-                        // Verificar si ya hemos recargado recientemente para evitar bucle
-                        const lastReload = sessionStorage.getItem('lastForceReload');
-                        const currentTime = Date.now();
-                        
-                        if (!lastReload || (currentTime - parseInt(lastReload)) > 10000) {
-                            console.log('Forzando recarga para resolver problemas de inicialización');
-                            sessionStorage.setItem('lastForceReload', currentTime.toString());
-                            window.location.reload(true);
-                        }
-                    }
-                }, 1000);
             }
         }, 500);
     });

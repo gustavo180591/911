@@ -31,13 +31,13 @@
 
         // Monitorear errores JavaScript que podrían indicar problemas de carga
         window.addEventListener('error', function(e) {
-            console.error('Error detectado, podría requerir recarga:', e);
+            console.error('Error detectado:', e);
             // Incrementar contador de errores
             const errorCount = parseInt(sessionStorage.getItem('jsErrorCount') || '0') + 1;
             sessionStorage.setItem('jsErrorCount', errorCount);
             
             // Si hay múltiples errores, considerar recargar la página
-            if (errorCount >= 3) {
+            if (errorCount >= 5) { // Aumentado de 3 a 5 para ser menos agresivo
                 console.log('Múltiples errores detectados, recargando página...');
                 sessionStorage.removeItem('jsErrorCount');
                 reloadPage();
@@ -55,24 +55,25 @@
         // Verificar elementos que deberían haberse inicializado
         const uninitializedElements = document.querySelectorAll('[data-should-be-initialized="true"]:not(.initialized)');
         if (uninitializedElements.length > 0) {
-            console.log('Elementos no inicializados detectados, recargando página...', uninitializedElements);
-            reloadPage();
+            console.log('Elementos no inicializados detectados:', uninitializedElements);
+            // Intentar reinicializar en lugar de recargar
+            uninitializedElements.forEach(el => {
+                const moduleName = el.getAttribute('data-module');
+                if (moduleName && window.EventInitializer) {
+                    window.EventInitializer.reinitialize(moduleName);
+                }
+            });
             return;
         }
 
         // Verificar si hay formularios o interacciones que no funcionan correctamente
         const brokenForms = document.querySelectorAll('form.needs-verification:not(.verified)');
         if (brokenForms.length > 0) {
-            console.log('Formularios no verificados detectados, recargando página...', brokenForms);
-            reloadPage();
-            return;
-        }
-
-        // Verificar si hay contenido dinámico que debería haberse cargado
-        const emptyContainers = document.querySelectorAll('.should-have-content:empty');
-        if (emptyContainers.length > 0) {
-            console.log('Contenedores vacíos detectados, recargando página...', emptyContainers);
-            reloadPage();
+            console.log('Formularios no verificados detectados:', brokenForms);
+            // Intentar reinicializar en lugar de recargar
+            brokenForms.forEach(form => {
+                form.classList.add('verified');
+            });
             return;
         }
 
